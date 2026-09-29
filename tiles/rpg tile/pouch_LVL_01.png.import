@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dery64ig0ktfp"
-path="res://.godot/imported/punyworld-overworld-tileset.png-41678b0b5e52caf48477e6c39795b6bf.ctex"
+uid="uid://cypljfof82b7s"
+path="res://.godot/imported/pouch_LVL_01.png-4602771a26e5e5a6364722b75db12c27.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://tiles/punyworld-overworld-tileset.png"
-dest_files=["res://.godot/imported/punyworld-overworld-tileset.png-41678b0b5e52caf48477e6c39795b6bf.ctex"]
+source_file="res://tiles/rpg tile/pouch_LVL_01.png"
+dest_files=["res://.godot/imported/pouch_LVL_01.png-4602771a26e5e5a6364722b75db12c27.ctex"]
 
 [params]
 

@@ -1,6 +1,6 @@
 [gd_scene format=4 uid="uid://nbyh4vcove1"]
 
-[ext_resource type="Texture2D" uid="uid://dery64ig0ktfp" path="res://tiles/punyworld-overworld-tileset.png" id="2_2u3nc"]
+[ext_resource type="Texture2D" uid="uid://dery64ig0ktfp" path="res://tiles/rpg tile/punyworld-overworld-tileset.png" id="2_2u3nc"]
 [ext_resource type="Script" uid="uid://buwa3qkqf7psy" path="res://player/player.gd" id="2_hiqwa"]
 [ext_resource type="Texture2D" uid="uid://cphwhjmvatcru" path="res://animations/animation_player/attack/attack_down_40x40.png" id="3_2u3nc"]
 [ext_resource type="Texture2D" uid="uid://bu15qi8gy2np5" path="res://animations/animation_player/attack/attack_left_40x40.png" id="4_udxuc"]
