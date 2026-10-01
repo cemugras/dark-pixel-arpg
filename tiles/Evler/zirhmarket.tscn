@@ -27821,7 +27821,12 @@ texture = ExtResource("2_pnvcs")
 sources/0 = SubResource("TileSetAtlasSource_ny4ef")
 sources/1 = SubResource("TileSetAtlasSource_cdcuk")
 
+[sub_resource type="RectangleShape2D" id="RectangleShape2D_g4v7s"]
+size = Vector2(108, 92)
+
 [node name="zirhmarket" type="TileMapLayer" unique_id=1601782330]
+y_sort_enabled = true
+position = Vector2(60, -17)
 
 [node name="TileMapLayer2" type="TileMapLayer" parent="." unique_id=380735234]
 position = Vector2(-22, -24)
@@ -27835,3 +27840,9 @@ tile_set = SubResource("TileSet_bw14x")
 [node name="TileMapLayer" type="TileMapLayer" parent="TileMapLayer2/TileMap" unique_id=1841559558]
 tile_map_data = PackedByteArray("AAABAPn/AQBKABAAAAABAPr/AQBKABEAAAACAPn/AQBLABAAAAACAPr/AQBLABEAAAD8//7/AQBqAB4AAAD8////AQBqAB8AAAD9//7/AQBrAB4AAAD9////AQBrAB8AAAAAAP3/AQBoABYAAAAAAP7/AQBoABcAAAABAP3/AQBpABYAAAABAP7/AQBpABcAAAA=")
 tile_set = SubResource("TileSet_chyev")
+
+[node name="StaticBody2D" type="StaticBody2D" parent="." unique_id=1784484733]
+
+[node name="CollisionShape2D" type="CollisionShape2D" parent="StaticBody2D" unique_id=1012574980]
+position = Vector2(-6, -31)
+shape = SubResource("RectangleShape2D_g4v7s")
