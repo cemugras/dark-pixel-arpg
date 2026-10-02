@@ -1,0 +1,20 @@
+[gd_scene format=3 uid="uid://bvmtpblm4ubpv"]
+
+[ext_resource type="PackedScene" uid="uid://bfs6lhn6hwrmi" path="res://tiles/Buildings/surust.tscn" id="1_y1ka5"]
+[ext_resource type="PackedScene" uid="uid://cvihcxcojdu04" path="res://tiles/Buildings/sursol.tscn" id="2_hf4sy"]
+[ext_resource type="PackedScene" uid="uid://bkdd757m1s027" path="res://tiles/Buildings/sursag.tscn" id="3_6ngqj"]
+[ext_resource type="PackedScene" uid="uid://bc1uwvhjvtwcj" path="res://tiles/Buildings/agac.tscn" id="4_giyvs"]
+
+[node name="surlar" type="Node2D" unique_id=462964919]
+
+[node name="Node2D5" parent="." unique_id=2052315428 instance=ExtResource("1_y1ka5")]
+y_sort_enabled = false
+position = Vector2(-42, -110)
+
+[node name="Node2D3" parent="." unique_id=399320299 instance=ExtResource("2_hf4sy")]
+position = Vector2(-152, 644)
+
+[node name="Node2D4" parent="." unique_id=467144125 instance=ExtResource("3_6ngqj")]
+position = Vector2(648, 642)
+
+[node name="Node2D2" parent="." unique_id=1644079257 instance=ExtResource("4_giyvs")]

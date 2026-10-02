@@ -315,7 +315,7 @@ animations = [{
 }],
 "loop": 1,
 "name": &"attack_down",
-"speed": 5.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 0.8,
@@ -341,7 +341,7 @@ animations = [{
 }],
 "loop": 1,
 "name": &"attack_left",
-"speed": 5.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 0.8,
@@ -367,7 +367,7 @@ animations = [{
 }],
 "loop": 1,
 "name": &"attack_right",
-"speed": 5.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 0.8,
@@ -393,7 +393,7 @@ animations = [{
 }],
 "loop": 1,
 "name": &"attack_up",
-"speed": 5.0
+"speed": 10.0
 }, {
 "frames": [{
 "duration": 1.0,

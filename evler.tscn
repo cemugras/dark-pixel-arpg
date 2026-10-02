@@ -1,0 +1,58 @@
+[gd_scene format=3 uid="uid://dajbj0ppsyk4f"]
+
+[ext_resource type="PackedScene" uid="uid://ddhel5y4pbkk3" path="res://tiles/Evler/ortakoyevi.tscn" id="1_hhelw"]
+[ext_resource type="PackedScene" uid="uid://dwimyec55iw5l" path="res://tiles/Evler/silahmarket.tscn" id="2_txo0p"]
+[ext_resource type="PackedScene" uid="uid://c6pqoohgkxg5x" path="res://tiles/Evler/zirhmarket.tscn" id="3_7x1li"]
+[ext_resource type="PackedScene" uid="uid://wffodrk11ovg" path="res://tiles/Evler/buyukev.tscn" id="4_bxed3"]
+[ext_resource type="PackedScene" uid="uid://cygv0walwmwig" path="res://tiles/Evler/ortakoyeviarka.tscn" id="5_c3bmo"]
+[ext_resource type="PackedScene" uid="uid://bisnd6j10a34y" path="res://tiles/Evler/kucukkoyevi.tscn" id="6_jehpq"]
+[ext_resource type="PackedScene" uid="uid://b2ili8v387mda" path="res://tiles/Evler/kucukkoyevi_arka.tscn" id="7_a12oy"]
+[ext_resource type="PackedScene" uid="uid://dubxvbna15035" path="res://tiles/Evler/KrallikBinasi.tscn" id="8_td6yw"]
+
+[node name="Evler" type="Node2D" unique_id=39675639]
+y_sort_enabled = true
+
+[node name="ortakoyevi" parent="." unique_id=382966261 instance=ExtResource("1_hhelw")]
+position = Vector2(337, 123)
+
+[node name="silahmarket" parent="." unique_id=503609058 instance=ExtResource("2_txo0p")]
+position = Vector2(530, -165)
+
+[node name="zirhmarket" parent="." unique_id=1601782330 instance=ExtResource("3_7x1li")]
+position = Vector2(393, -165)
+
+[node name="BuyukMarket" parent="." unique_id=1923671362 instance=ExtResource("4_bxed3")]
+position = Vector2(25, -199)
+
+[node name="ortakoyevi2" parent="." unique_id=1597328421 instance=ExtResource("5_c3bmo")]
+position = Vector2(337, 36)
+
+[node name="Node2D2" parent="." unique_id=900293647 instance=ExtResource("6_jehpq")]
+position = Vector2(544, 95)
+
+[node name="ortakoyevi3" parent="." unique_id=1576907610 instance=ExtResource("5_c3bmo")]
+position = Vector2(472, 36)
+
+[node name="TileMapLayer" parent="." unique_id=1834842053 instance=ExtResource("7_a12oy")]
+position = Vector2(42, -288)
+
+[node name="TileMapLayer2" parent="." unique_id=1531399365 instance=ExtResource("7_a12oy")]
+position = Vector2(125, -288)
+
+[node name="TileMapLayer3" parent="." unique_id=2024286732 instance=ExtResource("7_a12oy")]
+position = Vector2(208, -287)
+
+[node name="ortakoyevi4" parent="." unique_id=992264851 instance=ExtResource("5_c3bmo")]
+position = Vector2(471, -242)
+
+[node name="TileMapLayer4" parent="." unique_id=97604329 instance=ExtResource("7_a12oy")]
+position = Vector2(408, -279)
+
+[node name="Krallik" parent="." unique_id=1867413355 instance=ExtResource("8_td6yw")]
+position = Vector2(300, -395)
+
+[node name="ortakoyevi5" parent="." unique_id=441549019 instance=ExtResource("5_c3bmo")]
+position = Vector2(-14, 30)
+
+[node name="TileMapLayer5" parent="." unique_id=1579784107 instance=ExtResource("7_a12oy")]
+position = Vector2(197, -6)
