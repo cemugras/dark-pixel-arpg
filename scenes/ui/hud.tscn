@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://dli6q5lmk6ojw"]
+
+[ext_resource type="Script" uid="uid://cgg3631ticsqk" path="res://scenes/ui/hud.gd" id="1_0mwgc"]
+
+[node name="Hud" type="CanvasLayer" unique_id=1625741198]
+script = ExtResource("1_0mwgc")
+
+[node name="MarginContainer" type="MarginContainer" parent="." unique_id=1211973933]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+mouse_filter = 2
+theme_override_constants/margin_left = 6
+theme_override_constants/margin_top = 6
+theme_override_constants/margin_right = 6
+theme_override_constants/margin_bottom = 6
+
+[node name="VBoxContainer" type="VBoxContainer" parent="MarginContainer" unique_id=1005182641]
+layout_mode = 2
+
+[node name="HealthLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1531324002]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+
+[node name="HealthBar" type="ProgressBar" parent="MarginContainer/VBoxContainer" unique_id=205795697]
+custom_minimum_size = Vector2(70, 6)
+layout_mode = 2
+show_percentage = false
+
+[node name="GoldLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=564667591]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+
+[node name="WaveLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=904224141]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+
+[node name="TimerLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=743122340]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10

@@ -21,6 +21,7 @@ var _break_left: float = 0.0
 var _player: Node2D
 
 func _ready() -> void:
+	add_to_group("wave_manager")
 	wave = start_wave - 1
 	start_next_wave.call_deferred()
 
