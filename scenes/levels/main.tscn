@@ -5,6 +5,7 @@
 [ext_resource type="PackedScene" uid="uid://ca4yb1raxumdt" path="res://scenes/pickups/coin.tscn" id="2_u81e1"]
 [ext_resource type="PackedScene" uid="uid://dvtaorfmeyp2c" path="res://scenes/player/player.tscn" id="2_y0acb"]
 [ext_resource type="PackedScene" uid="uid://4e5rqghol2mk" path="res://scenes/enemies/enemy.tscn" id="3_y0acb"]
+[ext_resource type="Script" uid="uid://d3liubyui7y8e" path="res://scenes/levels/wave_manager.gd" id="6_b6bv0"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_y0acb"]
 texture = ExtResource("1_2vj2h")
@@ -237,5 +238,7 @@ limit_bottom = 1054
 position_smoothing_enabled = true
 position_smoothing_speed = 8.0
 
-[node name="Enemy" parent="." unique_id=618674576 instance=ExtResource("3_y0acb")]
-position = Vector2(53, -55)
+[node name="WaveManager" type="Node" parent="." unique_id=956270903]
+script = ExtResource("6_b6bv0")
+enemy_scene = ExtResource("3_y0acb")
+spawn_area = Rect2(-152, -152, 304, 304)

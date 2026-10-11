@@ -114,3 +114,4 @@ script = ExtResource("1_rhl6v")
 [node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="." unique_id=1253452538]
 sprite_frames = SubResource("SpriteFrames_x65yb")
 animation = &"collect"
+speed_scale = 5.0

@@ -12,9 +12,13 @@ var _collected: bool = false
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 func _ready() -> void:
+	add_to_group("coin")
 	_target = get_tree().get_first_node_in_group("player")
 	sprite.play("spin")
 
+func attract_to_player() -> void:
+	magnet_range = INF
+	
 func _physics_process(delta: float) -> void:
 	if _collected or not is_instance_valid(_target):
 		return

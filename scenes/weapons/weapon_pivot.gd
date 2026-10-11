@@ -29,10 +29,10 @@ func rebuild() -> void:
 	for i in sword_count:
 		var sword := sword_scene.instantiate()
 		sword.damage = damage
-		add_child(sword)
 		var angle := TAU * i / sword_count
 		sword.position = Vector2.from_angle(angle) * radius
-		sword.rotation = angle  # ucu çemberden dışarı baksın
+		sword.rotation = angle
+		add_child(sword)
 
 	queue_redraw()
 

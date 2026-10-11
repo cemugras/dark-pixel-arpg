@@ -431,7 +431,6 @@ shape = SubResource("CapsuleShape2D_rn7t0")
 [node name="WeaponPivot" type="Node2D" parent="." unique_id=1796254593]
 script = ExtResource("4_lvxji")
 sword_scene = ExtResource("5_p47bc")
-debug_circle = true
 
 [node name="Hurtbox" type="Area2D" parent="." unique_id=197462709]
 collision_layer = 0

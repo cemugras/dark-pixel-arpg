@@ -11,6 +11,7 @@ var target: Node2D
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 func _ready() -> void:
+	add_to_group("enemy")
 	health = max_health
 	target = get_tree().get_first_node_in_group("player")
 	sprite.play("run")
@@ -26,6 +27,13 @@ func _physics_process(_delta: float) -> void:
 	# Sprite sağa bakıyorsa bu satır doğru; sola bakıyorsa < yerine > yaz
 	if absf(dir.x) > 0.05:
 		sprite.flip_h = dir.x < 0.0
+
+# Dalga yöneticisi, düşmanı sahneye eklemeden önce bunu çağırır
+func setup(wave: int) -> void:
+	var w := wave - 1
+	max_health = int(max_health * (1.0 + 0.2 * w))
+	contact_damage = int(contact_damage * (1.0 + 0.1 * w))
+	move_speed *= minf(1.0 + 0.01 * w, 1.5)
 
 func take_damage(amount: int) -> void:
 	health -= amount
