@@ -7,6 +7,7 @@
 [ext_resource type="PackedScene" uid="uid://4e5rqghol2mk" path="res://scenes/enemies/enemy.tscn" id="3_y0acb"]
 [ext_resource type="PackedScene" uid="uid://dli6q5lmk6ojw" path="res://scenes/ui/hud.tscn" id="4_ubwgw"]
 [ext_resource type="Script" uid="uid://d3liubyui7y8e" path="res://scenes/levels/wave_manager.gd" id="6_b6bv0"]
+[ext_resource type="PackedScene" uid="uid://cunha02yfnu41" path="res://scenes/ui/shop.tscn" id="8_vkq25"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_y0acb"]
 texture = ExtResource("1_2vj2h")
@@ -245,3 +246,5 @@ position_smoothing_speed = 8.0
 script = ExtResource("6_b6bv0")
 enemy_scene = ExtResource("3_y0acb")
 spawn_area = Rect2(-152, -152, 304, 304)
+
+[node name="Shop" parent="." unique_id=1465708622 instance=ExtResource("8_vkq25")]

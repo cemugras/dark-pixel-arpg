@@ -1,0 +1,42 @@
+[gd_scene format=3 uid="uid://cunha02yfnu41"]
+
+[ext_resource type="Script" uid="uid://cdr2p7ocre6lx" path="res://scenes/ui/shop.gd" id="1_ahsc1"]
+
+[node name="Shop" type="CanvasLayer" unique_id=1465708622]
+script = ExtResource("1_ahsc1")
+
+[node name="Background" type="ColorRect" parent="." unique_id=1889334990]
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+color = Color(0, 0, 0, 0.70980394)
+
+[node name="MarginContainer" type="MarginContainer" parent="Background" unique_id=118237181]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+
+[node name="VBoxContainer" type="VBoxContainer" parent="Background/MarginContainer" unique_id=616862349]
+layout_mode = 2
+
+[node name="TitleLabel" type="Label" parent="Background/MarginContainer/VBoxContainer" unique_id=1931998677]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+
+[node name="GoldLabel" type="Label" parent="Background/MarginContainer/VBoxContainer" unique_id=1770039170]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+
+[node name="UpgradeList" type="GridContainer" parent="Background/MarginContainer/VBoxContainer" unique_id=266232472]
+layout_mode = 2
+columns = 2
+
+[node name="NextWaveButton" type="Button" parent="Background/MarginContainer/VBoxContainer" unique_id=1178518961]
+layout_mode = 2
+theme_override_font_sizes/font_size = 10
+text = "Next Wave"

@@ -1,8 +1,11 @@
 extends Node
 
 signal gold_changed(amount: int)
+signal stats_changed
 
 var gold: int = 0
+var stats: PlayerStats = PlayerStats.new()
+var upgrade_levels: Dictionary = {}  # geliştirme id -> kaç kez alındı
 
 func _ready() -> void:
 	EventBus.coin_collected.connect(_on_coin_collected)
@@ -14,7 +17,6 @@ func _on_coin_collected(value: int) -> void:
 func add_gold(amount: int) -> void:
 	gold += amount
 	gold_changed.emit(gold)
-	print("Gold: ", gold)  # geçici
 
 func spend_gold(amount: int) -> bool:
 	if gold < amount:
@@ -23,6 +25,22 @@ func spend_gold(amount: int) -> bool:
 	gold_changed.emit(gold)
 	return true
 
+func get_upgrade_cost(upgrade: Dictionary) -> int:
+	return upgrade["cost"] + upgrade["step"] * upgrade_levels.get(upgrade["id"], 0)
+
+func buy_upgrade(upgrade: Dictionary) -> bool:
+	if not spend_gold(get_upgrade_cost(upgrade)):
+		return false
+	var stat: String = upgrade["stat"]
+	stats.set(stat, stats.get(stat) + upgrade["amount"])
+	upgrade_levels[upgrade["id"]] = upgrade_levels.get(upgrade["id"], 0) + 1
+	stats_changed.emit()
+	return true
+
+# Yeni oyun: her şeyi sıfırla
 func reset() -> void:
 	gold = 0
+	stats = PlayerStats.new()
+	upgrade_levels.clear()
 	gold_changed.emit(gold)
+	stats_changed.emit()

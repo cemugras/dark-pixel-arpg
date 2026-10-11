@@ -22,6 +22,7 @@ var _player: Node2D
 
 func _ready() -> void:
 	add_to_group("wave_manager")
+	EventBus.next_wave_requested.connect(start_next_wave)
 	wave = start_wave - 1
 	start_next_wave.call_deferred()
 
@@ -48,7 +49,7 @@ func _physics_process(delta: float) -> void:
 		_break_left -= delta
 		if _break_left <= 0.0:
 			_in_break = false
-			start_next_wave()
+			EventBus.shop_requested.emit(wave)
 		return
 
 	if not wave_active:

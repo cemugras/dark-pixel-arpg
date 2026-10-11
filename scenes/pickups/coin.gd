@@ -13,6 +13,7 @@ var _collected: bool = false
 
 func _ready() -> void:
 	add_to_group("coin")
+	magnet_range = GameState.stats.pickup_range
 	_target = get_tree().get_first_node_in_group("player")
 	sprite.play("spin")
 

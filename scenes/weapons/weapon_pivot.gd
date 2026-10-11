@@ -39,3 +39,9 @@ func rebuild() -> void:
 func _draw() -> void:
 	if debug_circle:
 		draw_arc(Vector2.ZERO, radius, 0.0, TAU, 48, Color(1, 0, 0, 1), 2.0)
+
+func apply_stats(count: int, speed: float, dmg: int) -> void:
+	sword_count = maxi(count, 0)
+	rotation_speed = speed
+	damage = dmg
+	rebuild()

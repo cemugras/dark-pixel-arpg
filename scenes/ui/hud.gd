@@ -9,7 +9,7 @@ extends CanvasLayer
 var _wave_manager: Node
 
 func _ready() -> void:
-	EventBus.player_damaged.connect(_on_player_damaged)
+	EventBus.player_health_changed.connect(_on_player_damaged)
 	EventBus.wave_started.connect(_on_wave_started)
 	GameState.gold_changed.connect(_on_gold_changed)
 
