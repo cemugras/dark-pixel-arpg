@@ -25,15 +25,20 @@ func spend_gold(amount: int) -> bool:
 	gold_changed.emit(gold)
 	return true
 
-func get_upgrade_cost(upgrade: Dictionary) -> int:
-	return upgrade["cost"] + upgrade["step"] * upgrade_levels.get(upgrade["id"], 0)
+func get_upgrade_cost(upgrade: UpgradeData) -> int:
+	return upgrade.base_cost + upgrade.cost_step * upgrade_levels.get(upgrade.id, 0)
 
-func buy_upgrade(upgrade: Dictionary) -> bool:
+func buy_upgrade(upgrade: UpgradeData) -> bool:
 	if not spend_gold(get_upgrade_cost(upgrade)):
 		return false
-	var stat: String = upgrade["stat"]
-	stats.set(stat, stats.get(stat) + upgrade["amount"])
-	upgrade_levels[upgrade["id"]] = upgrade_levels.get(upgrade["id"], 0) + 1
+
+	var current: Variant = stats.get(upgrade.stat)
+	if current is int:
+		stats.set(upgrade.stat, current + int(upgrade.amount))
+	else:
+		stats.set(upgrade.stat, current + upgrade.amount)
+
+	upgrade_levels[upgrade.id] = upgrade_levels.get(upgrade.id, 0) + 1
 	stats_changed.emit()
 	return true
 

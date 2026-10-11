@@ -3,6 +3,7 @@ extends Node
 enum Mode { TIMED, CLEAR_ALL }
 
 @export var enemy_scene: PackedScene
+@export var enemy_pool: Array[EnemyData] = []
 @export var mode: Mode = Mode.TIMED
 @export var start_wave: int = 1                 # test için: 50 yaparsan oyun 50. dalgadan başlar
 @export var max_wave: int = 100
@@ -71,13 +72,36 @@ func _can_spawn() -> bool:
 	return mode == Mode.TIMED or enemies_left_to_spawn > 0
 
 func _spawn_enemy() -> void:
+	var data := _pick_enemy_data()
+	if data == null:
+		return
+
 	if mode == Mode.CLEAR_ALL:
 		enemies_left_to_spawn -= 1
 
 	var enemy := enemy_scene.instantiate()
-	enemy.setup(wave)
-	enemy.position = _random_spawn_position()  # sahneye eklemeden ÖNCE konumlandır
+	enemy.setup(data, wave)
+	enemy.position = _random_spawn_position()
 	add_child(enemy)
+
+# Bu dalgada doğabilecek türlerden ağırlığa göre rastgele seç
+func _pick_enemy_data() -> EnemyData:
+	var candidates: Array[EnemyData] = []
+	var total_weight := 0.0
+	for e in enemy_pool:
+		if not e.is_boss and wave >= e.min_wave and wave <= e.max_wave:
+			candidates.append(e)
+			total_weight += e.spawn_weight
+
+	if candidates.is_empty():
+		return null
+
+	var roll := randf() * total_weight
+	for e in candidates:
+		roll -= e.spawn_weight
+		if roll <= 0.0:
+			return e
+	return candidates.back()
 
 func _random_spawn_position() -> Vector2:
 	var pos := spawn_area.position

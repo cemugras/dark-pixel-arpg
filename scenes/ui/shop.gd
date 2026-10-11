@@ -7,6 +7,8 @@ extends CanvasLayer
 
 var _buttons: Dictionary = {}  # geliştirme id -> Button
 
+var _upgrades: Array[UpgradeData] = []
+
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS  # oyun dururken de çalışsın
 	visible = false
@@ -19,13 +21,14 @@ func _ready() -> void:
 	_build_buttons()
 
 func _build_buttons() -> void:
-	for upgrade in UpgradePool.UPGRADES:
+	_upgrades = UpgradePool.load_all()
+	for upgrade in _upgrades:
 		var button := Button.new()
 		button.add_theme_font_size_override("font_size", 8)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.pressed.connect(_on_upgrade_pressed.bind(upgrade))
 		upgrade_list.add_child(button)
-		_buttons[upgrade["id"]] = button
+		_buttons[upgrade.id] = button
 
 func open(wave: int) -> void:
 	title_label.text = "Wave %d complete" % wave
@@ -37,14 +40,14 @@ func _refresh() -> void:
 	if not visible:
 		return
 	gold_label.text = "Gold: %d" % GameState.gold
-	for upgrade in UpgradePool.UPGRADES:
-		var button: Button = _buttons[upgrade["id"]]
+	for upgrade in _upgrades:
+		var button: Button = _buttons[upgrade.id]
 		var cost := GameState.get_upgrade_cost(upgrade)
-		var level: int = GameState.upgrade_levels.get(upgrade["id"], 0)
-		button.text = "%s (Lv %d) - %d gold\n%s" % [upgrade["name"], level, cost, upgrade["desc"]]
+		var level: int = GameState.upgrade_levels.get(upgrade.id, 0)
+		button.text = "%s (Lv %d) - %d gold\n%s" % [upgrade.display_name, level, cost, upgrade.description]
 		button.disabled = GameState.gold < cost
 
-func _on_upgrade_pressed(upgrade: Dictionary) -> void:
+func _on_upgrade_pressed(upgrade: UpgradeData) -> void:
 	GameState.buy_upgrade(upgrade)
 
 func _on_next_wave_pressed() -> void:

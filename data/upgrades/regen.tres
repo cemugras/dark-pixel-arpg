@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3 uid="uid://bbabp2h1uylns"]
+
+[ext_resource type="Script" uid="uid://c88doks7c16o" path="res://scripts/upgrade_data.gd" id="1_nij70"]
+
+[resource]
+script = ExtResource("1_nij70")
+id = "regen"
+display_name = "Regeneration"
+description = "+0.5 HP/sec"
+base_cost = 20
+cost_step = 15
+stat = "health_regen"
+amount = 0.5
+sort_order = 4

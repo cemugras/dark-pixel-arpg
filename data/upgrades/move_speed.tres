@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3 uid="uid://cl8ngqil6bkda"]
+
+[ext_resource type="Script" uid="uid://c88doks7c16o" path="res://scripts/upgrade_data.gd" id="1_sbl0j"]
+
+[resource]
+script = ExtResource("1_sbl0j")
+id = "move_speed"
+display_name = "Speed"
+description = "+6 move speed"
+base_cost = 15
+stat = "move_speed"
+amount = 6.0
+sort_order = 6

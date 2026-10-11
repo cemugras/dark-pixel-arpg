@@ -1,0 +1,13 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3 uid="uid://bnuyfllo20e58"]
+
+[ext_resource type="Script" uid="uid://c88doks7c16o" path="res://scripts/upgrade_data.gd" id="1_cx4c2"]
+
+[resource]
+script = ExtResource("1_cx4c2")
+id = "pickup_range"
+display_name = "Magnet"
+description = "+10 pickup range"
+cost_step = 8
+stat = "pickup_range"
+amount = 10.0
+sort_order = 7

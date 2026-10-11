@@ -1,0 +1,11 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://t17swky8ennc"]
+
+[ext_resource type="Script" uid="uid://cqlw7x1k6q18i" path="res://scripts/enemy_data.gd" id="1_sajyx"]
+[ext_resource type="SpriteFrames" uid="uid://cbjgy8fcrsg0a" path="res://data/enemies/monster1_frames.tres" id="2_fbcjn"]
+
+[resource]
+script = ExtResource("1_sajyx")
+id = "monster1"
+display_name = "Imp"
+sprite_frames = ExtResource("2_fbcjn")
+metadata/_custom_type_script = "uid://cqlw7x1k6q18i"
