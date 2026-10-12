@@ -7,7 +7,6 @@ var max_health: int = 100
 var health_regen: float = 0.0     # saniyede yenilenen can
 var armor: float = 0.0
 var move_speed: float = 90.0
-var pickup_range: float = 40.0    # altının çekilmeye başladığı mesafe
 var sword_count: int = 1
 var rotation_speed: float = 3.0
 var damage_multiplier: float = 1.0

@@ -1,0 +1,19 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://djnp5rpt1qdkr"]
+
+[ext_resource type="Script" uid="uid://cqlw7x1k6q18i" path="res://scripts/enemy_data.gd" id="1_klrlg"]
+[ext_resource type="SpriteFrames" uid="uid://cbjgy8fcrsg0a" path="res://data/enemies/monster1_frames.tres" id="2_uqikw"]
+
+[resource]
+script = ExtResource("1_klrlg")
+id = "boss1"
+display_name = "Boss 1"
+sprite_frames = ExtResource("2_uqikw")
+body_scale = 2.5
+max_health = 400
+move_speed = 30.0
+contact_damage = 15
+coin_value = 100
+is_boss = true
+boss_wave = 10
+tint = Color(1, 0.4, 0.4, 1)
+metadata/_custom_type_script = "uid://cqlw7x1k6q18i"

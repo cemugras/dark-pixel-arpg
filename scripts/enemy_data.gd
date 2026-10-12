@@ -14,3 +14,5 @@ extends Resource
 @export var min_wave: int = 1
 @export var max_wave: int = 100
 @export var is_boss: bool = false                # boss'lar normal havuzdan doğmaz
+@export var boss_wave: int = 0                   # boss ise hangi dalgada çıkar (10, 20, 30...)
+@export var tint: Color = Color.WHITE            # sprite rengi, aynı sprite'tan farklı görünüm için

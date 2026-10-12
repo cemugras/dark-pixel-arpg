@@ -10,6 +10,7 @@
 [ext_resource type="Script" uid="uid://cqlw7x1k6q18i" path="res://scripts/enemy_data.gd" id="8_rssyh"]
 [ext_resource type="PackedScene" uid="uid://cunha02yfnu41" path="res://scenes/ui/shop.tscn" id="8_vkq25"]
 [ext_resource type="Resource" uid="uid://t17swky8ennc" path="res://data/enemies/monster1.tres" id="9_hwp66"]
+[ext_resource type="Resource" uid="uid://djnp5rpt1qdkr" path="res://data/enemies/boss1.tres" id="10_hwp66"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_y0acb"]
 texture = ExtResource("1_2vj2h")
@@ -248,6 +249,6 @@ position_smoothing_speed = 8.0
 script = ExtResource("6_b6bv0")
 enemy_scene = ExtResource("3_y0acb")
 enemy_pool = Array[ExtResource("8_rssyh")]([ExtResource("9_hwp66")])
-spawn_area = Rect2(-152, -152, 304, 304)
+boss_pool = Array[ExtResource("8_rssyh")]([ExtResource("10_hwp66")])
 
 [node name="Shop" parent="." unique_id=1465708622 instance=ExtResource("8_vkq25")]

@@ -29,6 +29,7 @@ var _regen_accumulator: float = 0.0
 func _ready() -> void:
 	add_to_group("player")
 	GameState.stats_changed.connect(_on_stats_changed)
+	EventBus.wave_started.connect(_on_wave_started)
 	max_health = GameState.stats.max_health
 	health = max_health
 	_apply_stats()
@@ -111,3 +112,9 @@ func _apply_stats() -> void:
 	var s := GameState.stats
 	move_speed = s.move_speed
 	weapon_pivot.apply_stats(s.sword_count, s.rotation_speed, s.sword_damage())
+
+func _on_wave_started(_wave: int) -> void:
+	if is_dead:
+		return
+	health = max_health
+	EventBus.player_health_changed.emit(health, max_health)

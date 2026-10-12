@@ -5,13 +5,18 @@ extends CanvasLayer
 @onready var gold_label: Label = $MarginContainer/VBoxContainer/GoldLabel
 @onready var wave_label: Label = $MarginContainer/VBoxContainer/WaveLabel
 @onready var timer_label: Label = $MarginContainer/VBoxContainer/TimerLabel
+@onready var boss_bar: ProgressBar = $BossBar
 
+var _boss: Node
 var _wave_manager: Node
 
 func _ready() -> void:
 	EventBus.player_health_changed.connect(_on_player_damaged)
 	EventBus.wave_started.connect(_on_wave_started)
 	GameState.gold_changed.connect(_on_gold_changed)
+	
+	EventBus.boss_spawned.connect(_on_boss_spawned)
+	boss_bar.hide()
 
 	_wave_manager = get_tree().get_first_node_in_group("wave_manager")
 	_refresh_initial.call_deferred()
@@ -26,11 +31,22 @@ func _refresh_initial() -> void:
 		_on_wave_started(_wave_manager.wave)
 
 func _process(_delta: float) -> void:
+	if _boss != null:
+		if is_instance_valid(_boss):
+			boss_bar.value = _boss.health
+		else:
+			_boss = null
+			boss_bar.hide()
+
 	if _wave_manager == null:
 		return
 
 	if not _wave_manager.wave_active:
 		timer_label.text = "Break"
+	elif _wave_manager.spawning_stopped:
+		timer_label.text = "Enemies: %d" % get_tree().get_nodes_in_group("enemy").size()
+	elif _wave_manager.is_boss_wave:
+		timer_label.text = "BOSS"
 	elif _wave_manager.mode == _wave_manager.Mode.TIMED:
 		timer_label.text = "Time: %d" % ceili(maxf(_wave_manager.time_left, 0.0))
 	else:
@@ -47,3 +63,9 @@ func _on_gold_changed(amount: int) -> void:
 
 func _on_wave_started(wave: int) -> void:
 	wave_label.text = "Wave %d" % wave
+
+func _on_boss_spawned(boss: Node) -> void:
+	_boss = boss
+	boss_bar.max_value = boss.max_health
+	boss_bar.value = boss.health
+	boss_bar.show()

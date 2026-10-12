@@ -5,6 +5,7 @@ var max_health: int = 30
 var move_speed: float = 40.0
 var contact_damage: int = 5
 var coin_value: int = 1
+var _base_color: Color = Color.WHITE
 
 var health: int
 var target: Node2D
@@ -25,6 +26,8 @@ func _ready() -> void:
 	add_to_group("enemy")
 	if data:
 		sprite.sprite_frames = data.sprite_frames
+		_base_color = data.tint
+		sprite.modulate = _base_color
 	health = max_health
 	target = get_tree().get_first_node_in_group("player")
 	sprite.play("run")
@@ -54,4 +57,4 @@ func die() -> void:
 func _flash() -> void:
 	sprite.modulate = Color(3, 3, 3)  # kısa süreli parlama
 	var tween := create_tween()
-	tween.tween_property(sprite, "modulate", Color.WHITE, 0.1)
+	tween.tween_property(sprite, "modulate", _base_color, 0.1)

@@ -9,3 +9,4 @@ signal wave_ended(wave: int)
 signal player_health_changed(current: int, maximum: int)
 signal shop_requested(wave: int)
 signal next_wave_requested
+signal boss_spawned(boss: Node)
