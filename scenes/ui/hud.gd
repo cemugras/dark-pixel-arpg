@@ -16,6 +16,8 @@ func _ready() -> void:
 	GameState.gold_changed.connect(_on_gold_changed)
 	
 	EventBus.boss_spawned.connect(_on_boss_spawned)
+	_style_bar(boss_bar, Color(0.8, 0.1, 0.1))
+	_style_bar(health_bar, Color(0.2, 0.7, 0.2))
 	boss_bar.hide()
 
 	_wave_manager = get_tree().get_first_node_in_group("wave_manager")
@@ -69,3 +71,12 @@ func _on_boss_spawned(boss: Node) -> void:
 	boss_bar.max_value = boss.max_health
 	boss_bar.value = boss.health
 	boss_bar.show()
+
+func _style_bar(bar: ProgressBar, fill_color: Color) -> void:
+	var fill := StyleBoxFlat.new()
+	fill.bg_color = fill_color
+	var background := StyleBoxFlat.new()
+	background.bg_color = Color(0.1, 0.1, 0.1, 0.9)
+	bar.add_theme_stylebox_override("fill", fill)
+	bar.add_theme_stylebox_override("background", background)
+	bar.show_percentage = false

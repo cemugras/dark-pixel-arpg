@@ -6,6 +6,7 @@
 script = ExtResource("1_0mwgc")
 
 [node name="BossBar" type="ProgressBar" parent="." unique_id=1472759107]
+custom_minimum_size = Vector2(240, 16)
 anchors_preset = 5
 anchor_left = 0.5
 anchor_right = 0.5
@@ -15,6 +16,18 @@ offset_right = 100.0
 offset_bottom = 14.0
 grow_horizontal = 2
 show_percentage = false
+
+[node name="BossLabel" type="Label" parent="BossBar" unique_id=997750275]
+layout_mode = 1
+anchors_preset = 15
+anchor_right = 1.0
+anchor_bottom = 1.0
+grow_horizontal = 2
+grow_vertical = 2
+theme_override_font_sizes/font_size = 10
+text = "BOSS"
+horizontal_alignment = 1
+vertical_alignment = 1
 
 [node name="MarginContainer" type="MarginContainer" parent="." unique_id=1211973933]
 anchors_preset = 15

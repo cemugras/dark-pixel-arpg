@@ -18,6 +18,7 @@ func _ready() -> void:
 
 func attract_to_player() -> void:
 	magnet_range = INF
+	magnet_speed = 600.0
 	
 func _physics_process(delta: float) -> void:
 	if _collected or not is_instance_valid(_target):

@@ -11,7 +11,7 @@ enum Mode { TIMED, CLEAR_ALL }
 @export var max_wave: int = 100
 @export var spawn_area: Rect2 = Rect2(-152, -152, 304, 304)
 @export var min_spawn_distance: float = 120.0
-@export var break_time: float = 3.0             # dalga sonu altınların toplanması için bekleme
+@export var break_time: float = 1.0             # dalga sonu altınların toplanması için bekleme
 
 var wave: int = 0
 var wave_active: bool = false
