@@ -93,9 +93,6 @@ func die() -> void:
 	is_dead = true
 	velocity = Vector2.ZERO
 	EventBus.player_died.emit()
-	# Geçici: 1 saniye sonra sahneyi yeniden başlat. Sonra Game Over ekranı yapacağız.
-	await get_tree().create_timer(1.0).timeout
-	get_tree().reload_current_scene()
 
 func _on_stats_changed() -> void:
 	if is_dead:
