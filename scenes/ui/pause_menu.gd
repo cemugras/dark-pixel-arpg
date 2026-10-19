@@ -18,7 +18,10 @@ func _unhandled_input(event: InputEvent) -> void:
 	if visible:
 		resume()
 	elif not get_tree().paused:
-		# Başka bir ekran (mağaza, game over) oyunu zaten durdurduysa karışma
+		# Oyuncu öldüyse (Game Over bekleniyorsa) duraklatma açma
+		var player := get_tree().get_first_node_in_group("player")
+		if player and player.is_dead:
+			return
 		pause()
 	get_viewport().set_input_as_handled()
 
