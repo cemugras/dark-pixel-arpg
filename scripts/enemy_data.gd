@@ -3,8 +3,10 @@ extends Resource
 
 @export var id: String = ""
 @export var display_name: String = ""
-@export var sprite_frames: SpriteFrames          # "run" animasyonu zorunlu
-@export var sprite_faces_right: bool = true      # sprite sağa mı bakıyor
+# Animasyon adına göre mod: "run_east/south_east/south/north_east/north" = 8 yön (batı flip),
+# "run_down/up/left/right" = 4 yön, ikisi de yoksa "run" zorunlu (tek yön + flip)
+@export var sprite_frames: SpriteFrames
+@export var sprite_faces_right: bool = true      # sadece tek yönlü sprite için: sprite sağa mı bakıyor
 @export var body_scale: float = 1.0              # 1.5 yaparsan daha büyük
 @export var max_health: int = 30
 @export var move_speed: float = 40.0

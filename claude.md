@@ -26,7 +26,8 @@ assets/audio/ (buraya sesler eklenecek, klasör şimdilik boş)
 assets/fonts/ (buraya fontlar eklenecek, klasör şimdilik boş)
 assets/sprites/gold/ (GoldCollect.png; altının toplanma sprite'ı, GoldSpin.png; altının dönme sprite'ı)
 assets/sprites/gun/ (Ak47.png, Ak47Shoot.png, Glock.png, GlockShoot.png, Bullet.png; hepsi sağa bakıyor)
-assets/sprites/monster/ (Monster1IdleSheet.png, Monster1RunSheet.png; yaratıkların sprite'larının bulunduğu yer. Sayfalar 64x64 kare, 4 satır: aşağı, yukarı, sol, sağ; kodda şimdilik sadece 1. satır (aşağı) kullanılıyor)
+assets/sprites/monster/ (Monster1IdleSheet.png, Monster1RunSheet.png; yaratıkların sprite'larının bulunduğu yer. Sayfalar 64x64 kare, 4 satır: aşağı, yukarı, sol, sağ; monster1_frames.tres içinde run_down/up/left/right olarak kullanılıyor)
+assets/sprites/monster/bat/ (Hell Bat, PixelLab ile üretildi. run/animations/<uzun klasör adı>/<yön>/frame_000-008.png: 5 yön (south, south-east, east, north-east, north) x 9 kare, kare boyutu yöne göre 84-92 px. run/rotations/ içindeki duruş pozları kullanılmıyor)
 assets/sprites/player/ (IdleSheet 16x16.png, RunSheet 16x16.png karakterin idle ve run sprite'ları, sword.png sağa dönük kılıç sprite'ı)
 scenes/enemies/enemy.tscn (düşman yaratık sahnesi)
 scenes/levels/main.tscn (projenin ana sahnesi)
@@ -39,7 +40,8 @@ scenes/ui/shop.tscn (shop sahnesi)
 scenes/weapons/sword.tscn (kılıç sahnesi)
 scenes/weapons/gun.tscn (menzilli silah sahnesi; görünümü WeaponData'dan koddan kurulur), scenes/weapons/bullet.tscn (mermi), scenes/weapons/gun_slots.gd (Player/GunSlots düğümünün scripti, silahları yuvalara yerleştirir)
 scenes/ui/start_choice.gd (oyun başı silah seçim ekranı, Main/StartChoice düğümü; arayüzü koddan kurar)
-data/enemies/ (monster1.tres = Imp, bat.tres = Hell Bat, boss1.tres), data/upgrades/, data/weapons/ (sword, glock, ak47)
+data/enemies/ (monster1.tres = Imp, bat.tres = Hell Bat, boss1.tres; monster1_frames.tres ve bat_frames.tres animasyonlar), data/upgrades/, data/weapons/ (sword, glock, ak47)
+Düşman yön sistemi (enemy.gd): SpriteFrames'teki animasyon adlarına göre otomatik seçilir. run_east/south_east/south/north_east/north varsa 8 yön (batı tarafı flip), run_down/up/left/right varsa 4 yön, ikisi de yoksa tek "run" + yatay flip. Yeni yaratık için 8 yönlü sprite'ta sadece bu 5 yön üretilir.
 Duraklatma menüsü: CanvasLayer > Dim, Center > VBox > Title, ResumeButton, MainMenuButton; pause_menu.gd, Esc ile açılır/kapanır
 Test arenası en uzak gidilebilir tile koordinatları: sol üst (-10,-10), sol alt (-10,9), sağ üst (9,-10), sağ alt (9,9). Düşman spawn alanı bu koordinatlara göre ayarlıdır.
 
@@ -56,18 +58,19 @@ Toplamda en fazla 2 menzilli silah (Glock/AK47) + 1 kılıç olabilir. Kılıç 
 Glock tek tek ateş eder; AK47 otomatik silahtır. Şu anki değerler: Glock 10 hasar / 1.5 atış/sn / 30 altın, AK47 6 hasar / 3 atış/sn / 60 altın, Kılıç 40 altın (.tres içinden ayarlanır).
 Damage geliştirmesi kılıca ve menzilli silahlara birlikte uygulanır; Fire Rate sadece menzilli silahlara.
 Extra Sword ve Spin Speed geliştirmeleri kılıç yoksa kilitlidir; Fire Rate menzilli silah yoksa kilitlidir.
-Her dalgada Imp ve daha zayıf/hızlı Hell Bat birlikte çıkar (spawn_weight eşit). Hell Bat şimdilik Imp sprite'ının küçültülmüş, mor tonlu hâlidir; özgün sprite gelince bat.tres güncellenecek.
+Her dalgada Imp ve daha zayıf/hızlı Hell Bat birlikte çıkar (spawn_weight eşit). Hell Bat'in özgün 8 yönlü sprite'ı var (body_scale 0.5).
+Yaratıklar gittikleri yöne bakar (Imp 4 yön, Hell Bat 8 yön).
 İleride: karakter silahı tuttuğu yöne bakacak.
 Mağaza ekranı görsel olarak şimdilik amatör, ileride güzelleştirilecek.
 Mevcut durum
 Adım 1-17 tamamlandı: hareket, 8 yönlü animasyon, dönen kılıç, kovalayan düşman, hasar sistemi, altın, GameState, dalga yöneticisi, HUD, mağaza, veri odaklı yapı (.tres), boss sistemi (BossBar dahil), Game Over, duraklatma menüsü, ana menü. Ses/müzik altyapısı henüz yok (Audio autoload yapılmadı).
 Adım 18 tamamlandı: silah sistemi (Glock/AK47, 2 yuva, en yakın düşmana otomatik nişan, mermi), oyun başı Kılıç/Glock seçimi, mağazada silah bölümü ve Fire Rate geliştirmesi. 10. dalgaya kadar oynanıp boss'la test edildi.
-Adım 19: ikinci normal düşman Hell Bat eklendi (geçici sprite).
+Adım 19 tamamlandı: ikinci normal düşman Hell Bat (PixelLab sprite'ı, 8 yön) ve yaratıkların gittikleri yöne bakması. Oyunda test edildi.
+Not: "gun logic" commit'inde main.tscn yanlışlıkla hud.tscn içeriğiyle kaydedilmişti (siyah ekran); 2da1c97'den geri alınıp düzeltildi. Claude dosya değiştirdiğinde Godot'nun sorusuna "Reload from disk" seçilmeli ve editörde kaydedilmemiş değişiklik bırakılmamalı.
 Not: Şu an oyun açılınca direkt oyun sahnesi açılıyor. Ana menü kısmı şimdilik tamam sayılıyor ama asıl ana menü (aşağıdaki maddeler) her şey bittikten sonra yapılacak.
 Sonrasında:
-	yaratıklar gittikleri yöne baksın (sprite sayfalarındaki 4 yön satırı kullanılacak: aşağı, yukarı, sol, sağ),
 	silah satma ve yuvaları farklı silahlarla değiştirme,
-	Hell Bat için özgün sprite,
+	düşman saldırı animasyonu/mekaniği (şu an sadece temas hasarı var; PixelLab'de attack animasyonu 5 yön üretilecek),
 	sadece esc tuşu ile değil, ekranda da bir pause duşu gösterelim ki esc bilmeyenler onu kullansın,
 	yeni hikayeye uygun boss çeşitliliği,
 	sigara mekaniği,
@@ -86,7 +89,8 @@ Gereksiz refactor yapma, çalışan sistemi bozma. Emin değilsen sor.
 Kod yorumları ve açıklamalar Türkçe olabilir; değişken, fonksiyon ve dosya adları İngilizce kalsın.
 
 Görsel (art) kuralları
-Şimdilik örnek/geçici varlıklar kullanılıyor; ileride Pixellab ile özgün varlıklar üretilecek.
+Şimdilik örnek/geçici varlıklar kullanılıyor; ileride Pixellab ile özgün varlıklar üretilecek (ilki Hell Bat).
+PixelLab ipuçları: karakter önce sadece duruş (rotations) olarak üretilir, animasyon ayrı ekranda eklenir. Hak tasarrufu için sadece 5 yön (south, south-east, east, north-east, north) üretilir, batı tarafı kodda çevrilir. Animasyon prompt'una yön yazılmaz. İndirilen paket olduğu gibi assets/sprites/monster/<yaratık>/ altına konur. PixelLab'in ticari kullanım koşulları satıştan önce kontrol edilmeli.
 Yeni sprite'lar 16x16, aynı yön düzeniyle (5 yön + flip) ve tutarlı dosya adlarıyla eklenmeli.
 Silah sprite'ları sağa bakacak şekilde hazırlanır.
 

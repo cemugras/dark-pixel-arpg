@@ -7,8 +7,27 @@ var contact_damage: int = 5
 var coin_value: int = 1
 var _base_color: Color = Color.WHITE
 
+const DIRECTION_BIAS: float = 1.2  # 4 yön: eksen değiştirme eşiği (titreme önleme)
+const SECTOR_MARGIN: float = 0.12  # 8 yön: dilim değiştirme payı (radyan, titreme önleme)
+
+# 8 yön: 45 derecelik dilimler, indeks 0 = doğu, saat yönünde (Godot'ta y aşağı artar).
+# Batı tarafı, doğu tarafının yatay çevrilmiş halidir (oyuncudaki gibi).
+const DIR8_NAMES: Array[String] = [
+	"east", "south_east", "south", "south_east",
+	"east", "north_east", "north", "north_east"
+]
+const DIR8_FLIP: Array[bool] = [
+	false, false, false, true,
+	true, true, false, false
+]
+
+enum SpriteMode { SINGLE, FOUR_DIR, EIGHT_DIR }
+
 var health: int
 var target: Node2D
+var _mode: SpriteMode = SpriteMode.SINGLE
+var _facing: String = "down"   # 4 yön modu
+var _dir8_idx: int = 2         # 8 yön modu, başlangıçta güney
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
@@ -30,7 +49,17 @@ func _ready() -> void:
 		sprite.modulate = _base_color
 	health = max_health
 	target = get_tree().get_first_node_in_group("player")
-	sprite.play("run")
+	# Sprite'ta hangi animasyonlar varsa ona göre mod seçilir
+	var frames := sprite.sprite_frames
+	if frames.has_animation("run_east"):
+		_mode = SpriteMode.EIGHT_DIR
+		sprite.play("run_" + DIR8_NAMES[_dir8_idx])
+	elif frames.has_animation("run_down"):
+		_mode = SpriteMode.FOUR_DIR
+		sprite.play("run_down")
+	else:
+		_mode = SpriteMode.SINGLE
+		sprite.play("run")
 
 func _physics_process(_delta: float) -> void:
 	if not is_instance_valid(target):
@@ -40,9 +69,57 @@ func _physics_process(_delta: float) -> void:
 	velocity = dir * move_speed
 	move_and_slide()
 
-	if absf(dir.x) > 0.05:
-		var faces_right := data.sprite_faces_right if data else true
-		sprite.flip_h = (dir.x < 0.0) == faces_right
+	match _mode:
+		SpriteMode.EIGHT_DIR:
+			_update_direction_8(dir)
+		SpriteMode.FOUR_DIR:
+			_update_direction(dir)
+		SpriteMode.SINGLE:
+			if absf(dir.x) > 0.05:
+				# Tek yönlü sprite: sadece yatay çevir
+				var faces_right := data.sprite_faces_right if data else true
+				sprite.flip_h = (dir.x < 0.0) == faces_right
+
+# 8 yönlü sprite: run_east/south_east/south/north_east/north + batı için flip.
+# Mevcut dilimin sınırını biraz aşmadan yön değişmez (çaprazda titreme önleme).
+func _update_direction_8(dir: Vector2) -> void:
+	var angle := dir.angle()
+	var current_center := _dir8_idx * PI / 4.0
+	if absf(angle_difference(current_center, angle)) <= PI / 8.0 + SECTOR_MARGIN:
+		return
+
+	_dir8_idx = wrapi(roundi(angle / (PI / 4.0)), 0, 8)
+	sprite.flip_h = DIR8_FLIP[_dir8_idx]
+	_play_keep_frame("run_" + DIR8_NAMES[_dir8_idx])
+
+# Animasyon karesi kaldığı yerden devam etsin, yön değişince baştan başlamasın
+func _play_keep_frame(anim: String) -> void:
+	if sprite.animation == anim:
+		return
+	var frame := sprite.frame
+	var progress := sprite.frame_progress
+	sprite.play(anim)
+	sprite.set_frame_and_progress(frame, progress)
+
+# 4 yönlü sprite: baskın eksene göre run_down/up/left/right seç.
+# Çaprazda titremesin diye eksen değiştirmek için diğer eksenin belirgin şekilde baskın olması gerekir.
+func _update_direction(dir: Vector2) -> void:
+	var horizontal := _facing == "left" or _facing == "right"
+	if horizontal and absf(dir.y) > absf(dir.x) * DIRECTION_BIAS:
+		horizontal = false
+	elif not horizontal and absf(dir.x) > absf(dir.y) * DIRECTION_BIAS:
+		horizontal = true
+
+	var new_facing: String
+	if horizontal:
+		new_facing = "right" if dir.x > 0.0 else "left"
+	else:
+		new_facing = "down" if dir.y > 0.0 else "up"
+
+	if new_facing == _facing:
+		return
+	_facing = new_facing
+	_play_keep_frame("run_" + _facing)
 
 func take_damage(amount: int) -> void:
 	health -= amount
