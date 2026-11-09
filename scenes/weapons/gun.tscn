@@ -1,0 +1,13 @@
+[gd_scene format=3]
+
+[ext_resource type="Script" path="res://scenes/weapons/gun.gd" id="1_gun"]
+[ext_resource type="PackedScene" path="res://scenes/weapons/bullet.tscn" id="2_bullet"]
+
+[node name="Gun" type="Node2D"]
+z_index = 1
+script = ExtResource("1_gun")
+bullet_scene = ExtResource("2_bullet")
+
+[node name="AnimatedSprite2D" type="AnimatedSprite2D" parent="."]
+
+[node name="Muzzle" type="Marker2D" parent="."]

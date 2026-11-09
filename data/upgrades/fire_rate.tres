@@ -1,0 +1,15 @@
+[gd_resource type="Resource" script_class="UpgradeData" format=3]
+
+[ext_resource type="Script" uid="uid://c88doks7c16o" path="res://scripts/upgrade_data.gd" id="1_fr"]
+
+[resource]
+script = ExtResource("1_fr")
+id = "fire_rate"
+display_name = "Fire Rate"
+description = "+10% fire rate"
+base_cost = 20
+cost_step = 15
+stat = "fire_rate_multiplier"
+amount = 0.1
+sort_order = 7
+requires = "gun"

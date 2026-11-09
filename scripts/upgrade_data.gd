@@ -9,3 +9,4 @@ extends Resource
 @export var stat: String = ""        # PlayerStats'taki değişken adı
 @export var amount: float = 1.0
 @export var sort_order: int = 0      # mağazadaki sıra
+@export var requires: String = ""    # "sword" veya "gun": o silah yoksa mağazada kilitli görünür

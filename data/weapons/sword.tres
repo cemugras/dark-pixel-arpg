@@ -1,0 +1,14 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapon_data.gd" id="1_wdata"]
+[ext_resource type="Texture2D" uid="uid://v7y1wbrcdp73" path="res://assets/sprites/player/sword.png" id="2_icon"]
+
+[resource]
+script = ExtResource("1_wdata")
+id = "sword"
+display_name = "Sword"
+description = "Blade spinning around you"
+is_melee = true
+cost = 40
+sort_order = 0
+icon = ExtResource("2_icon")

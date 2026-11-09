@@ -11,3 +11,4 @@ base_cost = 15
 stat = "rotation_speed"
 amount = 0.4
 sort_order = 1
+requires = "sword"

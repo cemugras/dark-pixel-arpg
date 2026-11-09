@@ -1,0 +1,22 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapon_data.gd" id="1_wdata"]
+[ext_resource type="Texture2D" uid="uid://w015fdjuj640" path="res://assets/sprites/gun/Glock.png" id="2_icon"]
+[ext_resource type="Texture2D" uid="uid://dblq536j7dg0n" path="res://assets/sprites/gun/GlockShoot.png" id="3_sheet"]
+
+[resource]
+script = ExtResource("1_wdata")
+id = "glock"
+display_name = "Glock"
+description = "10 dmg, 1.5 shots/s"
+cost = 30
+sort_order = 1
+icon = ExtResource("2_icon")
+shoot_sheet = ExtResource("3_sheet")
+shoot_frame_count = 9
+sprite_scale = 0.35
+damage = 10
+fire_rate = 1.5
+attack_range = 160.0
+bullet_speed = 320.0
+spread_degrees = 2.0

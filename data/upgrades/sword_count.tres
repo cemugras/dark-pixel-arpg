@@ -10,3 +10,4 @@ description = "+1 sword"
 base_cost = 40
 cost_step = 40
 stat = "sword_count"
+requires = "sword"
