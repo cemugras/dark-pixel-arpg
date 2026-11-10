@@ -20,3 +20,4 @@ fire_rate = 1.5
 attack_range = 160.0
 bullet_speed = 320.0
 spread_degrees = 2.0
+shoot_sound = "glock_shoot"

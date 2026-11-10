@@ -19,6 +19,7 @@ config/icon="res://icon.svg"
 
 EventBus="*uid://dmorure374fpg"
 GameState="*uid://d08nh3vepvvvl"
+Audio="*res://autoload/audio.gd"
 
 [display]
 

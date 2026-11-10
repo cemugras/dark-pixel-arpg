@@ -20,3 +20,4 @@ fire_rate = 3.0
 attack_range = 180.0
 bullet_speed = 380.0
 spread_degrees = 6.0
+shoot_sound = "ak47_shoot"

@@ -8,6 +8,7 @@ extends Resource
 @export var cost: int = 30                    # mağaza fiyatı
 @export var sort_order: int = 0               # mağazadaki sıra
 @export var icon: Texture2D                   # seçim ekranı ve silahın duruş görüntüsü (sağa bakan)
+@export var shoot_sound: String = ""            # Audio sfx adı (assets/audio/sfx/ içindeki dosya adı, uzantısız). Boşsa ses yok
 
 @export_group("Ranged")
 @export var shoot_sheet: Texture2D            # yatay ateş animasyonu şeridi (sağa bakan)

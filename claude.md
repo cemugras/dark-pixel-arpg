@@ -22,7 +22,7 @@ Dalga yöneticisi iki modu destekler: süreli dalga ve "hepsini öldür" dalgas�
 
 Dosya yapısı
 Bilinen yollar:
-assets/audio/ (buraya sesler eklenecek, klasör şimdilik boş)
+assets/audio/ (sfx/: oyunda kullanılan kesilmiş efektler, 16 bit mono WAV; music/: müzikler, stereo OGG; raw/: ham indirmeler, .gdignore ile Godot'dan gizli ve oyuna girmez, Dosya Gezgini'nden kullanılır; CREDITS.md: her sesin kaynağı/yazarı/lisansı)
 assets/fonts/ (buraya fontlar eklenecek, klasör şimdilik boş)
 assets/sprites/gold/ (GoldCollect.png; altının toplanma sprite'ı, GoldSpin.png; altının dönme sprite'ı)
 assets/sprites/gun/ (Ak47.png, Ak47Shoot.png, Glock.png, GlockShoot.png, Bullet.png; hepsi sağa bakıyor)
@@ -43,6 +43,8 @@ scenes/ui/start_choice.gd (oyun başı silah seçim ekranı, Main/StartChoice d�
 data/enemies/ (monster1.tres = Imp, bat.tres = Hell Bat, boss1.tres; monster1_frames.tres ve bat_frames.tres animasyonlar), data/upgrades/, data/weapons/ (sword, glock, ak47)
 Düşman yön sistemi (enemy.gd): SpriteFrames'teki animasyon adlarına göre otomatik seçilir. run_east/south_east/south/north_east/north varsa 8 yön (batı tarafı flip), run_down/up/left/right varsa 4 yön, ikisi de yoksa tek "run" + yatay flip. Yeni yaratık için 8 yönlü sprite'ta sadece bu 5 yön üretilir.
 Duraklatma menüsü: CanvasLayer > Dim, Center > VBox > Title, ResumeButton, MainMenuButton; pause_menu.gd, Esc ile açılır/kapanır. Ayrıca HUD'da sol üstte (MarginContainer/VBoxContainer sonunda, Timer yazısının altında) koddan kurulan "II" PauseButton var; Esc ve buton pause_menu.try_pause() kullanır (mağaza açıkken / oyuncu ölüyken açılmaz).
+Ses sistemi: Audio autoload (autoload/audio.gd). Audio.play_sfx("ad") ile çalınır; assets/audio/sfx/ otomatik okunur, dosya adı = ses adı (uzantısız). Varyasyonlar ad_01, ad_02 ... şeklinde, rastgele seçilir + hafif perde oynaması. Dosyası olmayan ses sessizce atlanır. Sesler arası seviye dengesi SFX_VOLUME_DB içinde. SFX ve Music bus'ları koddan oluşturulur. Silah ateş sesi WeaponData.shoot_sound alanından seçilir.
+Ses kuralları: sesler lisansı uygun kaynaklardan (CC0, CC-BY; NC yasak) alınır, her ses CREDITS.md'ye eklenir (kullanıcı freesound attribution metnini verir, Claude ekler). Efektler başındaki sessizlik kırpılmış 16 bit mono WAV; ham dosya raw/ altında _raw ekiyle saklanır.
 Test arenası en uzak gidilebilir tile koordinatları: sol üst (-10,-10), sol alt (-10,9), sağ üst (9,-10), sağ alt (9,9). Düşman spawn alanı bu koordinatlara göre ayarlıdır.
 
 Alınmış oyun kararları
@@ -65,12 +67,13 @@ Yaratıklar gittikleri yöne bakar (Imp 4 yön, Hell Bat 8 yön).
 Mağazada "Your weapons" bölümündeki yuva/kılıç butonlarında silahın görseli gösterilir.
 Mağaza ekranı görsel olarak şimdilik amatör, ileride güzelleştirilecek.
 Mevcut durum
-Adım 1-17 tamamlandı: hareket, 8 yönlü animasyon, dönen kılıç, kovalayan düşman, hasar sistemi, altın, GameState, dalga yöneticisi, HUD, mağaza, veri odaklı yapı (.tres), boss sistemi (BossBar dahil), Game Over, duraklatma menüsü, ana menü. Ses/müzik altyapısı henüz yok (Audio autoload yapılmadı).
+Adım 1-17 tamamlandı: hareket, 8 yönlü animasyon, dönen kılıç, kovalayan düşman, hasar sistemi, altın, GameState, dalga yöneticisi, HUD, mağaza, veri odaklı yapı (.tres), boss sistemi (BossBar dahil), Game Over, duraklatma menüsü, ana menü.
 Adım 18 tamamlandı: silah sistemi (Glock/AK47, 2 yuva, en yakın düşmana otomatik nişan, mermi), oyun başı Kılıç/Glock seçimi, mağazada silah bölümü ve Fire Rate geliştirmesi. 10. dalgaya kadar oynanıp boss'la test edildi.
 Adım 19 tamamlandı: ikinci normal düşman Hell Bat (PixelLab sprite'ı, 8 yön) ve yaratıkların gittikleri yöne bakması. Oyunda test edildi.
 Adım 20 tamamlandı: mağazada silah satma ("Your weapons" bölümü) ve dolu yuvadaki silahı başka silahla değiştirme. Oyunda test edildi.
 Ara adım (20b) tamamlandı: menzilli silahlar oyuncu etrafındaki çemberde hedefe doğru kayıyor; mağazada sahip olunan silahların görseli gösteriliyor. Oyunda test edildi.
 Adım 21 tamamlandı: ekranda pause butonu (HUD sol üst, Esc bilmeyenler için). Oyunda test edildi.
+Adım 22 (devam ediyor): ses altyapısı (Audio autoload, SFX/Music bus, CREDITS.md, raw/ klasörü). İlk ses Glock ateşi, oyunda test edildi.
 Not: "gun logic" commit'inde main.tscn yanlışlıkla hud.tscn içeriğiyle kaydedilmişti (siyah ekran); 2da1c97'den geri alınıp düzeltildi. Claude dosya değiştirdiğinde Godot'nun sorusuna "Reload from disk" seçilmeli ve editörde kaydedilmemiş değişiklik bırakılmamalı.
 Not: Şu an oyun açılınca direkt oyun sahnesi açılıyor. Ana menü kısmı şimdilik tamam sayılıyor ama asıl ana menü (aşağıdaki maddeler) her şey bittikten sonra yapılacak.
 Sonrasında:
@@ -79,7 +82,7 @@ Sonrasında:
 	sigara mekaniği,
 	silah/alet çeşitliliği,
 	final boss (şeytan),
-	ses altyapısı (Audio autoload) ve müzikler: lisans sorunu olmayan, oyunun atmosferine uygun müzik/ses efektleri eklenecek ve ayarlanacak,
+	ses efektleri ve müzikler (altyapı hazır, Adım 22): kalan sesler bulunup eklenecek (ak47_shoot, enemy_hit, enemy_death, player_hurt, player_death, coin_pickup, wave_start/complete, boss_spawn/death, ui_click/buy/sell) ve müzik çalma (gameplay/boss/shop) eklenecek,
 	oyun açıldığında ilk olarak ana menü gibi bir menü ayarlanacak, burada play game, options, quit butonları olacak.
 
 Çalışma kuralları (Claude için)

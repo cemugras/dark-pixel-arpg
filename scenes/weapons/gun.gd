@@ -138,6 +138,7 @@ func _fire(dir: Vector2) -> void:
 	sprite.sprite_frames.set_animation_speed("shoot", sprite.sprite_frames.get_frame_count("shoot") / anim_time)
 	sprite.play("shoot")
 	sprite.frame = 0
+	Audio.play_sfx(data.shoot_sound)
 
 func _fire_interval() -> float:
 	return 1.0 / maxf(data.fire_rate * GameState.stats.fire_rate_multiplier, 0.01)
