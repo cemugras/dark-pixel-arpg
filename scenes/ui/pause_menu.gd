@@ -9,6 +9,7 @@ func _ready() -> void:
 	# Oyun durunca bu menü çalışmaya devam etmeli
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	visible = false
+	add_to_group("pause_menu")  # HUD'daki pause butonu buradan bulur
 	resume_button.pressed.connect(resume)
 	main_menu_button.pressed.connect(_on_main_menu_pressed)
 
@@ -17,13 +18,18 @@ func _unhandled_input(event: InputEvent) -> void:
 		return
 	if visible:
 		resume()
-	elif not get_tree().paused:
-		# Oyuncu öldüyse (Game Over bekleniyorsa) duraklatma açma
-		var player := get_tree().get_first_node_in_group("player")
-		if player and player.is_dead:
-			return
-		pause()
+	else:
+		try_pause()
 	get_viewport().set_input_as_handled()
+
+# Esc ve ekrandaki pause butonu bunu kullanır. Mağaza/başka menü açıksa ya da oyuncu öldüyse açılmaz.
+func try_pause() -> void:
+	if visible or get_tree().paused:
+		return
+	var player := get_tree().get_first_node_in_group("player")
+	if player and player.is_dead:
+		return
+	pause()
 
 func pause() -> void:
 	get_tree().paused = true

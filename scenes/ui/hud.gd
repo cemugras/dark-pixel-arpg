@@ -19,9 +19,28 @@ func _ready() -> void:
 	_style_bar(boss_bar, Color(0.8, 0.1, 0.1))
 	_style_bar(health_bar, Color(0.2, 0.7, 0.2))
 	boss_bar.hide()
+	_build_pause_button()
 
 	_wave_manager = get_tree().get_first_node_in_group("wave_manager")
 	_refresh_initial.call_deferred()
+
+# Sol üstte, HUD yazılarının (Gold, Wave, Timer) altında pause butonu (Esc bilmeyenler için); hud.tscn'e dokunmamak için koddan kurulur
+func _build_pause_button() -> void:
+	var button := Button.new()
+	button.name = "PauseButton"
+	button.text = "II"
+	button.tooltip_text = "Pause (Esc)"
+	button.add_theme_font_size_override("font_size", 12)
+	button.focus_mode = Control.FOCUS_NONE  # Space/Enter ile yanlışlıkla basılmasın
+	button.custom_minimum_size = Vector2(24, 24)
+	button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN  # VBox içinde tüm genişliğe yayılmasın
+	button.pressed.connect(_on_pause_pressed)
+	timer_label.get_parent().add_child(button)
+
+func _on_pause_pressed() -> void:
+	var pause_menu := get_tree().get_first_node_in_group("pause_menu")
+	if pause_menu:
+		pause_menu.try_pause()
 
 # Oyun başında sinyal gelmeden önce değerleri doldur
 func _refresh_initial() -> void:
