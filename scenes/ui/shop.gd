@@ -10,8 +10,10 @@ var _buttons: Dictionary = {}  # geliştirme id -> Button
 var _upgrades: Array[UpgradeData] = []
 
 var _weapons: Array[WeaponData] = []
-var _weapon_buttons: Dictionary = {}  # silah id -> Button
 var _weapons_label: Label
+var _weapon_list: GridContainer   # satın alma / değiştirme butonları (her yenilemede yeniden kurulur)
+var _owned_label: Label
+var _owned_list: GridContainer    # sahip olunan silahlar: satma butonları
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS  # oyun dururken de çalışsın
@@ -24,30 +26,33 @@ func _ready() -> void:
 	next_wave_button.pressed.connect(_on_next_wave_pressed)
 
 	_build_buttons()
-	_build_weapon_buttons()
+	_build_weapon_section()
 
-# Silah bölümü koddan eklenir (shop.tscn'e dokunmamak için), Next Wave butonunun üstüne
-func _build_weapon_buttons() -> void:
-	var vbox := next_wave_button.get_parent()
-
-	_weapons_label = Label.new()
-	_weapons_label.add_theme_font_size_override("font_size", 10)
-	vbox.add_child(_weapons_label)
-	vbox.move_child(_weapons_label, next_wave_button.get_index())
-
-	var weapon_list := GridContainer.new()
-	weapon_list.columns = 2
-	vbox.add_child(weapon_list)
-	vbox.move_child(weapon_list, next_wave_button.get_index())
-
+# Silah bölümleri koddan eklenir (shop.tscn'e dokunmamak için), Next Wave butonunun üstüne
+func _build_weapon_section() -> void:
 	_weapons = WeaponPool.load_all()
-	for weapon in _weapons:
-		var button := Button.new()
-		button.add_theme_font_size_override("font_size", 8)
-		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
-		button.pressed.connect(_on_weapon_pressed.bind(weapon))
-		weapon_list.add_child(button)
-		_weapon_buttons[weapon.id] = button
+
+	_owned_label = _add_label("Your weapons (sell refunds 50% of everything spent on it)")
+	_owned_list = _add_grid(3)
+	_weapons_label = _add_label("")
+	_weapon_list = _add_grid(2)
+
+func _add_label(text: String) -> Label:
+	var vbox := next_wave_button.get_parent()
+	var label := Label.new()
+	label.text = text
+	label.add_theme_font_size_override("font_size", 10)
+	vbox.add_child(label)
+	vbox.move_child(label, next_wave_button.get_index())
+	return label
+
+func _add_grid(columns: int) -> GridContainer:
+	var vbox := next_wave_button.get_parent()
+	var grid := GridContainer.new()
+	grid.columns = columns
+	vbox.add_child(grid)
+	vbox.move_child(grid, next_wave_button.get_index())
+	return grid
 
 func _build_buttons() -> void:
 	_upgrades = UpgradePool.load_all()
@@ -78,23 +83,77 @@ func _refresh() -> void:
 		button.text = "%s (Lv %d) - %d gold\n%s" % [upgrade.display_name, level, cost, info]
 		button.disabled = locked or GameState.gold < cost
 
+	_refresh_owned()
+	_refresh_weapon_list()
+
+func _clear(container: Node) -> void:
+	for child in container.get_children():
+		container.remove_child(child)
+		child.queue_free()
+
+func _make_button(parent: Node, text: String, disabled: bool, on_pressed: Callable) -> void:
+	var button := Button.new()
+	button.add_theme_font_size_override("font_size", 8)
+	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
+	button.text = text
+	button.disabled = disabled
+	button.pressed.connect(on_pressed)
+	parent.add_child(button)
+
+# Sahip olunan silahlar: her biri için "Sell (+X)" butonu. Son silah satılamaz.
+func _refresh_owned() -> void:
+	_clear(_owned_list)
+	var can_sell := GameState.can_sell_weapon()
+	var last_text := "\nLast weapon, can't sell" if not can_sell else ""
+
+	for slot in GameState.guns.size():
+		var gun := GameState.guns[slot]
+		var text := "Slot %d: %s\nSell (+%d gold)%s" % [slot + 1, gun.display_name, GameState.get_gun_sell_price(slot), last_text]
+		_make_button(_owned_list, text, not can_sell, _on_sell_gun_pressed.bind(slot))
+
+	if GameState.has_sword():
+		var text := "Sword x%d\nSell (+%d gold)%s" % [GameState.stats.sword_count, GameState.get_sword_sell_price(), last_text]
+		_make_button(_owned_list, text, not can_sell, _on_sell_sword_pressed)
+
+# Satın alma; yuvalar doluyken menzilli silahlar "değiştir" butonu olarak görünür
+func _refresh_weapon_list() -> void:
+	_clear(_weapon_list)
 	_weapons_label.text = "Weapons (gun slots %d/%d)" % [GameState.guns.size(), GameState.MAX_GUNS]
+
 	for weapon in _weapons:
-		var button: Button = _weapon_buttons[weapon.id]
-		var status := ""
-		if weapon.is_melee and GameState.has_sword():
-			status = "Owned"
-		elif not weapon.is_melee and GameState.gun_slots_full():
-			status = "Gun slots full"
-		var info := status if status != "" else weapon.description
-		button.text = "%s - %d gold\n%s" % [weapon.display_name, weapon.cost, info]
-		button.disabled = status != "" or GameState.gold < weapon.cost
+		if weapon.is_melee:
+			var owned := GameState.has_sword()
+			var info := "Owned" if owned else weapon.description
+			var text := "%s - %d gold\n%s" % [weapon.display_name, weapon.cost, info]
+			_make_button(_weapon_list, text, owned or GameState.gold < weapon.cost, _on_weapon_pressed.bind(weapon))
+		elif not GameState.gun_slots_full():
+			var text := "%s - %d gold\n%s" % [weapon.display_name, weapon.cost, weapon.description]
+			_make_button(_weapon_list, text, GameState.gold < weapon.cost, _on_weapon_pressed.bind(weapon))
+		else:
+			# Yuvalar dolu: her farklı silahlı yuva için bir değiştirme butonu
+			for slot in GameState.guns.size():
+				var old := GameState.guns[slot]
+				if old.id == weapon.id:
+					continue
+				var net := GameState.get_swap_cost(slot, weapon)
+				var price := ("%d gold" % net) if net >= 0 else ("+%d gold" % -net)
+				var text := "%s: replace %s (slot %d)\n%s" % [weapon.display_name, old.display_name, slot + 1, price]
+				_make_button(_weapon_list, text, not GameState.can_swap_gun(slot, weapon), _on_swap_pressed.bind(slot, weapon))
 
 func _on_upgrade_pressed(upgrade: UpgradeData) -> void:
 	GameState.buy_upgrade(upgrade)
 
 func _on_weapon_pressed(weapon: WeaponData) -> void:
 	GameState.buy_weapon(weapon)
+
+func _on_sell_gun_pressed(slot: int) -> void:
+	GameState.sell_gun(slot)
+
+func _on_sell_sword_pressed() -> void:
+	GameState.sell_sword()
+
+func _on_swap_pressed(slot: int, weapon: WeaponData) -> void:
+	GameState.swap_gun(slot, weapon)
 
 func _on_next_wave_pressed() -> void:
 	visible = false

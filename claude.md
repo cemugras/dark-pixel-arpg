@@ -16,7 +16,7 @@ Sprite'lar: 16x16 pixel art
 Oyuncu animasyonları: 5 yön (down, down_right, right, up_right, up). Sol yönler yatay çevirme (flip) ile yapılır, toplam 8 yön.
 GameState autoload: altın ve oyun durumu burada tutulur; Main Menu'ye dönerken GameState.reset() çağrılır.
 Veri odaklı yapı: düşmanlar, geliştirmeler ve silahlar .tres kaynaklarıyla tanımlanır (EnemyData, UpgradeData, WeaponData). Yeni düşman/geliştirme/silah eklerken koda gömmek yerine yeni .tres oluştur. data/upgrades/ ve data/weapons/ klasörleri otomatik okunur (UpgradePool, WeaponPool); yeni düşman ise main.tscn > WaveManager > enemy_pool listesine eklenmeli.
-Silah sistemi: GameState.guns (en fazla MAX_GUNS = 2 menzilli silah) + stats.sword_count (0 = kılıç yok). Silah verme/alma GameState.give_weapon() / buy_weapon() üzerinden yapılır. UpgradeData.requires ("sword" / "gun") ilgili silah yoksa geliştirmeyi mağazada kilitler.
+Silah sistemi: GameState.guns (en fazla MAX_GUNS = 2 menzilli silah) + stats.sword_count (0 = kılıç yok). Silah verme/alma GameState.give_weapon() / buy_weapon() üzerinden yapılır. UpgradeData.requires ("sword" / "gun") ilgili silah yoksa geliştirmeyi mağazada kilitler. Satma/değiştirme: sell_gun(slot), sell_sword(), swap_gun(slot, weapon); harcama takibi gun_spent / sword_spent / gun_upgrade_spent.
 Oyuncu istatistikleri tek yerde toplanır; mağaza buradan beslenir.
 Dalga yöneticisi iki modu destekler: süreli dalga ve "hepsini öldür" dalgası (ikisi de denenecek, seçim kullanıcıda).
 
@@ -54,7 +54,8 @@ Boss can çubuğu kırmızı ve içinde "BOSS" yazar (oyuncu canından ayırt ed
 Menzilli silahlar en yakın canavara otomatik ateş eder.
 Silah yuvası 2 tane (çift elle tutma hissi).
 Oyun başında oyuncuya Kılıç mı Glock mu diye sorulur; seçilen silahla başlanır.
-Toplamda en fazla 2 menzilli silah (Glock/AK47) + 1 kılıç olabilir. Kılıç mağazadan bir kez alınır. 2 silah yuvası doluyken silahlar mağazada yine görünür ama pasiftir.
+Toplamda en fazla 2 menzilli silah (Glock/AK47) + 1 kılıç olabilir. Kılıç mağazadan bir kez alınır. 2 silah yuvası doluyken mağazadaki menzilli silahlar "replace" (yuvadaki silahla değiştir) butonu olarak görünür.
+Silah satışı: o silah için harcanan toplam paranın %50'si iade edilir (SELL_RATIO). Kılıç satılınca kılıç fiyatı + Extra Sword/Spin Speed harcamasının yarısı iade edilir, bu geliştirmeler sıfırlanır. Fire Rate ortak olduğu için son menzilli silah satılınca iade edilip sıfırlanır. Damage satışta iade edilmez. Başlangıç silahı bedava olduğu için satış fiyatı 0 (sadece ona alınan geliştirmeler). Son silah satılamaz. Değiştirmede net fiyat = yeni fiyat - eski silahın iadesi.
 Glock tek tek ateş eder; AK47 otomatik silahtır. Şu anki değerler: Glock 10 hasar / 1.5 atış/sn / 30 altın, AK47 6 hasar / 3 atış/sn / 60 altın, Kılıç 40 altın (.tres içinden ayarlanır).
 Damage geliştirmesi kılıca ve menzilli silahlara birlikte uygulanır; Fire Rate sadece menzilli silahlara.
 Extra Sword ve Spin Speed geliştirmeleri kılıç yoksa kilitlidir; Fire Rate menzilli silah yoksa kilitlidir.
@@ -66,10 +67,10 @@ Mevcut durum
 Adım 1-17 tamamlandı: hareket, 8 yönlü animasyon, dönen kılıç, kovalayan düşman, hasar sistemi, altın, GameState, dalga yöneticisi, HUD, mağaza, veri odaklı yapı (.tres), boss sistemi (BossBar dahil), Game Over, duraklatma menüsü, ana menü. Ses/müzik altyapısı henüz yok (Audio autoload yapılmadı).
 Adım 18 tamamlandı: silah sistemi (Glock/AK47, 2 yuva, en yakın düşmana otomatik nişan, mermi), oyun başı Kılıç/Glock seçimi, mağazada silah bölümü ve Fire Rate geliştirmesi. 10. dalgaya kadar oynanıp boss'la test edildi.
 Adım 19 tamamlandı: ikinci normal düşman Hell Bat (PixelLab sprite'ı, 8 yön) ve yaratıkların gittikleri yöne bakması. Oyunda test edildi.
+Adım 20 tamamlandı: mağazada silah satma ("Your weapons" bölümü) ve dolu yuvadaki silahı başka silahla değiştirme. Oyunda test edildi.
 Not: "gun logic" commit'inde main.tscn yanlışlıkla hud.tscn içeriğiyle kaydedilmişti (siyah ekran); 2da1c97'den geri alınıp düzeltildi. Claude dosya değiştirdiğinde Godot'nun sorusuna "Reload from disk" seçilmeli ve editörde kaydedilmemiş değişiklik bırakılmamalı.
 Not: Şu an oyun açılınca direkt oyun sahnesi açılıyor. Ana menü kısmı şimdilik tamam sayılıyor ama asıl ana menü (aşağıdaki maddeler) her şey bittikten sonra yapılacak.
 Sonrasında:
-	silah satma ve yuvaları farklı silahlarla değiştirme,
 	düşman saldırı animasyonu/mekaniği (şu an sadece temas hasarı var; PixelLab'de attack animasyonu 5 yön üretilecek),
 	sadece esc tuşu ile değil, ekranda da bir pause duşu gösterelim ki esc bilmeyenler onu kullansın,
 	yeni hikayeye uygun boss çeşitliliği,
