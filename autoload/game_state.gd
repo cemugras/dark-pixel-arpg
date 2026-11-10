@@ -6,8 +6,9 @@ signal weapons_changed
 
 const MAX_GUNS: int = 2  # menzilli silah yuvası sayısı
 const SELL_RATIO: float = 0.5  # satışta, o silah için harcanan toplam paranın bu oranı iade edilir
+const START_GOLD: int = 0  # başlangıç altını (test için geçici olarak artırılabilir)
 
-var gold: int = 0
+var gold: int = START_GOLD
 var stats: PlayerStats = PlayerStats.new()
 var upgrade_levels: Dictionary = {}  # geliştirme id -> kaç kez alındı
 var guns: Array[WeaponData] = []     # takılı menzilli silahlar (yuva sırasıyla)
@@ -187,7 +188,7 @@ func meets_requirement(requirement: String) -> bool:
 
 # Yeni oyun: her şeyi sıfırla
 func reset() -> void:
-	gold = 0
+	gold = START_GOLD
 	stats = PlayerStats.new()
 	upgrade_levels.clear()
 	guns.clear()

@@ -16,6 +16,7 @@ const PITCH_JITTER: float = 0.06      # her çalışta perde +/- bu kadar oynar,
 # Sesler arası seviye dengesi (dB). Listede olmayan 0 dB çalar. Sesi kısmak için eksi değer ver.
 const SFX_VOLUME_DB: Dictionary = {
 	"glock_shoot": -4.0,
+	"ak47_shoot": -12.0,
 }
 
 var _sounds: Dictionary = {}          # ses adı -> Array[AudioStream] (varyasyonlar)

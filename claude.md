@@ -55,6 +55,8 @@ Coin magnet (pickup range) geliştirmesi yok; dalga sonunda altın otomatik topl
 Boss can çubuğu kırmızı ve içinde "BOSS" yazar (oyuncu canından ayırt edilsin diye).
 Menzilli silahlar en yakın canavara otomatik ateş eder. Silahlar oyuncunun etrafındaki görünmez bir çemberde (GunSlots: orbit_radius 10, orbit_speed 9) hedefe en yakın noktaya kayar ve düşmana döner; hedef yokken el konumuna (slot_offsets) döner. İki silah aynı hedefe bakarken pair_spread_degrees (25°) ile yan yana durur. Menzil/hedef seçimi çember merkezinden yapılır.
 Silah yuvası 2 tane (çift elle tutma hissi).
+İki menzilli silah aynı anda ateş etmez: GunSlots.request_shot() sıra verir, atışlar arası boşluk = en hızlı silahın atış aralığı / silah sayısı (shot_gap_ratio ile ayarlanır). Atışlar seri halinde arka arkaya gelir, sesler üst üste binmez.
+Test için GameState.START_GOLD geçici olarak artırılabilir; commit'te 0 olmalı.
 Oyun başında oyuncuya Kılıç mı Glock mu diye sorulur; seçilen silahla başlanır.
 Toplamda en fazla 2 menzilli silah (Glock/AK47) + 1 kılıç olabilir. Kılıç mağazadan bir kez alınır. 2 silah yuvası doluyken mağazadaki menzilli silahlar "replace" (yuvadaki silahla değiştir) butonu olarak görünür.
 Silah satışı: o silah için harcanan toplam paranın %50'si iade edilir (SELL_RATIO). Kılıç satılınca kılıç fiyatı + Extra Sword/Spin Speed harcamasının yarısı iade edilir, bu geliştirmeler sıfırlanır. Fire Rate ortak olduğu için son menzilli silah satılınca iade edilip sıfırlanır. Damage satışta iade edilmez. Başlangıç silahı bedava olduğu için satış fiyatı 0 (sadece ona alınan geliştirmeler). Son silah satılamaz. Değiştirmede net fiyat = yeni fiyat - eski silahın iadesi.
@@ -73,7 +75,7 @@ Adım 19 tamamlandı: ikinci normal düşman Hell Bat (PixelLab sprite'ı, 8 yö
 Adım 20 tamamlandı: mağazada silah satma ("Your weapons" bölümü) ve dolu yuvadaki silahı başka silahla değiştirme. Oyunda test edildi.
 Ara adım (20b) tamamlandı: menzilli silahlar oyuncu etrafındaki çemberde hedefe doğru kayıyor; mağazada sahip olunan silahların görseli gösteriliyor. Oyunda test edildi.
 Adım 21 tamamlandı: ekranda pause butonu (HUD sol üst, Esc bilmeyenler için). Oyunda test edildi.
-Adım 22 (devam ediyor): ses altyapısı (Audio autoload, SFX/Music bus, CREDITS.md, raw/ klasörü). İlk ses Glock ateşi, oyunda test edildi.
+Adım 22 (devam ediyor): ses altyapısı (Audio autoload, SFX/Music bus, CREDITS.md, raw/ klasörü). Eklenen sesler: glock_shoot, ak47_shoot (-12 dB). İki silahın sırayla ateş etmesi eklendi. Oyunda test edildi.
 Not: "gun logic" commit'inde main.tscn yanlışlıkla hud.tscn içeriğiyle kaydedilmişti (siyah ekran); 2da1c97'den geri alınıp düzeltildi. Claude dosya değiştirdiğinde Godot'nun sorusuna "Reload from disk" seçilmeli ve editörde kaydedilmemiş değişiklik bırakılmamalı.
 Not: Şu an oyun açılınca direkt oyun sahnesi açılıyor. Ana menü kısmı şimdilik tamam sayılıyor ama asıl ana menü (aşağıdaki maddeler) her şey bittikten sonra yapılacak.
 Sonrasında:
@@ -82,7 +84,7 @@ Sonrasında:
 	sigara mekaniği,
 	silah/alet çeşitliliği,
 	final boss (şeytan),
-	ses efektleri ve müzikler (altyapı hazır, Adım 22): kalan sesler bulunup eklenecek (ak47_shoot, enemy_hit, enemy_death, player_hurt, player_death, coin_pickup, wave_start/complete, boss_spawn/death, ui_click/buy/sell) ve müzik çalma (gameplay/boss/shop) eklenecek,
+	ses efektleri ve müzikler (altyapı hazır, Adım 22): kalan sesler bulunup eklenecek (enemy_hit, enemy_death, player_hurt, player_death, coin_pickup, wave_start/complete, boss_spawn/death, ui_click/buy/sell) ve müzik çalma (gameplay/boss/shop) eklenecek,
 	oyun açıldığında ilk olarak ana menü gibi bir menü ayarlanacak, burada play game, options, quit butonları olacak.
 
 Çalışma kuralları (Claude için)

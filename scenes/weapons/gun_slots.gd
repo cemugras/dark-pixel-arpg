@@ -9,10 +9,37 @@ extends Node2D
 @export var orbit_speed: float = 9.0              # çember üzerinde dönüş hızı (radyan/sn)
 # İki silah aynı düşmana nişan alırken üst üste binmesin diye aradaki açı farkının yarısı (derece)
 @export var pair_spread_degrees: float = 25.0
+# İki silahın atışları arasındaki boşluk = en hızlı silahın atış aralığı / silah sayısı x bu oran (1 = tam eşit aralık)
+@export var shot_gap_ratio: float = 1.0
+
+var _time: float = 0.0
+var _last_shot_time: float = -100.0
 
 func _ready() -> void:
 	GameState.weapons_changed.connect(rebuild)
 	rebuild()
+
+func _physics_process(delta: float) -> void:
+	_time += delta
+
+# Silahlar ateş etmeden önce sorar; diğer silah az önce ateş ettiyse false döner
+func request_shot() -> bool:
+	if _time - _last_shot_time < _shot_gap():
+		return false
+	_last_shot_time = _time
+	return true
+
+func _shot_gap() -> float:
+	var guns := get_children()
+	if guns.size() < 2:
+		return 0.0
+	var fastest := INF
+	for gun in guns:
+		if gun.has_method("fire_interval"):
+			fastest = minf(fastest, gun.fire_interval())
+	if fastest == INF:
+		return 0.0
+	return fastest / guns.size() * shot_gap_ratio
 
 func rebuild() -> void:
 	# Ölüm anında GameState sıfırlanınca silahlar kaybolmasın

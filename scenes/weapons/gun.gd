@@ -91,6 +91,10 @@ func _physics_process(delta: float) -> void:
 	_set_aim(dir)
 
 	if _cooldown <= 0.0:
+		# İki silah aynı anda ateş etmesin: GunSlots sıra verene kadar bekle (atışlar arka arkaya, sesler üst üste binmez)
+		var slots := get_parent()
+		if slots and slots.has_method("request_shot") and not slots.request_shot():
+			return
 		_fire(dir)
 		_cooldown = _fire_interval()
 
@@ -139,6 +143,10 @@ func _fire(dir: Vector2) -> void:
 	sprite.play("shoot")
 	sprite.frame = 0
 	Audio.play_sfx(data.shoot_sound)
+
+# GunSlots atışlar arası boşluğu hesaplarken kullanır
+func fire_interval() -> float:
+	return _fire_interval()
 
 func _fire_interval() -> float:
 	return 1.0 / maxf(data.fire_rate * GameState.stats.fire_rate_multiplier, 0.01)
