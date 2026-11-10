@@ -33,6 +33,7 @@ func _physics_process(delta: float) -> void:
 func _collect() -> void:
 	_collected = true
 	EventBus.coin_collected.emit(value)
+	Audio.play_sfx("coin_pickup")  # dalga sonunda çok altın gelince Audio aynı anda en fazla MAX_PER_SOUND kadarını çalar
 	sprite.play("collect")
 	await sprite.animation_finished
 	queue_free()

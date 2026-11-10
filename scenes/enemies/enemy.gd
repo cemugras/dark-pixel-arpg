@@ -28,6 +28,7 @@ var target: Node2D
 var _mode: SpriteMode = SpriteMode.SINGLE
 var _facing: String = "down"   # 4 yön modu
 var _dir8_idx: int = 2         # 8 yön modu, başlangıçta güney
+var _dying: bool = false
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
@@ -122,12 +123,22 @@ func _update_direction(dir: Vector2) -> void:
 	_play_keep_frame("run_" + _facing)
 
 func take_damage(amount: int) -> void:
+	if _dying:
+		return
 	health -= amount
 	_flash()
 	if health <= 0:
 		die()
+	elif data:
+		Audio.play_sfx(data.hit_sound)
 
 func die() -> void:
+	# Aynı karede iki vuruş gelirse iki kez ölmesin (çift altın / çift ses olmasın)
+	if _dying:
+		return
+	_dying = true
+	if data:
+		Audio.play_sfx(data.death_sound)
 	EventBus.enemy_died.emit(global_position, coin_value)
 	queue_free()
 

@@ -14,3 +14,5 @@ move_speed = 60.0
 contact_damage = 3
 coin_value = 1
 spawn_weight = 1.0
+hit_sound = "hell_bat_hit"
+death_sound = "hell_bat_death"

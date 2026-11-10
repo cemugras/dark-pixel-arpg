@@ -18,3 +18,5 @@ extends Resource
 @export var is_boss: bool = false                # boss'lar normal havuzdan doğmaz
 @export var boss_wave: int = 0                   # boss ise hangi dalgada çıkar (10, 20, 30...)
 @export var tint: Color = Color.WHITE            # sprite rengi, aynı sprite'tan farklı görünüm için
+@export var hit_sound: String = ""             # Audio sfx adı: hasar alınca (boşsa ses yok)
+@export var death_sound: String = ""           # Audio sfx adı: ölünce (boşsa ses yok)
