@@ -10,12 +10,29 @@ var _target: Node2D = null
 var _retarget_timer: float = 0.0
 var _player: Node = null
 
+# Görünmez çember üzerinde hareket (GunSlots setup_orbit ile ayarlar)
+var _orbit_center: Vector2 = Vector2.ZERO
+var _orbit_radius: float = 10.0
+var _orbit_speed: float = 9.0
+var _rest_angle: float = 0.0     # hedef yokken çemberdeki açı (el konumu)
+var _aim_offset: float = 0.0     # iki silah aynı hedefe bakarken aradaki açı farkı
+var _angle: float = 0.0          # şu anki çember açısı
+
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var muzzle: Marker2D = $Muzzle
 
 # GunSlots, silahı sahneye eklemeden önce bunu çağırır
 func setup(weapon_data: WeaponData) -> void:
 	data = weapon_data
+
+func setup_orbit(center: Vector2, radius: float, speed: float, rest_angle: float, aim_offset: float) -> void:
+	_orbit_center = center
+	_orbit_radius = radius
+	_orbit_speed = speed
+	_rest_angle = rest_angle
+	_aim_offset = aim_offset
+	_angle = rest_angle
+	_update_orbit_position()
 
 func _ready() -> void:
 	_player = get_tree().get_first_node_in_group("player")
@@ -58,22 +75,45 @@ func _physics_process(delta: float) -> void:
 		_target = _find_target()
 		_retarget_timer = retarget_interval
 
+	# Çember üzerinde hedefe en yakın noktaya kay; hedef yoksa el konumuna dön
+	var desired := _rest_angle
+	if _target != null:
+		desired = _center_global().direction_to(_target.global_position).angle() + _aim_offset
+	_angle = rotate_toward(_angle, desired, _orbit_speed * delta)
+	_update_orbit_position()
+
 	if _target == null:
+		# hedef yokken namlu çemberin dışına baksın
+		_set_aim(Vector2.from_angle(_angle))
 		return
 
 	var dir := global_position.direction_to(_target.global_position)
-	rotation = dir.angle()
-	sprite.flip_v = dir.x < 0.0  # sola nişan alırken silah ters görünmesin
+	_set_aim(dir)
 
 	if _cooldown <= 0.0:
 		_fire(dir)
 		_cooldown = _fire_interval()
 
+func _set_aim(dir: Vector2) -> void:
+	rotation = dir.angle()
+	sprite.flip_v = dir.x < 0.0  # sola nişan alırken silah ters görünmesin
+
+# Çemberin merkezi (dünya koordinatı); menzil ve hedef seçimi buradan yapılır, silah kayarken titremesin
+func _center_global() -> Vector2:
+	var parent := get_parent() as Node2D
+	if parent == null:
+		return global_position
+	return parent.to_global(_orbit_center)
+
+func _update_orbit_position() -> void:
+	position = _orbit_center + Vector2.from_angle(_angle) * _orbit_radius
+
 func _find_target() -> Node2D:
 	var best: Node2D = null
 	var best_dist := data.attack_range * data.attack_range
+	var center := _center_global()
 	for enemy in get_tree().get_nodes_in_group("enemy"):
-		var d := global_position.distance_squared_to(enemy.global_position)
+		var d := center.distance_squared_to(enemy.global_position)
 		if d <= best_dist:
 			best_dist = d
 			best = enemy
@@ -83,7 +123,7 @@ func _find_target() -> Node2D:
 func _is_valid_target(t: Variant) -> bool:
 	if not is_instance_valid(t) or t.is_queued_for_deletion():
 		return false
-	return global_position.distance_to(t.global_position) <= data.attack_range
+	return _center_global().distance_to(t.global_position) <= data.attack_range
 
 func _fire(dir: Vector2) -> void:
 	var spread := deg_to_rad(randf_range(-data.spread_degrees, data.spread_degrees))

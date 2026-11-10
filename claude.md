@@ -51,7 +51,7 @@ Dalga bitince canavarlar silinmez; kalanlar öldürülünce mağaza/sonraki dalg
 Dalga sonu mağaza öncesi bekleme (break_time) sabit 1 saniye.
 Coin magnet (pickup range) geliştirmesi yok; dalga sonunda altın otomatik toplanır.
 Boss can çubuğu kırmızı ve içinde "BOSS" yazar (oyuncu canından ayırt edilsin diye).
-Menzilli silahlar en yakın canavara otomatik ateş eder.
+Menzilli silahlar en yakın canavara otomatik ateş eder. Silahlar oyuncunun etrafındaki görünmez bir çemberde (GunSlots: orbit_radius 10, orbit_speed 9) hedefe en yakın noktaya kayar ve düşmana döner; hedef yokken el konumuna (slot_offsets) döner. İki silah aynı hedefe bakarken pair_spread_degrees (25°) ile yan yana durur. Menzil/hedef seçimi çember merkezinden yapılır.
 Silah yuvası 2 tane (çift elle tutma hissi).
 Oyun başında oyuncuya Kılıç mı Glock mu diye sorulur; seçilen silahla başlanır.
 Toplamda en fazla 2 menzilli silah (Glock/AK47) + 1 kılıç olabilir. Kılıç mağazadan bir kez alınır. 2 silah yuvası doluyken mağazadaki menzilli silahlar "replace" (yuvadaki silahla değiştir) butonu olarak görünür.
@@ -62,12 +62,14 @@ Extra Sword ve Spin Speed geliştirmeleri kılıç yoksa kilitlidir; Fire Rate m
 Her dalgada Imp ve daha zayıf/hızlı Hell Bat birlikte çıkar (spawn_weight eşit). Hell Bat'in özgün 8 yönlü sprite'ı var (body_scale 0.5).
 Yaratıklar gittikleri yöne bakar (Imp 4 yön, Hell Bat 8 yön).
 İleride: karakter silahı tuttuğu yöne bakacak.
+Mağazada "Your weapons" bölümündeki yuva/kılıç butonlarında silahın görseli gösterilir.
 Mağaza ekranı görsel olarak şimdilik amatör, ileride güzelleştirilecek.
 Mevcut durum
 Adım 1-17 tamamlandı: hareket, 8 yönlü animasyon, dönen kılıç, kovalayan düşman, hasar sistemi, altın, GameState, dalga yöneticisi, HUD, mağaza, veri odaklı yapı (.tres), boss sistemi (BossBar dahil), Game Over, duraklatma menüsü, ana menü. Ses/müzik altyapısı henüz yok (Audio autoload yapılmadı).
 Adım 18 tamamlandı: silah sistemi (Glock/AK47, 2 yuva, en yakın düşmana otomatik nişan, mermi), oyun başı Kılıç/Glock seçimi, mağazada silah bölümü ve Fire Rate geliştirmesi. 10. dalgaya kadar oynanıp boss'la test edildi.
 Adım 19 tamamlandı: ikinci normal düşman Hell Bat (PixelLab sprite'ı, 8 yön) ve yaratıkların gittikleri yöne bakması. Oyunda test edildi.
 Adım 20 tamamlandı: mağazada silah satma ("Your weapons" bölümü) ve dolu yuvadaki silahı başka silahla değiştirme. Oyunda test edildi.
+Ara adım (20b) tamamlandı: menzilli silahlar oyuncu etrafındaki çemberde hedefe doğru kayıyor; mağazada sahip olunan silahların görseli gösteriliyor. Oyunda test edildi.
 Not: "gun logic" commit'inde main.tscn yanlışlıkla hud.tscn içeriğiyle kaydedilmişti (siyah ekran); 2da1c97'den geri alınıp düzeltildi. Claude dosya değiştirdiğinde Godot'nun sorusuna "Reload from disk" seçilmeli ve editörde kaydedilmemiş değişiklik bırakılmamalı.
 Not: Şu an oyun açılınca direkt oyun sahnesi açılıyor. Ana menü kısmı şimdilik tamam sayılıyor ama asıl ana menü (aşağıdaki maddeler) her şey bittikten sonra yapılacak.
 Sonrasında:

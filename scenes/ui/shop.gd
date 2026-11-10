@@ -91,7 +91,7 @@ func _clear(container: Node) -> void:
 		container.remove_child(child)
 		child.queue_free()
 
-func _make_button(parent: Node, text: String, disabled: bool, on_pressed: Callable) -> void:
+func _make_button(parent: Node, text: String, disabled: bool, on_pressed: Callable) -> Button:
 	var button := Button.new()
 	button.add_theme_font_size_override("font_size", 8)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -99,6 +99,17 @@ func _make_button(parent: Node, text: String, disabled: bool, on_pressed: Callab
 	button.disabled = disabled
 	button.pressed.connect(on_pressed)
 	parent.add_child(button)
+	return button
+
+# Sahip olunan silah butonunun solunda silahın görseli (hangi yuvada ne var karışmasın)
+func _set_weapon_icon(button: Button, weapon: WeaponData) -> void:
+	if weapon == null or weapon.icon == null:
+		return
+	button.icon = weapon.icon
+	button.expand_icon = true
+	button.icon_alignment = HORIZONTAL_ALIGNMENT_LEFT
+	button.add_theme_constant_override("icon_max_width", 48)
+	button.custom_minimum_size.y = 40
 
 # Sahip olunan silahlar: her biri için "Sell (+X)" butonu. Son silah satılamaz.
 func _refresh_owned() -> void:
@@ -109,11 +120,13 @@ func _refresh_owned() -> void:
 	for slot in GameState.guns.size():
 		var gun := GameState.guns[slot]
 		var text := "Slot %d: %s\nSell (+%d gold)%s" % [slot + 1, gun.display_name, GameState.get_gun_sell_price(slot), last_text]
-		_make_button(_owned_list, text, not can_sell, _on_sell_gun_pressed.bind(slot))
+		var button := _make_button(_owned_list, text, not can_sell, _on_sell_gun_pressed.bind(slot))
+		_set_weapon_icon(button, gun)
 
 	if GameState.has_sword():
 		var text := "Sword x%d\nSell (+%d gold)%s" % [GameState.stats.sword_count, GameState.get_sword_sell_price(), last_text]
-		_make_button(_owned_list, text, not can_sell, _on_sell_sword_pressed)
+		var button := _make_button(_owned_list, text, not can_sell, _on_sell_sword_pressed)
+		_set_weapon_icon(button, _sword_data())
 
 # Satın alma; yuvalar doluyken menzilli silahlar "değiştir" butonu olarak görünür
 func _refresh_weapon_list() -> void:
@@ -139,6 +152,12 @@ func _refresh_weapon_list() -> void:
 				var price := ("%d gold" % net) if net >= 0 else ("+%d gold" % -net)
 				var text := "%s: replace %s (slot %d)\n%s" % [weapon.display_name, old.display_name, slot + 1, price]
 				_make_button(_weapon_list, text, not GameState.can_swap_gun(slot, weapon), _on_swap_pressed.bind(slot, weapon))
+
+func _sword_data() -> WeaponData:
+	for weapon in _weapons:
+		if weapon.is_melee:
+			return weapon
+	return null
 
 func _on_upgrade_pressed(upgrade: UpgradeData) -> void:
 	GameState.buy_upgrade(upgrade)
