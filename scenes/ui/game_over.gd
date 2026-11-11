@@ -19,5 +19,6 @@ func _on_player_died() -> void:
 	get_tree().paused = true
 
 func _on_retry_pressed() -> void:
+	Audio.play_sfx("ui_click")
 	get_tree().paused = false
 	get_tree().reload_current_scene()

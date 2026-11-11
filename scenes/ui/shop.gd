@@ -159,22 +159,29 @@ func _sword_data() -> WeaponData:
 			return weapon
 	return null
 
+# Alım/satım sesi sadece işlem başarılı olunca çalar (para yetmezse ses yok)
 func _on_upgrade_pressed(upgrade: UpgradeData) -> void:
-	GameState.buy_upgrade(upgrade)
+	if GameState.buy_upgrade(upgrade):
+		Audio.play_sfx("ui_click")
 
 func _on_weapon_pressed(weapon: WeaponData) -> void:
-	GameState.buy_weapon(weapon)
+	if GameState.buy_weapon(weapon):
+		Audio.play_sfx("ui_click")
 
 func _on_sell_gun_pressed(slot: int) -> void:
-	GameState.sell_gun(slot)
+	if GameState.sell_gun(slot):
+		Audio.play_sfx("ui_click")
 
 func _on_sell_sword_pressed() -> void:
-	GameState.sell_sword()
+	if GameState.sell_sword():
+		Audio.play_sfx("ui_click")
 
 func _on_swap_pressed(slot: int, weapon: WeaponData) -> void:
-	GameState.swap_gun(slot, weapon)
+	if GameState.swap_gun(slot, weapon):
+		Audio.play_sfx("ui_click")
 
 func _on_next_wave_pressed() -> void:
+	Audio.play_sfx("ui_click")
 	visible = false
 	get_tree().paused = false
 	EventBus.next_wave_requested.emit()

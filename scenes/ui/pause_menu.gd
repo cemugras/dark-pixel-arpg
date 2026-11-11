@@ -10,7 +10,7 @@ func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS
 	visible = false
 	add_to_group("pause_menu")  # HUD'daki pause butonu buradan bulur
-	resume_button.pressed.connect(resume)
+	resume_button.pressed.connect(_on_resume_pressed)
 	main_menu_button.pressed.connect(_on_main_menu_pressed)
 
 func _unhandled_input(event: InputEvent) -> void:
@@ -40,7 +40,12 @@ func resume() -> void:
 	get_tree().paused = false
 	visible = false
 
+func _on_resume_pressed() -> void:
+	Audio.play_sfx("ui_click")
+	resume()
+
 func _on_main_menu_pressed() -> void:
+	Audio.play_sfx("ui_click")
 	get_tree().paused = false
 	# GameState içindeki altın, dalga, istatistikleri sıfırlayan bir fonksiyon çağıracağız (aşağıya bak)
 	if GameState.has_method("reset"):

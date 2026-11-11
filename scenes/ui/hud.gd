@@ -38,6 +38,7 @@ func _build_pause_button() -> void:
 	timer_label.get_parent().add_child(button)
 
 func _on_pause_pressed() -> void:
+	Audio.play_sfx("ui_click")
 	var pause_menu := get_tree().get_first_node_in_group("pause_menu")
 	if pause_menu:
 		pause_menu.try_pause()

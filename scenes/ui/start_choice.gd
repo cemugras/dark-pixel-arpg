@@ -52,6 +52,7 @@ func _build_ui() -> void:
 	(row.get_child(0) as Button).grab_focus.call_deferred()
 
 func _on_choice(weapon: WeaponData) -> void:
+	Audio.play_sfx("ui_click")
 	GameState.give_weapon(weapon)
 	get_tree().paused = false
 	queue_free()
