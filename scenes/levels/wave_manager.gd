@@ -25,6 +25,7 @@ var _in_break: bool = false
 var _break_left: float = 0.0
 var _player: Node2D
 var _boss: Node = null
+var _wave_sound_pending: bool = false  # dalga başlangıç sesi, oyun duraklatılmamışken ilk karede çalar
 
 func _ready() -> void:
 	add_to_group("wave_manager")
@@ -53,8 +54,13 @@ func start_next_wave() -> void:
 		_spawn_boss()
 
 	EventBus.wave_started.emit(wave)
+	_wave_sound_pending = true  # ses _physics_process ilk karesinde çalar (oyun duraklatılmışken çalmasın)
 
 func _physics_process(delta: float) -> void:
+	if _wave_sound_pending:
+		_wave_sound_pending = false
+		Audio.play_sfx("wave_start")
+
 	if _in_break:
 		_break_left -= delta
 		if _break_left <= 0.0:
@@ -169,6 +175,7 @@ func _end_wave() -> void:
 	_boss = null
 	get_tree().call_group("coin", "attract_to_player")
 	EventBus.wave_ended.emit(wave)
+	Audio.play_sfx("wave_complete")
 	_in_break = true
 	_break_left = break_time
 

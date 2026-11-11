@@ -20,6 +20,8 @@ const SFX_VOLUME_DB: Dictionary = {
 	"coin_pickup": -7.0,
 	"hell_bat_hit": -6.0,
 	"hell_bat_death": -6.0,
+	"wave_start": -3.0,
+	"wave_complete": -4.0,
 }
 
 var _sounds: Dictionary = {}          # ses adı -> Array[AudioStream] (varyasyonlar)
