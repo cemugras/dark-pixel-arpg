@@ -88,10 +88,13 @@ func take_damage(amount: int) -> void:
 	EventBus.player_health_changed.emit(health, max_health)
 	if health <= 0:
 		die()
+	else:
+		Audio.play_sfx("player_hurt")
 
 func die() -> void:
 	is_dead = true
 	velocity = Vector2.ZERO
+	Audio.play_sfx("player_death")
 	EventBus.player_died.emit()
 
 func _on_stats_changed() -> void:

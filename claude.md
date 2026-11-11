@@ -77,7 +77,7 @@ Adım 19 tamamlandı: ikinci normal düşman Hell Bat (PixelLab sprite'ı, 8 yö
 Adım 20 tamamlandı: mağazada silah satma ("Your weapons" bölümü) ve dolu yuvadaki silahı başka silahla değiştirme. Oyunda test edildi.
 Ara adım (20b) tamamlandı: menzilli silahlar oyuncu etrafındaki çemberde hedefe doğru kayıyor; mağazada sahip olunan silahların görseli gösteriliyor. Oyunda test edildi.
 Adım 21 tamamlandı: ekranda pause butonu (HUD sol üst, Esc bilmeyenler için). Oyunda test edildi.
-Adım 22 (devam ediyor): ses altyapısı (Audio autoload, SFX/Music bus, CREDITS.md, raw/ klasörü). Eklenen sesler: glock_shoot, ak47_shoot (-12 dB), coin_pickup (-7 dB), hell_bat_hit (3 varyasyon, -6 dB), hell_bat_death (-6 dB), wave_start (-3 dB, silah seçimi/mağaza kapandıktan sonra ilk oynanabilir karede çalar), wave_complete (-4 dB, son canavar ölünce). İki silahın sırayla ateş etmesi eklendi. Oyunda test edildi.
+Adım 22 (devam ediyor): ses altyapısı (Audio autoload, SFX/Music bus, CREDITS.md, raw/ klasörü). Eklenen sesler: glock_shoot, ak47_shoot (-12 dB), coin_pickup (-7 dB), hell_bat_hit (3 varyasyon, -6 dB), hell_bat_death (-6 dB), wave_start (-3 dB, silah seçimi/mağaza kapandıktan sonra ilk oynanabilir karede çalar), wave_complete (-4 dB, son canavar ölünce), player_hurt (3 varyasyon, hasar alıp hayatta kalınca), player_death (ölünce, hurt yerine çalar). player_hurt için CREDITS.md satırı TODO, attribution metni bekleniyor. İki silahın sırayla ateş etmesi eklendi. Oyunda test edildi.
 Not: "gun logic" commit'inde main.tscn yanlışlıkla hud.tscn içeriğiyle kaydedilmişti (siyah ekran); 2da1c97'den geri alınıp düzeltildi. Claude dosya değiştirdiğinde Godot'nun sorusuna "Reload from disk" seçilmeli ve editörde kaydedilmemiş değişiklik bırakılmamalı.
 Not: Şu an oyun açılınca direkt oyun sahnesi açılıyor. Ana menü kısmı şimdilik tamam sayılıyor ama asıl ana menü (aşağıdaki maddeler) her şey bittikten sonra yapılacak.
 Sonrasında:
@@ -86,7 +86,7 @@ Sonrasında:
 	sigara mekaniği,
 	silah/alet çeşitliliği,
 	final boss (şeytan),
-	ses efektleri ve müzikler (altyapı hazır, Adım 22): kalan sesler bulunup eklenecek (player_hurt, player_death, boss_spawn/death, ui_click/buy/sell) ve müzik çalma (gameplay/boss/shop) eklenecek,
+	ses efektleri ve müzikler (altyapı hazır, Adım 22): kalan sesler bulunup eklenecek (boss_spawn/death, ui_click/buy/sell) ve müzik çalma (gameplay/boss/shop) eklenecek,
 	oyun açıldığında ilk olarak ana menü gibi bir menü ayarlanacak, burada play game, options, quit butonları olacak.
 
 Çalışma kuralları (Claude için)
