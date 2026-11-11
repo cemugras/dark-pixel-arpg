@@ -16,7 +16,7 @@ Kurallar:
 | hell_bat_hit_01.wav, hell_bat_hit_02.wav, hell_bat_hit_03.wav, hell_bat_death.wav | VG Voice - Golem.wav | marlonnnnnn | https://freesound.org/s/319140/ | CC0 | Cut into 4 clips (3 hit + 1 death) from raw/hell_bat_raw.wav |
 | wave_start.wav | inception-sound.wav | mikobuntu | https://freesound.org/s/255107/ | CC0 | Trimmed |
 | wave_complete.wav | Inception (kinda) build up | divdbyone | https://freesound.org/s/250518/ | CC0 | Trimmed from raw/wave_complete_raw.wav |
-| player_hurt_01.wav, player_hurt_02.wav, player_hurt_03.wav | TODO | TODO | TODO | TODO | Cut into 3 clips from raw/player_hurt_raw.wav (attribution eksik, satıştan önce doldurulmalı) |
+| player_hurt_01.wav, player_hurt_02.wav, player_hurt_03.wav | hurts.wav | ttttrr | https://freesound.org/s/509566/ | CC0 | Cut into 3 clips from raw/player_hurt_raw.wav |
 | player_death.wav | Medium Male Pain Grunts | unfa | https://freesound.org/s/610998/ | CC0 | Trimmed from raw/player_death_raw.flac |
 
 ## Music (music/)
