@@ -25,10 +25,9 @@ var _in_break: bool = false
 var _break_left: float = 0.0
 var _player: Node2D
 var _boss: Node = null
-var _wave_sound_pending: bool = false  # dalga başlangıç sesi, oyun duraklatılmamışken ilk karede çalar
+var _wave_audio_pending: bool = false  # dalga müziği/boss giriş sesi, oyun duraklatılmamışken ilk karede başlar
 
-const PLAY_WAVE_START_SOUND: bool = false
-const WAVE_END_MUSIC_FADE: float = 0.8  # dalga bitince müzik bu sürede kısılır, sonra wave_complete çalar
+const WAVE_END_MUSIC_FADE: float = 0.8  # dalga bitince müzik bu sürede kısılır, sonra shop müziği başlar
 
 func _ready() -> void:
 	add_to_group("wave_manager")
@@ -57,20 +56,14 @@ func start_next_wave() -> void:
 		_spawn_boss()
 
 	EventBus.wave_started.emit(wave)
-	_wave_sound_pending = true  # ses _physics_process ilk karesinde çalar (oyun duraklatılmışken çalmasın)
+	_wave_audio_pending = true  # müzik _physics_process ilk karesinde başlar (silah seçimi/mağaza açıkken değil)
 
 func _physics_process(delta: float) -> void:
-	if _wave_sound_pending:
-		_wave_sound_pending = false
+	if _wave_audio_pending:
+		_wave_audio_pending = false
 		_play_wave_music()
-		# wave_start sesi kapalı: dalga müziğiyle üst üste biniyordu (dosya sfx/ içinde duruyor, açmak için PLAY_WAVE_START_SOUND)
-		var start_player: AudioStreamPlayer = Audio.play_sfx("wave_start") if PLAY_WAVE_START_SOUND else null
 		if is_instance_valid(_boss):
-			# boss dalgası: boss giriş sesi wave_start bittikten sonra çalar (üst üste binmesin)
-			if start_player:
-				start_player.finished.connect(_play_boss_spawn_sound, CONNECT_ONE_SHOT)
-			else:
-				_play_boss_spawn_sound()
+			_play_boss_spawn_sound()
 
 	if _in_break:
 		_break_left -= delta
@@ -140,15 +133,6 @@ func _play_wave_music() -> void:
 	else:
 		Audio.play_music("gameplay", Audio.MUSIC_FADE_TIME, true, wave - 1)
 
-func _play_wave_complete_sound() -> void:
-	if wave_active:
-		return  # bu arada yeni dalga başladıysa çalma
-	var complete_player := Audio.play_sfx("wave_complete")
-	if complete_player:
-		complete_player.finished.connect(_play_shop_music, CONNECT_ONE_SHOT)
-	else:
-		_play_shop_music()
-
 func _play_shop_music() -> void:
 	if not wave_active:  # mağazadan hızlı çıkıldıysa dalga sırasında shop müziği başlamasın
 		Audio.play_music("shop")
@@ -211,9 +195,9 @@ func _end_wave() -> void:
 	_boss = null
 	get_tree().call_group("coin", "attract_to_player")
 	EventBus.wave_ended.emit(wave)
-	# Müzik yavaşça kısılır, sustuğunda wave_complete çalar; o bitince mağaza müziği başlar
+	# Müzik yavaşça kısılır, sustuğunda mağaza müziği başlar
 	Audio.stop_music(WAVE_END_MUSIC_FADE)
-	get_tree().create_timer(WAVE_END_MUSIC_FADE).timeout.connect(_play_wave_complete_sound)
+	get_tree().create_timer(WAVE_END_MUSIC_FADE).timeout.connect(_play_shop_music)
 	_in_break = true
 	_break_left = break_time
 

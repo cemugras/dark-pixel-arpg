@@ -20,8 +20,6 @@ const SFX_VOLUME_DB: Dictionary = {
 	"coin_pickup": -7.0,
 	"hell_bat_hit": -6.0,
 	"hell_bat_death": -6.0,
-	"wave_start": -3.0,
-	"wave_complete": -4.0,
 	"player_hurt": 0.0,
 	"player_death": 0.0,
 	"boss_spawn": 0.0,
@@ -48,7 +46,8 @@ const SILENT_DB: float = -60.0
 const MUSIC_VOLUME_DB: Dictionary = {
 	"menu": -8.0,
 	"gameplay_01": -16.5,  # %85 kısık
-	"gameplay_02": -16.5,  # %85 kısık (gameplay_01 ile aynı başlangıç, kulağa göre ayarlanacak)
+	"gameplay_02": -16.5,  # %85 kısık
+	"shop": 0.0,  # henüz ayarlanmadı
 }
 
 var _sounds: Dictionary = {}          # ses adı -> Array[AudioStream] (varyasyonlar)
