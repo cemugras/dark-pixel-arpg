@@ -1,6 +1,6 @@
 extends CanvasLayer
 
-const MAIN_MENU_SCENE := "res://scenes/ui/main_menu.tscn"  # 17c'de yapacağız
+const MAIN_MENU_SCENE := "res://scenes/ui/main_menu.tscn"
 
 @onready var resume_button: Button = $Center/VBox/ResumeButton
 @onready var main_menu_button: Button = $Center/VBox/MainMenuButton

@@ -35,9 +35,28 @@ const SFX_MAX_INSTANCES: Dictionary = {
 	"boss_hit": 1,
 }
 
+# --- Müzik ---
+# Kullanım: Audio.play_music("menu") -> res://assets/audio/music/menu.ogg döngüde çalar.
+# Dosyası olmayan müzik sessizce atlanır (çalan müzik kısılarak durur).
+const MUSIC_FOLDER: String = "res://assets/audio/music/"
+const MUSIC_EXTENSIONS: Array[String] = ["ogg", "mp3"]  # döngü için OGG önerilir
+const MUSIC_FADE_TIME: float = 1.0    # parçalar arası geçiş süresi (sn)
+const SILENT_DB: float = -60.0
+
+# Müzikler arası seviye dengesi (dB). Listede olmayan 0 dB çalar.
+const MUSIC_VOLUME_DB: Dictionary = {
+	"menu": -8.0,
+}
+
 var _sounds: Dictionary = {}          # ses adı -> Array[AudioStream] (varyasyonlar)
 var _players: Array[AudioStreamPlayer] = []
 var _player_sound: Dictionary = {}    # AudioStreamPlayer -> çaldığı ses adı
+
+# İki müzik çalar: biri kısılırken diğeri açılır (crossfade)
+var _music_players: Array[AudioStreamPlayer] = []
+var _music_index: int = 0
+var _music_tweens: Dictionary = {}    # AudioStreamPlayer -> Tween
+var _current_music: String = ""
 
 func _ready() -> void:
 	process_mode = Node.PROCESS_MODE_ALWAYS  # mağaza/duraklatma sırasında da UI sesleri çalsın
@@ -49,6 +68,11 @@ func _ready() -> void:
 		player.bus = SFX_BUS
 		add_child(player)
 		_players.append(player)
+	for i in 2:
+		var music_player := AudioStreamPlayer.new()
+		music_player.bus = MUSIC_BUS
+		add_child(music_player)
+		_music_players.append(music_player)
 
 # Master'a bağlı ses kanalı yoksa oluştur (Options menüsündeki ses ayarları bunları kullanacak)
 func _ensure_bus(bus_name: String) -> void:
@@ -115,3 +139,58 @@ func _free_player() -> AudioStreamPlayer:
 		if not player.playing:
 			return player
 	return null
+
+# --- Müzik ---
+
+# Aynı müzik zaten çalıyorsa baştan başlatmaz.
+func play_music(music_name: String, fade_time: float = MUSIC_FADE_TIME) -> void:
+	if music_name == _current_music:
+		return
+	var stream := _load_music(music_name)
+	stop_music(fade_time)  # çalan parça kısılarak durur
+	if stream == null:
+		return
+	_current_music = music_name
+	_music_index = 1 - _music_index
+	var player := _music_players[_music_index]
+	var target_db: float = MUSIC_VOLUME_DB.get(music_name, 0.0)
+	player.stream = stream
+	player.volume_db = SILENT_DB if fade_time > 0.0 else target_db
+	player.play()
+	_fade_music(player, target_db, fade_time, false)
+
+func stop_music(fade_time: float = MUSIC_FADE_TIME) -> void:
+	_current_music = ""
+	var player := _music_players[_music_index]
+	if player.playing:
+		_fade_music(player, SILENT_DB, fade_time, true)
+
+func current_music() -> String:
+	return _current_music
+
+func _load_music(music_name: String) -> AudioStream:
+	for ext in MUSIC_EXTENSIONS:
+		var path := MUSIC_FOLDER + music_name + "." + ext
+		if ResourceLoader.exists(path):
+			var stream := load(path) as AudioStream
+			if stream is AudioStreamOggVorbis:
+				(stream as AudioStreamOggVorbis).loop = true
+			elif stream is AudioStreamMP3:
+				(stream as AudioStreamMP3).loop = true
+			return stream
+	return null
+
+func _fade_music(player: AudioStreamPlayer, to_db: float, fade_time: float, stop_after: bool) -> void:
+	if _music_tweens.has(player):
+		(_music_tweens[player] as Tween).kill()
+		_music_tweens.erase(player)
+	if fade_time <= 0.0:
+		player.volume_db = to_db
+		if stop_after:
+			player.stop()
+		return
+	var tween := create_tween()  # Audio PROCESS_MODE_ALWAYS olduğu için oyun dururken de ilerler
+	tween.tween_property(player, "volume_db", to_db, fade_time)
+	if stop_after:
+		tween.tween_callback(player.stop)
+	_music_tweens[player] = tween

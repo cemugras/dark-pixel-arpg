@@ -40,10 +40,11 @@ scenes/ui/shop.tscn (shop sahnesi)
 scenes/weapons/sword.tscn (kılıç sahnesi)
 scenes/weapons/gun.tscn (menzilli silah sahnesi; görünümü WeaponData'dan koddan kurulur), scenes/weapons/bullet.tscn (mermi), scenes/weapons/gun_slots.gd (Player/GunSlots düğümünün scripti, silahları yuvalara yerleştirir)
 scenes/ui/start_choice.gd (oyun başı silah seçim ekranı, Main/StartChoice düğümü; arayüzü koddan kurar)
+scenes/ui/main_menu.tscn + main_menu.gd (oyunun açılış sahnesi; tscn sadece kök Control, arayüz koddan kurulur. Play: müziği durdurur, GameState.reset(), main.tscn açar. Options şimdilik pasif. Quit: çıkış. Pause menüsündeki Main Menu buraya döner)
 data/enemies/ (monster1.tres = Imp, bat.tres = Hell Bat, boss1.tres; monster1_frames.tres ve bat_frames.tres animasyonlar), data/upgrades/, data/weapons/ (sword, glock, ak47)
 Düşman yön sistemi (enemy.gd): SpriteFrames'teki animasyon adlarına göre otomatik seçilir. run_east/south_east/south/north_east/north varsa 8 yön (batı tarafı flip), run_down/up/left/right varsa 4 yön, ikisi de yoksa tek "run" + yatay flip. Yeni yaratık için 8 yönlü sprite'ta sadece bu 5 yön üretilir.
 Duraklatma menüsü: CanvasLayer > Dim, Center > VBox > Title, ResumeButton, MainMenuButton; pause_menu.gd, Esc ile açılır/kapanır. Ayrıca HUD'da sol üstte (MarginContainer/VBoxContainer sonunda, Timer yazısının altında) koddan kurulan "II" PauseButton var; Esc ve buton pause_menu.try_pause() kullanır (mağaza açıkken / oyuncu ölüyken açılmaz).
-Ses sistemi: Audio autoload (autoload/audio.gd). Audio.play_sfx("ad") ile çalınır; assets/audio/sfx/ otomatik okunur, dosya adı = ses adı (uzantısız). Varyasyonlar ad_01, ad_02 ... şeklinde, rastgele seçilir + hafif perde oynaması. Dosyası olmayan ses sessizce atlanır. Sesler arası seviye dengesi SFX_VOLUME_DB içinde. SFX ve Music bus'ları koddan oluşturulur. Silah ateş sesi WeaponData.shoot_sound alanından seçilir.
+Ses sistemi: Audio autoload (autoload/audio.gd). Audio.play_sfx("ad") ile çalınır; assets/audio/sfx/ otomatik okunur, dosya adı = ses adı (uzantısız). Varyasyonlar ad_01, ad_02 ... şeklinde, rastgele seçilir + hafif perde oynaması. Dosyası olmayan ses sessizce atlanır. Sesler arası seviye dengesi SFX_VOLUME_DB içinde. SFX ve Music bus'ları koddan oluşturulur. Silah ateş sesi WeaponData.shoot_sound alanından seçilir. Müzik: Audio.play_music("ad") assets/audio/music/ad.ogg dosyasını döngüde çalar (loop koddan açılır, import ayarına gerek yok), parça değişince 1 sn crossfade; Audio.stop_music() kısarak durdurur. Müzik seviyeleri MUSIC_VOLUME_DB içinde (menu -8 dB). Müzik dosyaları sfx/ değil music/ altına konur; ham WAV raw/ altında saklanır, oyuna OGG girer.
 Ses kaynağı: sesler freesound.org'dan alınıyor (arama sonuçlarında License filtresiyle sadece CC0 / Attribution). Kesme işlemi audiomass.co ile yapılıyor.
 Düşman sesleri EnemyData.hit_sound / death_sound / spawn_sound alanlarından seçilir (boşsa ses yok; boss ise ortak boss_hit/boss_death/boss_spawn). Şu an sadece Hell Bat'in sesi var (hell_bat_hit, hell_bat_death); Imp değiştirileceği için sessiz.
 Ses kuralları: sesler lisansı uygun kaynaklardan (CC0, CC-BY; NC yasak) alınır, her ses CREDITS.md'ye eklenir (kullanıcı freesound attribution metnini verir, Claude ekler). Efektler başındaki sessizlik kırpılmış 16 bit mono WAV; ham dosya raw/ altında _raw ekiyle saklanır.
@@ -79,15 +80,15 @@ Ara adım (20b) tamamlandı: menzilli silahlar oyuncu etrafındaki çemberde hed
 Adım 21 tamamlandı: ekranda pause butonu (HUD sol üst, Esc bilmeyenler için). Oyunda test edildi.
 Adım 22 (devam ediyor): ses altyapısı (Audio autoload, SFX/Music bus, CREDITS.md, raw/ klasörü). Eklenen sesler: glock_shoot, ak47_shoot (-12 dB), coin_pickup (-7 dB), hell_bat_hit (3 varyasyon, -6 dB), hell_bat_death (-6 dB), wave_start (-3 dB, silah seçimi/mağaza kapandıktan sonra ilk oynanabilir karede çalar), wave_complete (-4 dB, son canavar ölünce), player_hurt (3 varyasyon, hasar alıp hayatta kalınca), player_death (ölünce, hurt yerine çalar), boss_spawn / boss_hit / boss_death (tüm boss'lar ortak; EnemyData get_*_sound() alan boşsa ve is_boss ise bunları döndürür, özel ses için .tres alanı doldurulur; boss_spawn wave_start bitince çalar; boss_hit üst üste çalmaz, Audio.SFX_MAX_INSTANCES). ui_click (tüm butonlar; mağazada alım/satım sadece başarılı olunca çalar, ayrı buy/sell sesi yok). Audio.play_sfx() çalan AudioStreamPlayer'ı döndürür. İki silahın sırayla ateş etmesi eklendi. Oyunda test edildi.
 Not: "gun logic" commit'inde main.tscn yanlışlıkla hud.tscn içeriğiyle kaydedilmişti (siyah ekran); 2da1c97'den geri alınıp düzeltildi. Claude dosya değiştirdiğinde Godot'nun sorusuna "Reload from disk" seçilmeli ve editörde kaydedilmemiş değişiklik bırakılmamalı.
-Not: Şu an oyun açılınca direkt oyun sahnesi açılıyor. Ana menü kısmı şimdilik tamam sayılıyor ama asıl ana menü (aşağıdaki maddeler) her şey bittikten sonra yapılacak.
+Ana menü (Adım 22 içinde) tamamlandı: oyun ana menüden açılır, menu müziği çalar. Oyunda test edildi. İleride menü arka planına sessiz bir "demo savaş" döngüsü eklenecek: elinde 2 AK47 olan karakter sağa sola yürür, yaratıklar doğar ve kesilir; bu arka plan savaşının hiçbir sesi çalmaz (sadece menü müziği), sadece aksiyon görünür.
 Sonrasında:
 	düşman saldırı animasyonu/mekaniği (şu an sadece temas hasarı var; PixelLab'de attack animasyonu 5 yön üretilecek),
 	yeni hikayeye uygun boss çeşitliliği,
 	sigara mekaniği,
 	silah/alet çeşitliliği,
 	final boss (şeytan),
-	ses efektleri ve müzikler (altyapı hazır, Adım 22): müzik çalma (gameplay/boss/shop) eklenecek,
-	oyun açıldığında ilk olarak ana menü gibi bir menü ayarlanacak, burada play game, options, quit butonları olacak.
+	ses efektleri ve müzikler (altyapı hazır, Adım 22): müzik sistemi hazır, kalan parçalar bulunup bağlanacak: gameplay_01 (varyasyonlar gameplay_02...), shop, boss, game_over, final_boss,
+	ana menüde Options ekranı (ses seviyeleri SFX/Music bus üzerinden) ve arka planda sessiz demo savaş döngüsü,
 
 Çalışma kuralları (Claude için)
 İş numaralı adımlarla ilerler. Her adımın sonunda neyin değiştiğini ve nasıl test edeceğimi kısaca söyle.
