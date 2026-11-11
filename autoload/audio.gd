@@ -43,9 +43,12 @@ const MUSIC_EXTENSIONS: Array[String] = ["ogg", "mp3"]  # döngü için OGG öne
 const MUSIC_FADE_TIME: float = 1.0    # parçalar arası geçiş süresi (sn)
 const SILENT_DB: float = -60.0
 
-# Müzikler arası seviye dengesi (dB). Listede olmayan 0 dB çalar.
+# Müzikler arası seviye dengesi (dB). Önce dosya adına (gameplay_02), yoksa grup adına (gameplay) bakılır; ikisi de yoksa 0 dB.
+# %85 kısmak = -16.5 dB, %80 = -14 dB, %60 = -8 dB, %50 = -6 dB, %25 = -2.5 dB
 const MUSIC_VOLUME_DB: Dictionary = {
 	"menu": -8.0,
+	"gameplay_01": -16.5,  # %85 kısık
+	# "gameplay_02": -6.0,  # yeni varyasyon gelince kendi seviyesi buraya
 }
 
 var _sounds: Dictionary = {}          # ses adı -> Array[AudioStream] (varyasyonlar)
@@ -143,17 +146,24 @@ func _free_player() -> AudioStreamPlayer:
 # --- Müzik ---
 
 # Aynı müzik zaten çalıyorsa baştan başlatmaz.
-func play_music(music_name: String, fade_time: float = MUSIC_FADE_TIME) -> void:
+# Varyasyonlar: "gameplay" -> gameplay.ogg ya da gameplay_01.ogg, gameplay_02.ogg ... arasından rastgele biri.
+# Dosyası olmayan müzikte çalan parça değişmez (ör. boss.ogg yoksa gameplay müziği sürer).
+# loop = false: tek sefer çalar (game_over gibi).
+func play_music(music_name: String, fade_time: float = MUSIC_FADE_TIME, loop: bool = true) -> void:
 	if music_name == _current_music:
 		return
-	var stream := _load_music(music_name)
-	stop_music(fade_time)  # çalan parça kısılarak durur
+	var paths := _music_paths(music_name)
+	if paths.is_empty():
+		return
+	var path: String = paths.pick_random()
+	var stream := _load_music(path, loop)
 	if stream == null:
 		return
+	stop_music(fade_time)  # çalan parça kısılarak durur
 	_current_music = music_name
 	_music_index = 1 - _music_index
 	var player := _music_players[_music_index]
-	var target_db: float = MUSIC_VOLUME_DB.get(music_name, 0.0)
+	var target_db := _music_volume(music_name, path)
 	player.stream = stream
 	player.volume_db = SILENT_DB if fade_time > 0.0 else target_db
 	player.play()
@@ -168,17 +178,41 @@ func stop_music(fade_time: float = MUSIC_FADE_TIME) -> void:
 func current_music() -> String:
 	return _current_music
 
-func _load_music(music_name: String) -> AudioStream:
+# Önce dosyaya özel seviye (ör. "gameplay_02"), yoksa grup seviyesi (ör. "gameplay"), o da yoksa 0 dB
+func _music_volume(music_name: String, path: String) -> float:
+	var file_base := path.get_file().get_basename()
+	if MUSIC_VOLUME_DB.has(file_base):
+		return MUSIC_VOLUME_DB[file_base]
+	return MUSIC_VOLUME_DB.get(music_name, 0.0)
+
+func _load_music(path: String, loop: bool) -> AudioStream:
+	var stream := load(path) as AudioStream
+	if stream is AudioStreamOggVorbis:
+		(stream as AudioStreamOggVorbis).loop = loop
+	elif stream is AudioStreamMP3:
+		(stream as AudioStreamMP3).loop = loop
+	return stream
+
+# "gameplay" -> [gameplay.ogg] varsa o, yoksa [gameplay_01.ogg, gameplay_02.ogg ...]
+func _music_paths(music_name: String) -> Array[String]:
+	var paths: Array[String] = []
+	var exact := _find_music_file(music_name)
+	if exact != "":
+		paths.append(exact)
+		return paths
+	for i in range(1, 100):
+		var variant := _find_music_file("%s_%02d" % [music_name, i])
+		if variant == "":
+			break
+		paths.append(variant)
+	return paths
+
+func _find_music_file(file_base: String) -> String:
 	for ext in MUSIC_EXTENSIONS:
-		var path := MUSIC_FOLDER + music_name + "." + ext
+		var path := MUSIC_FOLDER + file_base + "." + ext
 		if ResourceLoader.exists(path):
-			var stream := load(path) as AudioStream
-			if stream is AudioStreamOggVorbis:
-				(stream as AudioStreamOggVorbis).loop = true
-			elif stream is AudioStreamMP3:
-				(stream as AudioStreamMP3).loop = true
-			return stream
-	return null
+			return path
+	return ""
 
 func _fade_music(player: AudioStreamPlayer, to_db: float, fade_time: float, stop_after: bool) -> void:
 	if _music_tweens.has(player):
