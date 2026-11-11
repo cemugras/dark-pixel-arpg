@@ -48,7 +48,7 @@ const SILENT_DB: float = -60.0
 const MUSIC_VOLUME_DB: Dictionary = {
 	"menu": -8.0,
 	"gameplay_01": -16.5,  # %85 kısık
-	# "gameplay_02": -6.0,  # yeni varyasyon gelince kendi seviyesi buraya
+	"gameplay_02": -16.5,  # %85 kısık (gameplay_01 ile aynı başlangıç, kulağa göre ayarlanacak)
 }
 
 var _sounds: Dictionary = {}          # ses adı -> Array[AudioStream] (varyasyonlar)
@@ -149,13 +149,14 @@ func _free_player() -> AudioStreamPlayer:
 # Varyasyonlar: "gameplay" -> gameplay.ogg ya da gameplay_01.ogg, gameplay_02.ogg ... arasından rastgele biri.
 # Dosyası olmayan müzikte çalan parça değişmez (ör. boss.ogg yoksa gameplay müziği sürer).
 # loop = false: tek sefer çalar (game_over gibi).
-func play_music(music_name: String, fade_time: float = MUSIC_FADE_TIME, loop: bool = true) -> void:
+# variant >= 0: rastgele yerine sırayla seçer (0 -> _01, 1 -> _02, varyasyon sayısını aşınca başa döner).
+func play_music(music_name: String, fade_time: float = MUSIC_FADE_TIME, loop: bool = true, variant: int = -1) -> void:
 	if music_name == _current_music:
 		return
 	var paths := _music_paths(music_name)
 	if paths.is_empty():
 		return
-	var path: String = paths.pick_random()
+	var path: String = paths[variant % paths.size()] if variant >= 0 else paths.pick_random()
 	var stream := _load_music(path, loop)
 	if stream == null:
 		return
@@ -174,6 +175,9 @@ func stop_music(fade_time: float = MUSIC_FADE_TIME) -> void:
 	var player := _music_players[_music_index]
 	if player.playing:
 		_fade_music(player, SILENT_DB, fade_time, true)
+
+func has_music(music_name: String) -> bool:
+	return not _music_paths(music_name).is_empty()
 
 func current_music() -> String:
 	return _current_music

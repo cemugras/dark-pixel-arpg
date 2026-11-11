@@ -27,3 +27,4 @@ Kurallar:
 |---|---|---|---|---|---|
 | menu.ogg | Ambient Drum Loop at 120bpm | bassimat | https://freesound.org/s/845315/ | CC0 | Converted to OGG from raw/menu_raw.wav |
 | gameplay_01.ogg | Neural Malfunction | vitalezzz | https://opengameart.org/content/neural-malfunction | CC0 | Converted to OGG from raw/gameplay_01_raw.wav |
+| gameplay_02.ogg | Shadows Awaken Within | vitalezzz | https://opengameart.org/content/shadows-awaken-within | CC0 | Converted to OGG from raw/gameplay_02_raw.wav |

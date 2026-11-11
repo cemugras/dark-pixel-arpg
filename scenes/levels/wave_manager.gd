@@ -132,9 +132,13 @@ func _spawn_boss() -> void:
 	add_child(_boss)
 	EventBus.boss_spawned.emit(_boss)
 
-# Boss dalgasında "boss", diğerlerinde "gameplay" (gameplay_01, gameplay_02 ... rastgele). Dosya yoksa çalan müzik sürer.
+# Boss dalgasında "boss", diğerlerinde "gameplay" sırayla: dalga 1 -> gameplay_01, 2 -> gameplay_02, 3 -> gameplay_01 ...
+# (3. parça eklenirse 1-2-3-1-2-3 döner). boss.ogg yoksa boss dalgasında da sıradaki gameplay parçası çalar.
 func _play_wave_music() -> void:
-	Audio.play_music("boss" if is_instance_valid(_boss) else "gameplay")
+	if is_instance_valid(_boss) and Audio.has_music("boss"):
+		Audio.play_music("boss")
+	else:
+		Audio.play_music("gameplay", Audio.MUSIC_FADE_TIME, true, wave - 1)
 
 func _play_wave_complete_sound() -> void:
 	if wave_active:
