@@ -18,6 +18,7 @@ Kurallar:
 | wave_complete.wav | Inception (kinda) build up | divdbyone | https://freesound.org/s/250518/ | CC0 | Trimmed from raw/wave_complete_raw.wav |
 | player_hurt_01.wav, player_hurt_02.wav, player_hurt_03.wav | hurts.wav | ttttrr | https://freesound.org/s/509566/ | CC0 | Cut into 3 clips from raw/player_hurt_raw.wav |
 | player_death.wav | Medium Male Pain Grunts | unfa | https://freesound.org/s/610998/ | CC0 | Trimmed from raw/player_death_raw.flac |
+| boss_spawn.wav, boss_hit.wav, boss_death.wav | Monster screams.wav | gpag1 | https://freesound.org/s/391552/ | CC0 | Cut into 3 clips from raw/boss_raw.wav |
 
 ## Music (music/)
 

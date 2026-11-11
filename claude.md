@@ -45,7 +45,7 @@ Düşman yön sistemi (enemy.gd): SpriteFrames'teki animasyon adlarına göre ot
 Duraklatma menüsü: CanvasLayer > Dim, Center > VBox > Title, ResumeButton, MainMenuButton; pause_menu.gd, Esc ile açılır/kapanır. Ayrıca HUD'da sol üstte (MarginContainer/VBoxContainer sonunda, Timer yazısının altında) koddan kurulan "II" PauseButton var; Esc ve buton pause_menu.try_pause() kullanır (mağaza açıkken / oyuncu ölüyken açılmaz).
 Ses sistemi: Audio autoload (autoload/audio.gd). Audio.play_sfx("ad") ile çalınır; assets/audio/sfx/ otomatik okunur, dosya adı = ses adı (uzantısız). Varyasyonlar ad_01, ad_02 ... şeklinde, rastgele seçilir + hafif perde oynaması. Dosyası olmayan ses sessizce atlanır. Sesler arası seviye dengesi SFX_VOLUME_DB içinde. SFX ve Music bus'ları koddan oluşturulur. Silah ateş sesi WeaponData.shoot_sound alanından seçilir.
 Ses kaynağı: sesler freesound.org'dan alınıyor (arama sonuçlarında License filtresiyle sadece CC0 / Attribution). Kesme işlemi audiomass.co ile yapılıyor.
-Düşman sesleri EnemyData.hit_sound / death_sound alanlarından seçilir (boşsa ses yok). Şu an sadece Hell Bat'in sesi var (hell_bat_hit, hell_bat_death); Imp değiştirileceği için sessiz.
+Düşman sesleri EnemyData.hit_sound / death_sound / spawn_sound alanlarından seçilir (boşsa ses yok; boss ise ortak boss_hit/boss_death/boss_spawn). Şu an sadece Hell Bat'in sesi var (hell_bat_hit, hell_bat_death); Imp değiştirileceği için sessiz.
 Ses kuralları: sesler lisansı uygun kaynaklardan (CC0, CC-BY; NC yasak) alınır, her ses CREDITS.md'ye eklenir (kullanıcı freesound attribution metnini verir, Claude ekler). Efektler başındaki sessizlik kırpılmış 16 bit mono WAV; ham dosya raw/ altında _raw ekiyle saklanır.
 Test arenası en uzak gidilebilir tile koordinatları: sol üst (-10,-10), sol alt (-10,9), sağ üst (9,-10), sağ alt (9,9). Düşman spawn alanı bu koordinatlara göre ayarlıdır.
 
@@ -77,7 +77,7 @@ Adım 19 tamamlandı: ikinci normal düşman Hell Bat (PixelLab sprite'ı, 8 yö
 Adım 20 tamamlandı: mağazada silah satma ("Your weapons" bölümü) ve dolu yuvadaki silahı başka silahla değiştirme. Oyunda test edildi.
 Ara adım (20b) tamamlandı: menzilli silahlar oyuncu etrafındaki çemberde hedefe doğru kayıyor; mağazada sahip olunan silahların görseli gösteriliyor. Oyunda test edildi.
 Adım 21 tamamlandı: ekranda pause butonu (HUD sol üst, Esc bilmeyenler için). Oyunda test edildi.
-Adım 22 (devam ediyor): ses altyapısı (Audio autoload, SFX/Music bus, CREDITS.md, raw/ klasörü). Eklenen sesler: glock_shoot, ak47_shoot (-12 dB), coin_pickup (-7 dB), hell_bat_hit (3 varyasyon, -6 dB), hell_bat_death (-6 dB), wave_start (-3 dB, silah seçimi/mağaza kapandıktan sonra ilk oynanabilir karede çalar), wave_complete (-4 dB, son canavar ölünce), player_hurt (3 varyasyon, hasar alıp hayatta kalınca), player_death (ölünce, hurt yerine çalar). İki silahın sırayla ateş etmesi eklendi. Oyunda test edildi.
+Adım 22 (devam ediyor): ses altyapısı (Audio autoload, SFX/Music bus, CREDITS.md, raw/ klasörü). Eklenen sesler: glock_shoot, ak47_shoot (-12 dB), coin_pickup (-7 dB), hell_bat_hit (3 varyasyon, -6 dB), hell_bat_death (-6 dB), wave_start (-3 dB, silah seçimi/mağaza kapandıktan sonra ilk oynanabilir karede çalar), wave_complete (-4 dB, son canavar ölünce), player_hurt (3 varyasyon, hasar alıp hayatta kalınca), player_death (ölünce, hurt yerine çalar), boss_spawn / boss_hit / boss_death (tüm boss'lar ortak; EnemyData get_*_sound() alan boşsa ve is_boss ise bunları döndürür, özel ses için .tres alanı doldurulur; boss_spawn wave_start bitince çalar; boss_hit üst üste çalmaz, Audio.SFX_MAX_INSTANCES). Audio.play_sfx() çalan AudioStreamPlayer'ı döndürür. İki silahın sırayla ateş etmesi eklendi. Oyunda test edildi.
 Not: "gun logic" commit'inde main.tscn yanlışlıkla hud.tscn içeriğiyle kaydedilmişti (siyah ekran); 2da1c97'den geri alınıp düzeltildi. Claude dosya değiştirdiğinde Godot'nun sorusuna "Reload from disk" seçilmeli ve editörde kaydedilmemiş değişiklik bırakılmamalı.
 Not: Şu an oyun açılınca direkt oyun sahnesi açılıyor. Ana menü kısmı şimdilik tamam sayılıyor ama asıl ana menü (aşağıdaki maddeler) her şey bittikten sonra yapılacak.
 Sonrasında:
@@ -86,7 +86,7 @@ Sonrasında:
 	sigara mekaniği,
 	silah/alet çeşitliliği,
 	final boss (şeytan),
-	ses efektleri ve müzikler (altyapı hazır, Adım 22): kalan sesler bulunup eklenecek (boss_spawn/death, ui_click/buy/sell) ve müzik çalma (gameplay/boss/shop) eklenecek,
+	ses efektleri ve müzikler (altyapı hazır, Adım 22): kalan sesler bulunup eklenecek (ui_click/buy/sell) ve müzik çalma (gameplay/boss/shop) eklenecek,
 	oyun açıldığında ilk olarak ana menü gibi bir menü ayarlanacak, burada play game, options, quit butonları olacak.
 
 Çalışma kuralları (Claude için)

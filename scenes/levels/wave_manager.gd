@@ -59,7 +59,13 @@ func start_next_wave() -> void:
 func _physics_process(delta: float) -> void:
 	if _wave_sound_pending:
 		_wave_sound_pending = false
-		Audio.play_sfx("wave_start")
+		var start_player := Audio.play_sfx("wave_start")
+		if is_instance_valid(_boss):
+			# boss dalgası: boss giriş sesi wave_start bittikten sonra çalar (üst üste binmesin)
+			if start_player:
+				start_player.finished.connect(_play_boss_spawn_sound, CONNECT_ONE_SHOT)
+			else:
+				_play_boss_spawn_sound()
 
 	if _in_break:
 		_break_left -= delta
@@ -120,6 +126,10 @@ func _spawn_boss() -> void:
 	_boss.position = _random_spawn_position()
 	add_child(_boss)
 	EventBus.boss_spawned.emit(_boss)
+
+func _play_boss_spawn_sound() -> void:
+	if is_instance_valid(_boss) and _boss.data:
+		Audio.play_sfx(_boss.data.get_spawn_sound())
 
 func _is_boss_alive() -> bool:
 	return is_instance_valid(_boss) and not _boss.is_queued_for_deletion()

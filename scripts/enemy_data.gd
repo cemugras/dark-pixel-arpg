@@ -20,3 +20,20 @@ extends Resource
 @export var tint: Color = Color.WHITE            # sprite rengi, aynı sprite'tan farklı görünüm için
 @export var hit_sound: String = ""             # Audio sfx adı: hasar alınca (boşsa ses yok)
 @export var death_sound: String = ""           # Audio sfx adı: ölünce (boşsa ses yok)
+@export var spawn_sound: String = ""           # Audio sfx adı: doğunca (boşsa ses yok)
+
+# Boss sesleri: alan boşsa tüm boss'lar ortak sesleri kullanır (boss_hit, boss_death, boss_spawn).
+# Özel ses isteyen boss için .tres içinde alanı doldurmak yeterli.
+func get_hit_sound() -> String:
+	return _sound_or_boss_default(hit_sound, "boss_hit")
+
+func get_death_sound() -> String:
+	return _sound_or_boss_default(death_sound, "boss_death")
+
+func get_spawn_sound() -> String:
+	return _sound_or_boss_default(spawn_sound, "boss_spawn")
+
+func _sound_or_boss_default(sound: String, boss_default: String) -> String:
+	if sound == "" and is_boss:
+		return boss_default
+	return sound

@@ -24,6 +24,15 @@ const SFX_VOLUME_DB: Dictionary = {
 	"wave_complete": -4.0,
 	"player_hurt": 0.0,
 	"player_death": 0.0,
+	"boss_spawn": 0.0,
+	"boss_death": 0.0,
+	"boss_hit": 0.0,
+}
+
+# Aynı anda en fazla kaç kopya çalabileceği sese özel ayar (listede yoksa MAX_PER_SOUND).
+# 1 = ses bitmeden aynı ses tekrar çalmaz.
+const SFX_MAX_INSTANCES: Dictionary = {
+	"boss_hit": 1,
 }
 
 var _sounds: Dictionary = {}          # ses adı -> Array[AudioStream] (varyasyonlar)
@@ -76,20 +85,23 @@ func _base_name(file_base: String) -> String:
 func has_sfx(sound_name: String) -> bool:
 	return _sounds.has(sound_name)
 
-func play_sfx(sound_name: String, volume_db: float = 0.0) -> void:
+# Çalan AudioStreamPlayer'ı döndürür (ses bitince bir şey yapmak için finished sinyaline bağlanılabilir).
+# Ses çalmadıysa null döner.
+func play_sfx(sound_name: String, volume_db: float = 0.0) -> AudioStreamPlayer:
 	if sound_name == "" or not _sounds.has(sound_name):
-		return
-	if _playing_count(sound_name) >= MAX_PER_SOUND:
-		return
+		return null
+	if _playing_count(sound_name) >= SFX_MAX_INSTANCES.get(sound_name, MAX_PER_SOUND):
+		return null
 	var player := _free_player()
 	if player == null:
-		return
+		return null
 	var variants: Array = _sounds[sound_name]
 	player.stream = variants.pick_random()
 	player.volume_db = SFX_VOLUME_DB.get(sound_name, 0.0) + volume_db
 	player.pitch_scale = randf_range(1.0 - PITCH_JITTER, 1.0 + PITCH_JITTER)
 	_player_sound[player] = sound_name
 	player.play()
+	return player
 
 func _playing_count(sound_name: String) -> int:
 	var count := 0

@@ -130,7 +130,7 @@ func take_damage(amount: int) -> void:
 	if health <= 0:
 		die()
 	elif data:
-		Audio.play_sfx(data.hit_sound)
+		Audio.play_sfx(data.get_hit_sound())
 
 func die() -> void:
 	# Aynı karede iki vuruş gelirse iki kez ölmesin (çift altın / çift ses olmasın)
@@ -138,7 +138,7 @@ func die() -> void:
 		return
 	_dying = true
 	if data:
-		Audio.play_sfx(data.death_sound)
+		Audio.play_sfx(data.get_death_sound())
 	EventBus.enemy_died.emit(global_position, coin_value)
 	queue_free()
 
