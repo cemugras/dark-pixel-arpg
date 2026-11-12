@@ -95,8 +95,7 @@ func die() -> void:
 	is_dead = true
 	velocity = Vector2.ZERO
 	Audio.play_sfx("player_death")
-	Audio.stop_music(0.5)
-	Audio.play_music("game_over", 0.5, false)  # tek sefer çalar; dosya yoksa sessizlik
+	Audio.stop_music(0.5)  # game over ekranı bilerek sessiz (müzik yok)
 	EventBus.player_died.emit()
 
 func _on_stats_changed() -> void:
