@@ -97,6 +97,23 @@ Hem yazıyla hem animasyonla anlatılacak (bkz. "Ara sahneler").
 - **Bitiş:** yukarıdaki final; Lucifer yenilince oynar.
 - Anlatım hem yazı (kısa metin kutuları) hem animasyonla olur. Karakter görselleri (Walt, Biscuit, Lucifer) PixelLab ile hazır olacağı için ara sahne animasyonları bu görsellerden bir yapay zekâ aracıyla üretilecek.
 
+## Bölgeler (harita)
+
+Walt her boss'tan sonra cehennemin daha derinine iner; her boss bölümünün kendi bölgesi vardır (oynanış alanı aynı, görsel farklı).
+
+| Dalgalar | Bölge |
+|---|---|
+| 1-10 | Moloch'un Kapısı: kızgın demir kapılar, fırınlar, kömür zemin |
+| 11-20 | Belphegor'un Uyku Salonları: kül tepeleri, devrik tahtlar |
+| 21-30 | Mammon'un Hazinesi: sikke yığınları, kasa kapıları |
+| 31-40 | Beelzebub'un Bataklığı: çürük yeşil bataklık, sinek bulutları |
+| 41-50 | Lilith'in Sarayı: kan kırmızısı mermer, dikenli güller |
+| 51-60 | Leviathan'ın Lav Denizi: lav nehirleri, taş adalar |
+| 61-70 | Asmodeus'un Bahçeleri: üç renkli saray bahçesi |
+| 71-80 | Abaddon'un Uçurumu: yıkık köprüler, kırık zemin |
+| 81-90 | Azazel'in Silah Dökümhanesi: kırık kılıçlar, örsler, düşmüş melek kanatları |
+| 91-100 | Lucifer'in Tahtı: donmuş göl (en dipte ateş değil buz) |
+
 ## Ton ve yazım
 
 - Karanlık atmosfer, kuru mizah.
