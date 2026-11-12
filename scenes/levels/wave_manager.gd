@@ -61,9 +61,10 @@ func start_next_wave() -> void:
 func _physics_process(delta: float) -> void:
 	if _wave_audio_pending:
 		_wave_audio_pending = false
-		_play_wave_music()
 		if is_instance_valid(_boss):
-			_play_boss_spawn_sound()
+			_start_boss_intro()
+		else:
+			_play_wave_music()
 
 	if _in_break:
 		_break_left -= delta
@@ -125,11 +126,11 @@ func _spawn_boss() -> void:
 	add_child(_boss)
 	EventBus.boss_spawned.emit(_boss)
 
-# Boss dalgasında "boss", diğerlerinde "gameplay" sırayla: dalga 1 -> gameplay_01, 2 -> gameplay_02, 3 -> gameplay_01 ...
-# (3. parça eklenirse 1-2-3-1-2-3 döner). boss.ogg yoksa boss dalgasında da sıradaki gameplay parçası çalar.
+# Boss dalgasında "boss_music", diğerlerinde "gameplay" sırayla: dalga 1 -> gameplay_01, 2 -> gameplay_02, 3 -> gameplay_01 ...
+# (3. parça eklenirse 1-2-3-1-2-3 döner). boss_music.ogg yoksa boss dalgasında da sıradaki gameplay parçası çalar.
 func _play_wave_music() -> void:
-	if is_instance_valid(_boss) and Audio.has_music("boss"):
-		Audio.play_music("boss")
+	if is_instance_valid(_boss) and Audio.has_music("boss_music"):
+		Audio.play_music("boss_music")
 	else:
 		Audio.play_music("gameplay", Audio.MUSIC_FADE_TIME, true, wave - 1)
 
@@ -137,9 +138,21 @@ func _play_shop_music() -> void:
 	if not wave_active:  # mağazadan hızlı çıkıldıysa dalga sırasında shop müziği başlamasın
 		Audio.play_music("shop")
 
-func _play_boss_spawn_sound() -> void:
-	if is_instance_valid(_boss) and _boss.data:
-		Audio.play_sfx(_boss.data.get_spawn_sound())
+# Boss dalgası: önceki müzik kısılır, boss_spawn sesi çalar, ses bitince boss müziği başlar.
+# Giriş sesi çalınamazsa (dosya yok vb.) müzik hemen başlar.
+func _start_boss_intro() -> void:
+	Audio.stop_music()
+	var player: AudioStreamPlayer = null
+	if _boss.data:
+		player = Audio.play_sfx(_boss.data.get_spawn_sound())
+	if player:
+		player.finished.connect(_on_boss_intro_finished, CONNECT_ONE_SHOT)
+	else:
+		_play_wave_music()
+
+func _on_boss_intro_finished() -> void:
+	if _is_boss_alive():  # giriş sesi bitmeden boss öldüyse müzik başlamaz
+		_play_wave_music()
 
 func _is_boss_alive() -> bool:
 	return is_instance_valid(_boss) and not _boss.is_queued_for_deletion()

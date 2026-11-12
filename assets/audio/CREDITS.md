@@ -27,3 +27,4 @@ Kurallar:
 | gameplay_01.ogg | Neural Malfunction | vitalezzz | https://opengameart.org/content/neural-malfunction | CC0 | Converted to OGG from raw/gameplay_01_raw.wav |
 | gameplay_02.ogg | Shadows Awaken Within | vitalezzz | https://opengameart.org/content/shadows-awaken-within | CC0 | Converted to OGG from raw/gameplay_02_raw.wav |
 | shop.ogg | Bassguitar_120bpm_loop1_C.wav | tichec | https://freesound.org/s/169880/ | CC0 | Converted to OGG from raw/shop_raw.wav |
+| boss_music.ogg | Boss Battle Music | SubspaceAudio | https://opengameart.org/content/boss-battle-music | CC0 | Cut and converted to OGG from raw/boss_music_raw.wav |

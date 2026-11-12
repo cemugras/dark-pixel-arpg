@@ -48,6 +48,7 @@ const MUSIC_VOLUME_DB: Dictionary = {
 	"gameplay_01": -16.5,  # %85 kısık
 	"gameplay_02": -16.5,  # %85 kısık
 	"shop": 0.0,  # henüz ayarlanmadı
+	"boss_music": -14.0,  # %80 kısık
 }
 
 var _sounds: Dictionary = {}          # ses adı -> Array[AudioStream] (varyasyonlar)

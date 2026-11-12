@@ -9,6 +9,7 @@ var _base_color: Color = Color.WHITE
 
 const DIRECTION_BIAS: float = 1.2  # 4 yön: eksen değiştirme eşiği (titreme önleme)
 const SECTOR_MARGIN: float = 0.12  # 8 yön: dilim değiştirme payı (radyan, titreme önleme)
+const BOSS_DEATH_MUSIC_FADE: float = 0.1  # boss ölünce müzik bu sürede kesilir (ani kesilme tıkırtısı olmasın)
 
 # 8 yön: 45 derecelik dilimler, indeks 0 = doğu, saat yönünde (Godot'ta y aşağı artar).
 # Batı tarafı, doğu tarafının yatay çevrilmiş halidir (oyuncudaki gibi).
@@ -138,6 +139,8 @@ func die() -> void:
 		return
 	_dying = true
 	if data:
+		if data.is_boss:
+			Audio.stop_music(BOSS_DEATH_MUSIC_FADE)  # boss müziği ölüm sesinden önce kesilir
 		Audio.play_sfx(data.get_death_sound())
 	EventBus.enemy_died.emit(global_position, coin_value)
 	queue_free()
