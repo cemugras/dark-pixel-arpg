@@ -1,0 +1,210 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/south/frame_000.png" id="south_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/south/frame_001.png" id="south_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/south/frame_002.png" id="south_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/south/frame_003.png" id="south_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/south/frame_004.png" id="south_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/south/frame_005.png" id="south_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/south/frame_006.png" id="south_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/south/frame_007.png" id="south_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/south/frame_008.png" id="south_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/south-east/frame_000.png" id="south_east_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/south-east/frame_001.png" id="south_east_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/south-east/frame_002.png" id="south_east_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/south-east/frame_003.png" id="south_east_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/south-east/frame_004.png" id="south_east_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/south-east/frame_005.png" id="south_east_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/south-east/frame_006.png" id="south_east_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/south-east/frame_007.png" id="south_east_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/south-east/frame_008.png" id="south_east_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/east/frame_000.png" id="east_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/east/frame_001.png" id="east_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/east/frame_002.png" id="east_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/east/frame_003.png" id="east_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/east/frame_004.png" id="east_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/east/frame_005.png" id="east_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/east/frame_006.png" id="east_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/east/frame_007.png" id="east_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/east/frame_008.png" id="east_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/north-east/frame_000.png" id="north_east_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/north-east/frame_001.png" id="north_east_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/north-east/frame_002.png" id="north_east_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/north-east/frame_003.png" id="north_east_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/north-east/frame_004.png" id="north_east_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/north-east/frame_005.png" id="north_east_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/north-east/frame_006.png" id="north_east_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/north-east/frame_007.png" id="north_east_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/north-east/frame_008.png" id="north_east_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/north/frame_000.png" id="north_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/north/frame_001.png" id="north_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/north/frame_002.png" id="north_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/north/frame_003.png" id="north_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/north/frame_004.png" id="north_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/north/frame_005.png" id="north_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/north/frame_006.png" id="north_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/north/frame_007.png" id="north_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/hell_harpy/run/animations/running_wings_flapping_rapidly_up_and_down_body_bo/north/frame_008.png" id="north_8"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("south_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("south_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("south_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("south_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("south_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("south_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("south_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("south_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("south_8")
+}],
+"loop": true,
+"name": &"run_south",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("south_east_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("south_east_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("south_east_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("south_east_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("south_east_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("south_east_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("south_east_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("south_east_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("south_east_8")
+}],
+"loop": true,
+"name": &"run_south_east",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("east_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("east_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("east_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("east_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("east_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("east_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("east_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("east_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("east_8")
+}],
+"loop": true,
+"name": &"run_east",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("north_east_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("north_east_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("north_east_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("north_east_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("north_east_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("north_east_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("north_east_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("north_east_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("north_east_8")
+}],
+"loop": true,
+"name": &"run_north_east",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("north_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("north_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("north_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("north_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("north_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("north_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("north_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("north_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("north_8")
+}],
+"loop": true,
+"name": &"run_north",
+"speed": 12.0
+}]

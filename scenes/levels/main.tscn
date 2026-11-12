@@ -14,7 +14,7 @@
 [ext_resource type="PackedScene" uid="uid://bjf3dljmdhkl7" path="res://scenes/ui/game_over.tscn" id="12_2xkjh"]
 [ext_resource type="PackedScene" uid="uid://b4aj6k3rhanhd" path="res://scenes/ui/pause_menu.tscn" id="13_dj21o"]
 [ext_resource type="Script" path="res://scenes/ui/start_choice.gd" id="14_start"]
-[ext_resource type="Resource" path="res://data/enemies/bat.tres" id="15_bat"]
+[ext_resource type="Resource" path="res://data/enemies/hell_harpy.tres" id="15_hell_harpy"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_y0acb"]
 texture = ExtResource("1_2vj2h")
@@ -252,7 +252,7 @@ position_smoothing_speed = 8.0
 [node name="WaveManager" type="Node" parent="." unique_id=956270903]
 script = ExtResource("6_b6bv0")
 enemy_scene = ExtResource("3_y0acb")
-enemy_pool = Array[ExtResource("8_rssyh")]([ExtResource("9_hwp66"), ExtResource("15_bat")])
+enemy_pool = Array[ExtResource("8_rssyh")]([ExtResource("9_hwp66"), ExtResource("15_hell_harpy")])
 boss_pool = Array[ExtResource("8_rssyh")]([ExtResource("10_hwp66")])
 
 [node name="Shop" parent="." unique_id=1465708622 instance=ExtResource("8_vkq25")]
