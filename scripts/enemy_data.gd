@@ -27,18 +27,13 @@ extends Resource
 func get_spawn_weight(wave: int) -> float:
 	return spawn_weight + spawn_weight_per_wave * maxi(wave - min_wave, 0)
 
-# Boss sesleri: alan boşsa tüm boss'lar ortak sesleri kullanır (boss_hit, boss_death, boss_spawn).
-# Özel ses isteyen boss için .tres içinde alanı doldurmak yeterli.
+# Sesler: her yaratık ve boss kendi seslerini .tres alanlarından alır (ör. moloch_hit).
+# Ortak boss sesi yok; alan boşsa o ses çalmaz (boss_spawn yoksa boss müziği hemen başlar).
 func get_hit_sound() -> String:
-	return _sound_or_boss_default(hit_sound, "boss_hit")
+	return hit_sound
 
 func get_death_sound() -> String:
-	return _sound_or_boss_default(death_sound, "boss_death")
+	return death_sound
 
 func get_spawn_sound() -> String:
-	return _sound_or_boss_default(spawn_sound, "boss_spawn")
-
-func _sound_or_boss_default(sound: String, boss_default: String) -> String:
-	if sound == "" and is_boss:
-		return boss_default
-	return sound
+	return spawn_sound

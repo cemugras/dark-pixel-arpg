@@ -26,15 +26,15 @@ const SFX_VOLUME_DB: Dictionary = {
 	"hellhound_death": -6.0,
 	"player_hurt": 0.0,
 	"player_death": 0.0,
-	"boss_spawn": 0.0,
-	"boss_death": 0.0,
-	"boss_hit": 0.0,
+	"moloch_spawn": 0.0,
+	"moloch_death": 0.0,
+	"moloch_hit": 0.0,
 }
 
 # Aynı anda en fazla kaç kopya çalabileceği sese özel ayar (listede yoksa MAX_PER_SOUND).
 # 1 = ses bitmeden aynı ses tekrar çalmaz.
 const SFX_MAX_INSTANCES: Dictionary = {
-	"boss_hit": 1,
+	"moloch_hit": 1,  # boss hit sesleri üst üste binmesin (her yeni boss için eklenir)
 }
 
 # --- Müzik ---

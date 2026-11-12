@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://bw0q814algri7"
-path="res://.godot/imported/boss_death.wav-0f78bd9c615fc1e1f69662e3e2b02b1e.sample"
+path="res://.godot/imported/moloch_death.wav-f610de06ac7b35d9263b0c5f05eaa43c.sample"
 
 [deps]
 
-source_file="res://assets/audio/sfx/boss_death.wav"
-dest_files=["res://.godot/imported/boss_death.wav-0f78bd9c615fc1e1f69662e3e2b02b1e.sample"]
+source_file="res://assets/audio/sfx/moloch_death.wav"
+dest_files=["res://.godot/imported/moloch_death.wav-f610de06ac7b35d9263b0c5f05eaa43c.sample"]
 
 [params]
 

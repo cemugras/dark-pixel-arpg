@@ -3,12 +3,12 @@
 importer="wav"
 type="AudioStreamWAV"
 uid="uid://5drh3dv3g4ek"
-path="res://.godot/imported/boss_spawn.wav-d97d5fdf099d356ac0f45b47e3188426.sample"
+path="res://.godot/imported/moloch_spawn.wav-90a94c84ab448d2cc5746b7ef82ae408.sample"
 
 [deps]
 
-source_file="res://assets/audio/sfx/boss_spawn.wav"
-dest_files=["res://.godot/imported/boss_spawn.wav-d97d5fdf099d356ac0f45b47e3188426.sample"]
+source_file="res://assets/audio/sfx/moloch_spawn.wav"
+dest_files=["res://.godot/imported/moloch_spawn.wav-90a94c84ab448d2cc5746b7ef82ae408.sample"]
 
 [params]
 

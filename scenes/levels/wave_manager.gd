@@ -138,7 +138,7 @@ func _play_shop_music() -> void:
 	if not wave_active:  # mağazadan hızlı çıkıldıysa dalga sırasında shop müziği başlamasın
 		Audio.play_music("shop")
 
-# Boss dalgası: önceki müzik kısılır, boss_spawn sesi çalar, ses bitince boss müziği başlar.
+# Boss dalgası: önceki müzik kısılır, boss'un giriş sesi (EnemyData.spawn_sound, ör. moloch_spawn) çalar, ses bitince boss müziği başlar.
 # Giriş sesi çalınamazsa (dosya yok vb.) müzik hemen başlar.
 func _start_boss_intro() -> void:
 	Audio.stop_music()

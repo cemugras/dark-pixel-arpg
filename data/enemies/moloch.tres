@@ -16,3 +16,6 @@ contact_damage = 15
 coin_value = 100
 is_boss = true
 boss_wave = 10
+hit_sound = "moloch_hit"
+death_sound = "moloch_death"
+spawn_sound = "moloch_spawn"
