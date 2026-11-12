@@ -71,6 +71,8 @@ Extra Sword ve Spin Speed geliştirmeleri kılıç yoksa kilitlidir; Fire Rate m
 Normal düşmanlar (hepsi PixelLab, 8 yön, body_scale 0.5): Damned Soul (yavaş kalabalık; 20 can, 35 hız, 5 hasar, ağırlık 1.5, 1. dalgadan), Hell Harpy (hızlı zayıf; 10 can, 60 hız, 3 hasar, ağırlık 1 + dalga başına 0.05, 3. dalgadan), Hellhound (hızlı dayanıklı; 30 can, 70 hız, 7 hasar, 2 altın, ağırlık 0.5 + dalga başına 0.08, 5. dalgadan). Yaratıklar kademeli tanıtılır (1-2. dalga sadece Soul). Imp havuzdan çıkarıldı.
 Zorluk eğrisi Brotato tarzı: kalabalık hızlı artar, can yavaş. Doğma aralığı 1.0 sn - dalga başına 0.04 (en az 0.25), dalga süresi 20 sn + dalga başına 2 (en fazla 60), can dalga başına +%12 (enemy.gd HEALTH_PER_WAVE), hasar +%10, hız +%1. EnemyData.spawn_weight_per_wave ile yeni türler dalgalar ilerledikçe sıklaşır. boss1 tabanı 540 can (10. dalgada ~1120).
 Yaratıklar gittikleri yöne bakar (hepsi 8 yön; boss1 hâlâ eski 4 yönlü Imp sprite.ını kullanıyor).
+Yaratıklar birbirinin içine girmez: enemy.gd içinde yumuşak itme (separation). Fiziksel çarpışma yok; her yaratığın kişisel alanı SEPARATION_RADIUS (20) x body_scale, iç içe girenler birbirini iter (küçük yaratık boss'tan daha çok itilir). Komşu arama her fizik karesinde bir kez kurulan ızgarayla (GRID_CELL 40 px) yapılır. Ayar: SEPARATION_RADIUS (ne kadar seyrek), SEPARATION_STRENGTH (ne kadar hızlı ayrılırlar).
+Çizim sırası (Y-sort): Main/WaveManager düğümü Node2D ve y_sort_enabled (script extends Node kalır). Yaratıklar onun çocuğu olarak doğar, ekranda aşağıda olan öne çizilir. Sıralama yaratığın merkezine göre. Oyuncu bu sıralamaya dahil değil (yaratıklar oyuncunun hep önünde çizilir).
 İleride: karakter silahı tuttuğu yöne bakacak.
 Mağazada "Your weapons" bölümündeki yuva/kılıç butonlarında silahın görseli gösterilir.
 Mağaza ekranı görsel olarak şimdilik amatör, ileride güzelleştirilecek.
@@ -86,6 +88,7 @@ Not: "gun logic" commit'inde main.tscn yanlışlıkla hud.tscn içeriğiyle kayd
 Adım 23 (devam ediyor): Imp yerine Damned Soul, üçüncü düşman Hellhound (PixelLab). Sprite + .tres + havuz hazır, zorluk eğrisi yeniden ayarlandı (Brotato tarzı); Damned Soul ve Hellhound sesleri eklendi (freesound, CREDITS.md). Oyunda test edildi: 17. dalgaya kadar.
 Ana menü (Adım 22 içinde) tamamlandı: oyun ana menüden açılır, menu müziği çalar. Oyunda test edildi. İleride menü arka planına sessiz bir "demo savaş" döngüsü eklenecek: elinde 2 AK47 olan karakter sağa sola yürür, yaratıklar doğar ve kesilir; bu arka plan savaşının hiçbir sesi çalmaz (sadece menü müziği), sadece aksiyon görünür.
 Adım 24 tamamlandı: Options ekranı (ana menü + duraklatma menüsü), müzik ve efekt sesi ayrı ayarlanır, kaydedilmez. Oyunda test edildi.
+Adım 25 tamamlandı: yaratıklar birbirinin içine girmiyor (separation) ve aşağıdaki yaratık öne çiziliyor (Y-sort). Oyunda test edildi.
 Sonrasında:
 	düşman saldırı animasyonu/mekaniği (şu an sadece temas hasarı var; PixelLab'de attack animasyonu 5 yön üretilecek),
 	yeni hikayeye uygun boss çeşitliliği,
@@ -95,7 +98,6 @@ Sonrasında:
 	final boss (şeytan),
 	ses efektleri ve müzikler (altyapı hazır, Adım 22): müzik sistemi hazır, oyuna bağlı; menu, gameplay_01 (Neural Malfunction) ve gameplay_02 (Shadows Awaken Within; ikisi de vitalezzz, OpenGameArt) ve shop (tichec, freesound) eklendi, boss_music (Boss Battle Music, SubspaceAudio, OpenGameArt) eklendi, kalan parça bulunacak: final_boss (şimdilik 100. dalga da boss dalgası olduğu için boss_music çalıyor),
 	ana menü arka planında sessiz demo savaş döngüsü,
-	yaratıklar birbirinin içine girmesin (iç içe yığılınca görüntü kötü): düşmanlar arası ayrışma/itme (separation) eklenecek,
 
 Çalışma kuralları (Claude için)
 İş numaralı adımlarla ilerler. Her adımın sonunda neyin değiştiğini ve nasıl test edeceğimi kısaca söyle.

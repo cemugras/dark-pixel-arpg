@@ -12,6 +12,19 @@ const SECTOR_MARGIN: float = 0.12  # 8 yön: dilim değiştirme payı (radyan, t
 const BOSS_DEATH_MUSIC_FADE: float = 0.1  # boss ölünce müzik bu sürede kesilir (ani kesilme tıkırtısı olmasın)
 const HEALTH_PER_WAVE: float = 0.12  # her dalgada can tabanın %12si kadar artar (Brotato tarzı: kalabalık hızlı, can yavaş artar)
 
+# --- Ayrışma (yaratıklar iç içe girmesin) ---
+# Fiziksel çarpışma yerine yumuşak itme: birbirine çok yaklaşan yaratıklar hafifçe ayrılır, kalabalık akıcı kalır.
+const SEPARATION_RADIUS: float = 20.0    # body_scale uygulanmadan önceki kişisel alan yarıçapı (0.5 ölçekte 10 px)
+const SEPARATION_STRENGTH: float = 1.2   # itmenin hıza göre gücü (artırırsan daha seyrek dururlar)
+const SEPARATION_MAX: float = 1.5        # aynı anda çok komşudan gelen itmenin üst sınırı
+const SEPARATION_MIN_SPEED: float = 40.0 # yavaş yaratıklar da yeterince hızlı ayrılsın
+const GRID_CELL: float = 40.0            # komşu arama ızgarası hücre boyutu (px)
+
+# Izgara her fizik karesinde bir kez (o karede ilk hareket eden yaratık tarafından) kurulur
+static var _grid: Dictionary = {}        # Vector2i hücre -> Array (yaratıklar)
+static var _grid_frame: int = -1
+static var _grid_max_radius: float = 0.0 # en büyük kişisel alan (boss) -> arama mesafesi
+
 # 8 yön: 45 derecelik dilimler, indeks 0 = doğu, saat yönünde (Godot'ta y aşağı artar).
 # Batı tarafı, doğu tarafının yatay çevrilmiş halidir (oyuncudaki gibi).
 const DIR8_NAMES: Array[String] = [
@@ -69,7 +82,8 @@ func _physics_process(_delta: float) -> void:
 		return
 
 	var dir := global_position.direction_to(target.global_position)
-	velocity = dir * move_speed
+	# Yön (bakış) oyuncuya göre kalır; itme sadece hareketi etkiler, böylece sprite titremez
+	velocity = dir * move_speed + _separation() * maxf(move_speed, SEPARATION_MIN_SPEED) * SEPARATION_STRENGTH
 	move_and_slide()
 
 	match _mode:
@@ -82,6 +96,59 @@ func _physics_process(_delta: float) -> void:
 				# Tek yönlü sprite: sadece yatay çevir
 				var faces_right := data.sprite_faces_right if data else true
 				sprite.flip_h = (dir.x < 0.0) == faces_right
+
+func _separation_radius() -> float:
+	return SEPARATION_RADIUS * scale.x
+
+static func _cell_of(pos: Vector2) -> Vector2i:
+	return Vector2i(floori(pos.x / GRID_CELL), floori(pos.y / GRID_CELL))
+
+func _ensure_grid() -> void:
+	var frame := Engine.get_physics_frames()
+	if _grid_frame == frame:
+		return
+	_grid_frame = frame
+	_grid.clear()
+	_grid_max_radius = 0.0
+	for e in get_tree().get_nodes_in_group("enemy"):
+		var cell := _cell_of(e.global_position)
+		if not _grid.has(cell):
+			_grid[cell] = []
+		_grid[cell].append(e)
+		_grid_max_radius = maxf(_grid_max_radius, e._separation_radius())
+
+# Yakındaki yaratıklardan uzaklaştıran itme yönü (0 = rahat, büyüdükçe daha sıkışık)
+func _separation() -> Vector2:
+	_ensure_grid()
+	var my_radius := _separation_radius()
+	var reach := ceili((my_radius + _grid_max_radius) / GRID_CELL)
+	var my_cell := _cell_of(global_position)
+	var push := Vector2.ZERO
+	for dx in range(-reach, reach + 1):
+		for dy in range(-reach, reach + 1):
+			var cell := my_cell + Vector2i(dx, dy)
+			if not _grid.has(cell):
+				continue
+			for other in _grid[cell]:
+				if other == self or not is_instance_valid(other):
+					continue
+				var other_radius: float = other._separation_radius()
+				var min_dist := my_radius + other_radius
+				var offset: Vector2 = global_position - other.global_position
+				var dist_sq := offset.length_squared()
+				if dist_sq >= min_dist * min_dist:
+					continue
+				var dist := sqrt(dist_sq)
+				var away: Vector2
+				if dist < 0.01:
+					# Tam üst üste doğdularsa: her yaratık kendine özgü sabit bir yöne kaçar
+					away = Vector2.RIGHT.rotated(float(get_instance_id() % 360) * PI / 180.0)
+				else:
+					away = offset / dist
+				# Küçük yaratık büyüğünden (boss) daha çok itilir
+				var share := other_radius / min_dist * 2.0
+				push += away * (1.0 - dist / min_dist) * share
+	return push.limit_length(SEPARATION_MAX)
 
 # 8 yönlü sprite: run_east/south_east/south/north_east/north + batı için flip.
 # Mevcut dilimin sınırını biraz aşmadan yön değişmez (çaprazda titreme önleme).
