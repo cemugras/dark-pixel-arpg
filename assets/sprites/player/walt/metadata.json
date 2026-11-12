@@ -288,8 +288,296 @@
           }
         }
       }
+    },
+    {
+      "character": {
+        "id": "4c72f7cd-6d00-487a-9285-4bc14237b185",
+        "name": "Aim Two",
+        "prompt": "Walt Ember, a tired middle-aged night security guard in his early 40s: faded grey hoodie under an old open navy blue work jacket with a small \"NIGHT SHIFT\" patch on the chest, baggy blue jeans, worn brown boots, messy dark hair, a few days of stubble, dark tired eyes, a cigarette tucked behind his ear, an empty cat collar hanging from his belt, both hands in his hoodie pockets, slightly slouched weary posture, standing upright, grounded realistic everyman hero, dark fantasy game protagonist",
+        "size": {
+          "width": 64,
+          "height": 64
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-11-12T21:21:58.644339+00:00"
+      },
+      "folder": "Aim_Two",
+      "frames": {
+        "rotations": {
+          "south": "Aim_Two/rotations/south.png",
+          "south-east": "Aim_Two/rotations/south-east.png",
+          "east": "Aim_Two/rotations/east.png",
+          "north-east": "Aim_Two/rotations/north-east.png",
+          "north": "Aim_Two/rotations/north.png",
+          "north-west": "Aim_Two/rotations/north-west.png",
+          "west": "Aim_Two/rotations/west.png",
+          "south-west": "Aim_Two/rotations/south-west.png"
+        },
+        "animations": {
+          "idle": {
+            "south-east": [
+              "Aim_Two/animations/idle/south-east/frame_000.png",
+              "Aim_Two/animations/idle/south-east/frame_001.png",
+              "Aim_Two/animations/idle/south-east/frame_002.png",
+              "Aim_Two/animations/idle/south-east/frame_003.png",
+              "Aim_Two/animations/idle/south-east/frame_004.png",
+              "Aim_Two/animations/idle/south-east/frame_005.png",
+              "Aim_Two/animations/idle/south-east/frame_006.png",
+              "Aim_Two/animations/idle/south-east/frame_007.png",
+              "Aim_Two/animations/idle/south-east/frame_008.png"
+            ],
+            "south": [
+              "Aim_Two/animations/idle/south/frame_000.png",
+              "Aim_Two/animations/idle/south/frame_001.png",
+              "Aim_Two/animations/idle/south/frame_002.png",
+              "Aim_Two/animations/idle/south/frame_003.png",
+              "Aim_Two/animations/idle/south/frame_004.png",
+              "Aim_Two/animations/idle/south/frame_005.png",
+              "Aim_Two/animations/idle/south/frame_006.png",
+              "Aim_Two/animations/idle/south/frame_007.png",
+              "Aim_Two/animations/idle/south/frame_008.png"
+            ],
+            "east": [
+              "Aim_Two/animations/idle/east/frame_000.png",
+              "Aim_Two/animations/idle/east/frame_001.png",
+              "Aim_Two/animations/idle/east/frame_002.png",
+              "Aim_Two/animations/idle/east/frame_003.png",
+              "Aim_Two/animations/idle/east/frame_004.png",
+              "Aim_Two/animations/idle/east/frame_005.png",
+              "Aim_Two/animations/idle/east/frame_006.png",
+              "Aim_Two/animations/idle/east/frame_007.png",
+              "Aim_Two/animations/idle/east/frame_008.png"
+            ],
+            "north-east": [
+              "Aim_Two/animations/idle/north-east/frame_000.png",
+              "Aim_Two/animations/idle/north-east/frame_001.png",
+              "Aim_Two/animations/idle/north-east/frame_002.png",
+              "Aim_Two/animations/idle/north-east/frame_003.png",
+              "Aim_Two/animations/idle/north-east/frame_004.png",
+              "Aim_Two/animations/idle/north-east/frame_005.png",
+              "Aim_Two/animations/idle/north-east/frame_006.png",
+              "Aim_Two/animations/idle/north-east/frame_007.png",
+              "Aim_Two/animations/idle/north-east/frame_008.png"
+            ],
+            "north": [
+              "Aim_Two/animations/idle/north/frame_000.png",
+              "Aim_Two/animations/idle/north/frame_001.png",
+              "Aim_Two/animations/idle/north/frame_002.png",
+              "Aim_Two/animations/idle/north/frame_003.png",
+              "Aim_Two/animations/idle/north/frame_004.png",
+              "Aim_Two/animations/idle/north/frame_005.png",
+              "Aim_Two/animations/idle/north/frame_006.png",
+              "Aim_Two/animations/idle/north/frame_007.png",
+              "Aim_Two/animations/idle/north/frame_008.png"
+            ]
+          },
+          "run": {
+            "east": [
+              "Aim_Two/animations/run/east/frame_000.png",
+              "Aim_Two/animations/run/east/frame_001.png",
+              "Aim_Two/animations/run/east/frame_002.png",
+              "Aim_Two/animations/run/east/frame_003.png",
+              "Aim_Two/animations/run/east/frame_004.png",
+              "Aim_Two/animations/run/east/frame_005.png",
+              "Aim_Two/animations/run/east/frame_006.png",
+              "Aim_Two/animations/run/east/frame_007.png",
+              "Aim_Two/animations/run/east/frame_008.png"
+            ],
+            "north-east": [
+              "Aim_Two/animations/run/north-east/frame_000.png",
+              "Aim_Two/animations/run/north-east/frame_001.png",
+              "Aim_Two/animations/run/north-east/frame_002.png",
+              "Aim_Two/animations/run/north-east/frame_003.png",
+              "Aim_Two/animations/run/north-east/frame_004.png",
+              "Aim_Two/animations/run/north-east/frame_005.png",
+              "Aim_Two/animations/run/north-east/frame_006.png",
+              "Aim_Two/animations/run/north-east/frame_007.png",
+              "Aim_Two/animations/run/north-east/frame_008.png"
+            ],
+            "north": [
+              "Aim_Two/animations/run/north/frame_000.png",
+              "Aim_Two/animations/run/north/frame_001.png",
+              "Aim_Two/animations/run/north/frame_002.png",
+              "Aim_Two/animations/run/north/frame_003.png",
+              "Aim_Two/animations/run/north/frame_004.png",
+              "Aim_Two/animations/run/north/frame_005.png",
+              "Aim_Two/animations/run/north/frame_006.png",
+              "Aim_Two/animations/run/north/frame_007.png",
+              "Aim_Two/animations/run/north/frame_008.png"
+            ],
+            "south": [
+              "Aim_Two/animations/run/south/frame_000.png",
+              "Aim_Two/animations/run/south/frame_001.png",
+              "Aim_Two/animations/run/south/frame_002.png",
+              "Aim_Two/animations/run/south/frame_003.png",
+              "Aim_Two/animations/run/south/frame_004.png",
+              "Aim_Two/animations/run/south/frame_005.png",
+              "Aim_Two/animations/run/south/frame_006.png",
+              "Aim_Two/animations/run/south/frame_007.png",
+              "Aim_Two/animations/run/south/frame_008.png"
+            ],
+            "south-east": [
+              "Aim_Two/animations/run/south-east/frame_000.png",
+              "Aim_Two/animations/run/south-east/frame_001.png",
+              "Aim_Two/animations/run/south-east/frame_002.png",
+              "Aim_Two/animations/run/south-east/frame_003.png",
+              "Aim_Two/animations/run/south-east/frame_004.png",
+              "Aim_Two/animations/run/south-east/frame_005.png",
+              "Aim_Two/animations/run/south-east/frame_006.png",
+              "Aim_Two/animations/run/south-east/frame_007.png",
+              "Aim_Two/animations/run/south-east/frame_008.png"
+            ]
+          }
+        }
+      }
+    },
+    {
+      "character": {
+        "id": "e038b33c-c0df-47a0-ab7e-d2e0030d19af",
+        "name": "Aim One",
+        "prompt": "Walt Ember, a tired middle-aged night security guard in his early 40s: faded grey hoodie under an old open navy blue work jacket with a small \"NIGHT SHIFT\" patch on the chest, baggy blue jeans, worn brown boots, messy dark hair, a few days of stubble, dark tired eyes, a cigarette tucked behind his ear, an empty cat collar hanging from his belt, both hands in his hoodie pockets, slightly slouched weary posture, standing upright, grounded realistic everyman hero, dark fantasy game protagonist",
+        "size": {
+          "width": 64,
+          "height": 64
+        },
+        "template_id": "mannequin",
+        "directions": 8,
+        "view": "low top-down",
+        "created_at": "2026-11-12T21:38:04.475754+00:00"
+      },
+      "folder": "Aim_One",
+      "frames": {
+        "rotations": {
+          "south": "Aim_One/rotations/south.png",
+          "south-east": "Aim_One/rotations/south-east.png",
+          "east": "Aim_One/rotations/east.png",
+          "north-east": "Aim_One/rotations/north-east.png",
+          "north": "Aim_One/rotations/north.png",
+          "north-west": "Aim_One/rotations/north-west.png",
+          "west": "Aim_One/rotations/west.png",
+          "south-west": "Aim_One/rotations/south-west.png"
+        },
+        "animations": {
+          "idle": {
+            "east": [
+              "Aim_One/animations/idle/east/frame_000.png",
+              "Aim_One/animations/idle/east/frame_001.png",
+              "Aim_One/animations/idle/east/frame_002.png",
+              "Aim_One/animations/idle/east/frame_003.png",
+              "Aim_One/animations/idle/east/frame_004.png",
+              "Aim_One/animations/idle/east/frame_005.png",
+              "Aim_One/animations/idle/east/frame_006.png",
+              "Aim_One/animations/idle/east/frame_007.png",
+              "Aim_One/animations/idle/east/frame_008.png"
+            ],
+            "north-east": [
+              "Aim_One/animations/idle/north-east/frame_000.png",
+              "Aim_One/animations/idle/north-east/frame_001.png",
+              "Aim_One/animations/idle/north-east/frame_002.png",
+              "Aim_One/animations/idle/north-east/frame_003.png",
+              "Aim_One/animations/idle/north-east/frame_004.png",
+              "Aim_One/animations/idle/north-east/frame_005.png",
+              "Aim_One/animations/idle/north-east/frame_006.png",
+              "Aim_One/animations/idle/north-east/frame_007.png",
+              "Aim_One/animations/idle/north-east/frame_008.png"
+            ],
+            "south-east": [
+              "Aim_One/animations/idle/south-east/frame_000.png",
+              "Aim_One/animations/idle/south-east/frame_001.png",
+              "Aim_One/animations/idle/south-east/frame_002.png",
+              "Aim_One/animations/idle/south-east/frame_003.png",
+              "Aim_One/animations/idle/south-east/frame_004.png",
+              "Aim_One/animations/idle/south-east/frame_005.png",
+              "Aim_One/animations/idle/south-east/frame_006.png",
+              "Aim_One/animations/idle/south-east/frame_007.png",
+              "Aim_One/animations/idle/south-east/frame_008.png"
+            ],
+            "north": [
+              "Aim_One/animations/idle/north/frame_000.png",
+              "Aim_One/animations/idle/north/frame_001.png",
+              "Aim_One/animations/idle/north/frame_002.png",
+              "Aim_One/animations/idle/north/frame_003.png",
+              "Aim_One/animations/idle/north/frame_004.png",
+              "Aim_One/animations/idle/north/frame_005.png",
+              "Aim_One/animations/idle/north/frame_006.png",
+              "Aim_One/animations/idle/north/frame_007.png",
+              "Aim_One/animations/idle/north/frame_008.png"
+            ],
+            "south": [
+              "Aim_One/animations/idle/south/frame_000.png",
+              "Aim_One/animations/idle/south/frame_001.png",
+              "Aim_One/animations/idle/south/frame_002.png",
+              "Aim_One/animations/idle/south/frame_003.png",
+              "Aim_One/animations/idle/south/frame_004.png",
+              "Aim_One/animations/idle/south/frame_005.png",
+              "Aim_One/animations/idle/south/frame_006.png",
+              "Aim_One/animations/idle/south/frame_007.png",
+              "Aim_One/animations/idle/south/frame_008.png"
+            ]
+          },
+          "run": {
+            "east": [
+              "Aim_One/animations/run/east/frame_000.png",
+              "Aim_One/animations/run/east/frame_001.png",
+              "Aim_One/animations/run/east/frame_002.png",
+              "Aim_One/animations/run/east/frame_003.png",
+              "Aim_One/animations/run/east/frame_004.png",
+              "Aim_One/animations/run/east/frame_005.png",
+              "Aim_One/animations/run/east/frame_006.png",
+              "Aim_One/animations/run/east/frame_007.png",
+              "Aim_One/animations/run/east/frame_008.png"
+            ],
+            "south": [
+              "Aim_One/animations/run/south/frame_000.png",
+              "Aim_One/animations/run/south/frame_001.png",
+              "Aim_One/animations/run/south/frame_002.png",
+              "Aim_One/animations/run/south/frame_003.png",
+              "Aim_One/animations/run/south/frame_004.png",
+              "Aim_One/animations/run/south/frame_005.png",
+              "Aim_One/animations/run/south/frame_006.png",
+              "Aim_One/animations/run/south/frame_007.png",
+              "Aim_One/animations/run/south/frame_008.png"
+            ],
+            "north-east": [
+              "Aim_One/animations/run/north-east/frame_000.png",
+              "Aim_One/animations/run/north-east/frame_001.png",
+              "Aim_One/animations/run/north-east/frame_002.png",
+              "Aim_One/animations/run/north-east/frame_003.png",
+              "Aim_One/animations/run/north-east/frame_004.png",
+              "Aim_One/animations/run/north-east/frame_005.png",
+              "Aim_One/animations/run/north-east/frame_006.png",
+              "Aim_One/animations/run/north-east/frame_007.png",
+              "Aim_One/animations/run/north-east/frame_008.png"
+            ],
+            "north": [
+              "Aim_One/animations/run/north/frame_000.png",
+              "Aim_One/animations/run/north/frame_001.png",
+              "Aim_One/animations/run/north/frame_002.png",
+              "Aim_One/animations/run/north/frame_003.png",
+              "Aim_One/animations/run/north/frame_004.png",
+              "Aim_One/animations/run/north/frame_005.png",
+              "Aim_One/animations/run/north/frame_006.png",
+              "Aim_One/animations/run/north/frame_007.png",
+              "Aim_One/animations/run/north/frame_008.png"
+            ],
+            "south-east": [
+              "Aim_One/animations/run/south-east/frame_000.png",
+              "Aim_One/animations/run/south-east/frame_001.png",
+              "Aim_One/animations/run/south-east/frame_002.png",
+              "Aim_One/animations/run/south-east/frame_003.png",
+              "Aim_One/animations/run/south-east/frame_004.png",
+              "Aim_One/animations/run/south-east/frame_005.png",
+              "Aim_One/animations/run/south-east/frame_006.png",
+              "Aim_One/animations/run/south-east/frame_007.png",
+              "Aim_One/animations/run/south-east/frame_008.png"
+            ]
+          }
+        }
+      }
     }
   ],
   "export_version": "3.1",
-  "export_date": "2026-11-12T21:06:16.799768"
+  "export_date": "2026-11-12T21:47:37.292517"
 }

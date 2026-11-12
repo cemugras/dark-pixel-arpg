@@ -18,6 +18,16 @@ var _rest_angle: float = 0.0     # hedef yokken çemberdeki açı (el konumu)
 var _aim_offset: float = 0.0     # iki silah aynı hedefe bakarken aradaki açı farkı
 var _angle: float = 0.0          # şu anki çember açısı
 
+# El modu (prototip): silah Walt'ın yumruğuna oturur, GunSlots her karede konumunu verir.
+# Kabza noktası dokunun içindeki orana göre (sol-alt bölge); silah bu noktanın etrafında döner.
+const GRIP_RATIO: Vector2 = Vector2(0.3, 0.65)
+const MUZZLE_Y_RATIO: float = 0.3
+var use_hand_grip: bool = false  # GunSlots sahneye eklemeden önce ayarlar
+var _hand_mode: bool = false
+var _rest_dir: Vector2 = Vector2.RIGHT
+var _grip_offset: Vector2 = Vector2.ZERO
+var _muzzle_offset: Vector2 = Vector2.ZERO
+
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var muzzle: Marker2D = $Muzzle
 
@@ -64,6 +74,20 @@ func _build_frames() -> void:
 	sprite.sprite_frames = frames
 	sprite.scale = Vector2.ONE * data.sprite_scale
 	muzzle.position = Vector2(frame_width * 0.5 * data.sprite_scale, 0.0)  # namlu ucu
+	if use_hand_grip:
+		# Dönme noktası kabzaya taşınır: sprite kabza origin'e gelecek şekilde kaydırılır
+		var h: float = data.icon.get_height()
+		_grip_offset = Vector2(frame_width * (0.5 - GRIP_RATIO.x), h * (0.5 - GRIP_RATIO.y))
+		_muzzle_offset = Vector2(frame_width * (1.0 - GRIP_RATIO.x), h * (MUZZLE_Y_RATIO - GRIP_RATIO.y)) * data.sprite_scale
+		sprite.offset = _grip_offset
+		muzzle.position = _muzzle_offset
+
+# GunSlots el modunda her karede çağırır: konum (oyuncuya göre), öne/arkaya çizim, hedef yokken bakış yönü
+func set_hand(pos: Vector2, front: bool, rest_dir: Vector2) -> void:
+	_hand_mode = true
+	position = pos
+	z_index = 1 if front else 0
+	_rest_dir = rest_dir
 
 func _physics_process(delta: float) -> void:
 	if data == null or (_player and _player.is_dead):
@@ -75,16 +99,17 @@ func _physics_process(delta: float) -> void:
 		_target = _find_target()
 		_retarget_timer = retarget_interval
 
-	# Çember üzerinde hedefe en yakın noktaya kay; hedef yoksa el konumuna dön
-	var desired := _rest_angle
-	if _target != null:
-		desired = _center_global().direction_to(_target.global_position).angle() + _aim_offset
-	_angle = rotate_toward(_angle, desired, _orbit_speed * delta)
-	_update_orbit_position()
+	if not _hand_mode:
+		# Çember üzerinde hedefe en yakın noktaya kay; hedef yoksa el konumuna dön
+		var desired := _rest_angle
+		if _target != null:
+			desired = _center_global().direction_to(_target.global_position).angle() + _aim_offset
+		_angle = rotate_toward(_angle, desired, _orbit_speed * delta)
+		_update_orbit_position()
 
 	if _target == null:
-		# hedef yokken namlu çemberin dışına baksın
-		_set_aim(Vector2.from_angle(_angle))
+		# hedef yokken namlu çemberin dışına (el modunda Walt'ın baktığı yöne) baksın
+		_set_aim(_rest_dir if _hand_mode else Vector2.from_angle(_angle))
 		return
 
 	var dir := global_position.direction_to(_target.global_position)
@@ -101,6 +126,11 @@ func _physics_process(delta: float) -> void:
 func _set_aim(dir: Vector2) -> void:
 	rotation = dir.angle()
 	sprite.flip_v = dir.x < 0.0  # sola nişan alırken silah ters görünmesin
+	if use_hand_grip:
+		# Ters çevrilince kabza ve namlu da dikeyde yer değiştirir
+		var sign_y := -1.0 if sprite.flip_v else 1.0
+		sprite.offset = Vector2(_grip_offset.x, _grip_offset.y * sign_y)
+		muzzle.position = Vector2(_muzzle_offset.x, _muzzle_offset.y * sign_y)
 
 # Çemberin merkezi (dünya koordinatı); menzil ve hedef seçimi buradan yapılır, silah kayarken titremesin
 func _center_global() -> Vector2:

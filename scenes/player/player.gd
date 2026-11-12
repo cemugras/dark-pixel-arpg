@@ -9,8 +9,11 @@ const DIR_NAMES: Array[String] = [
 	"east", "north_east", "north", "north_east"
 ]
 
-# Walt Ember: şimdilik hep eller cepte (silahlar etrafında süzülür). Silahı tutan eller planı: CLAUDE.md "DEVAM EDİLECEK"
+# Walt Ember: menzilli silah yokken eller cepte; varken "Aim Two" pozu (iki kol öne, silahlar yumruklarda, GunSlots el modu).
+# Silahlıyken gövde nişan yönüne bakar, hareket klavyeyle olur.
 const FRAMES_WALT: SpriteFrames = preload("res://data/player/walt_frames.tres")
+const FRAMES_AIM: SpriteFrames = preload("res://data/player/walt_aim_frames.tres")          # 2 silah: iki kol öne
+const FRAMES_AIM_ONE: SpriteFrames = preload("res://data/player/walt_aim_one_frames.tres")  # 1 silah: sağ kol öne, sol el cepte
 const SPRITE_SCALE: float = 0.5  # yaratıklarla aynı ölçek (64 px PixelLab karakteri ~32 px görünür)
 const DIR_FLIP: Array[bool] = [
 	false, false, false, true,
@@ -20,12 +23,14 @@ const DIR_FLIP: Array[bool] = [
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var weapon_pivot: Node2D = $WeaponPivot
 @onready var hurtbox: Area2D = $Hurtbox
+@onready var gun_slots: Node2D = $GunSlots
 
 var move_speed: float = 90.0
 var max_health: int = 100
 var health: int = 100
 
-var facing_idx: int = 2  # başlangıçta aşağı bakıyor
+var facing_idx: int = 2  # gövdenin baktığı yön (silahlıyken nişan yönü); başlangıçta aşağı
+var _move_facing_idx: int = 2  # klavyeyle son hareket yönü
 var invulnerable_timer: float = 0.0
 var is_dead: bool = false
 var _regen_accumulator: float = 0.0
@@ -37,6 +42,8 @@ func _ready() -> void:
 	sprite.sprite_frames = FRAMES_WALT
 	sprite.scale = Vector2.ONE * SPRITE_SCALE
 	sprite.play("idle_" + DIR_NAMES[facing_idx])
+	# Silahlar gövdenin arkasında da çizilebilsin diye GunSlots sprite'tan önce çizilir (arkadakiler z 0, öndekiler z 1)
+	move_child(gun_slots, 0)
 	max_health = GameState.stats.max_health
 	health = max_health
 	_apply_stats()
@@ -50,7 +57,19 @@ func _physics_process(delta: float) -> void:
 	move_and_slide()
 
 	if dir != Vector2.ZERO:
-		facing_idx = wrapi(roundi(dir.angle() / (PI / 4.0)), 0, 8)
+		_move_facing_idx = wrapi(roundi(dir.angle() / (PI / 4.0)), 0, 8)
+
+	var gun_count := GameState.guns.size()
+	var armed := gun_count > 0
+	var frames := FRAMES_WALT
+	if gun_count == 1:
+		frames = FRAMES_AIM_ONE
+	elif gun_count >= 2:
+		frames = FRAMES_AIM
+	if sprite.sprite_frames != frames:
+		sprite.sprite_frames = frames
+	# Silahlıyken gövde menzildeki en yakın düşmana döner; hedef yoksa hareket yönüne
+	facing_idx = gun_slots.aim_facing(facing_idx, _move_facing_idx) if armed else _move_facing_idx
 
 	_play_animation(dir != Vector2.ZERO)
 	_handle_contact_damage(delta)
