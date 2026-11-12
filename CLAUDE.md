@@ -3,10 +3,10 @@ Hellstake
 Godot 4.7.2 ile geliştirilen 2D top-down, Brotato tarzı, cehennem temalı hayatta kalma oyunu. Steam'de satılacak. Geliştirici Cem; Claude ile birlikte, adım adım ilerliyoruz.
 
 Oyun özeti
-Hikaye: Oyuncu, şeytandan intikam almak için cehenneme inen bir karakteri oynar (Constantine'den esinlenen; bkz. "Önemli notlar").
+Hikaye: Yorgun gece bekçisi Walt Ember, kedisi Biscuit Lucifer tarafından kaçırılınca peşinden cehenneme iner ("Hell took his cat. Bad idea."). Ayrıntılar, karakterler, boss'ların hikâyedeki yeri, giriş ve final: STORY.md (hikâyeyle ilgili tek kaynak; hikâye değişince orası güncellenir).
 Oynanış: 1-100 arası dalgalar (tur). Her dalgada yaratıklar can/zırh/saldırı olarak güçlenir. Yaratıklar altın düşürür; her dalga sonrası mağazada silah, silah sayısı, ateş/dönme hızı, zırh, can, can yenileme, koşu hızı vb. geliştirmeler alınır.
 Boss: Her 10. dalgada (10, 20, 30...) şeytani figürlerden biri boss olur ve bol altın düşürür. 100. dalgada şeytanın kendisi final boss'tur.
-Sigara mekaniği (planlı): Karakter her dalga içinde rastgele bir ihtimalle bir kez sigara içer. Küçük bir etkisi olabilir (kısa süreli buff gibi), henüz karar verilmedi.
+Sigara mekaniği (planlı): Walt (sigarayı bırakamıyor) her dalga içinde rastgele bir ihtimalle bir kez sigara içer. Küçük bir etkisi olabilir (kısa süreli buff gibi), henüz karar verilmedi.
 Silahlar: Dönen kılıç, menzilli silahlar (Glock, AK47) ve ileride farklı aletler.
 Harita: 100x100 sabit harita, mimarisi cehennemi andırır.
 Teknik temel
@@ -22,6 +22,7 @@ Dalga yöneticisi iki modu destekler: süreli dalga ve "hepsini öldür" dalgas�
 
 Dosya yapısı
 Bilinen yollar:
+STORY.md (hikâye, karakterler, boss akışı, giriş/final; hikâyeyle ilgili tek kaynak)
 assets/audio/ (sfx/: oyunda kullanılan kesilmiş efektler, 16 bit mono WAV; music/: müzikler, stereo OGG; raw/: ham indirmeler, .gdignore ile Godot'dan gizli ve oyuna girmez, Dosya Gezgini'nden kullanılır; CREDITS.md: her sesin kaynağı/yazarı/lisansı)
 assets/fonts/ (buraya fontlar eklenecek, klasör şimdilik boş)
 assets/sprites/gold/ (GoldCollect.png; altının toplanma sprite'ı, GoldSpin.png; altının dönme sprite'ı)
@@ -75,7 +76,7 @@ Yaratıklar gittikleri yöne bakar (hepsi 8 yön, boss'lar dahil).
 Yaratıklar birbirinin içine girmez: enemy.gd içinde yumuşak itme (separation). Fiziksel çarpışma yok; her yaratığın kişisel alanı SEPARATION_RADIUS (20) x body_scale, iç içe girenler birbirini iter (küçük yaratık boss'tan daha çok itilir). Komşu arama her fizik karesinde bir kez kurulan ızgarayla (GRID_CELL 40 px) yapılır. Ayar: SEPARATION_RADIUS (ne kadar seyrek), SEPARATION_STRENGTH (ne kadar hızlı ayrılırlar).
 Yaratık saldırısı (enemy.gd durum makinesi CHASE/ATTACK, EnemyData attack_*): attack_range'e girince durur, oyuncuya döner, attack_<yön> animasyonu (döngüsüz) oynar; attack_hit_frame karesinde oyuncu hâlâ attack_hit_range (boşsa range x1.4) içindeyse player.try_hit() ile hasar (dokunulmazlıktayken yok sayılır), kaçtıysa ıska. Vuruştan önceki 2 karede attack_lunge kadar ileri atılır. Bitince attack_cooldown kadar sadece kovalar. Temas hasarı düşük kalır (içine girme cezası). attack_range 0 ya da attack animasyonu yoksa eski gibi sadece temas. Değerler: Damned Soul menzil 22, hasar 6, vuruş karesi 5, atılma 4, bekleme 1.5, temas 2 (yavaş pençe, 10 fps); Hell Harpy 30/4/5/16/1.2, temas 1 (pençeli dalış, 14 fps); Hellhound 34/9/4/20/1.0, temas 2 (atılarak ısırma, 14 fps). Moloch 50/20/5/6/2.0, temas 5 (iki yumrukla yere vurma, 10 fps; 10. dalgada vuruş ~38). SpriteFrames dosyaları run + attack animasyonlarını birlikte içerir.
 Çizim sırası (Y-sort): Main/WaveManager düğümü Node2D ve y_sort_enabled (script extends Node kalır). Yaratıklar onun çocuğu olarak doğar, ekranda aşağıda olan öne çizilir. Sıralama yaratığın merkezine göre. Oyuncu bu sıralamaya dahil değil (yaratıklar oyuncunun hep önünde çizilir).
-İleride: karakter silahı tuttuğu yöne bakacak.
+İleride: karakter (Walt) silahı tuttuğu yöne bakacak.
 Mağazada "Your weapons" bölümündeki yuva/kılıç butonlarında silahın görseli gösterilir.
 Mağaza ekranı görsel olarak şimdilik amatör, ileride güzelleştirilecek.
 Mevcut durum
@@ -100,9 +101,15 @@ Sonrasında:
 	kılıç yerine/yanına farklı yardımcılar (mağazadan alınır):
 		Mavi Melek (koruyucu): küçük mavi melek, sağ omzun üstünde uçar. Her dalga başında dolu gelen sabit 100 ek can (kalkan) verir; can çubuğunda mavi olarak gösterilir. Hasar önce bu ek candan düşer; yeni dalga başlayınca ek can yeniden full olur,
 		Kırmızı Melek (saldırgan): küçük kırmızı melek, sol omzun üstünde uçar. Belli bir mesafeye yaklaşan yaratıklara ek hasar verir; mağazada hasarı ve vurma hızı geliştirilebilir (Damage/Fire Rate gibi ayrı geliştirmeler, requires ile melek yoksa kilitli),
+	ana karakter Walt Ember'in üretimi (PixelLab; görünüm STORY.md'de: gri kapüşonlu + lacivert "NIGHT SHIFT" iş ceketi, kot, bot, dağınık saç, sakal, kulak arkasında sigara, belde boş kedi tasması). 5 yön duruş + koşu, silahı tutan eller planıyla birlikte; şu anki 16x16 geçici oyuncu sprite'ı bununla değişecek,
+	Biscuit (turuncu tekir, bir kulağı kesik, gözleri hafif kızıl parlar) ve Lucifer görselleri (ara sahneler ve final boss için),
+	giriş ve bitiş ara sahneleri: hem yazı (kısa metin kutuları) hem animasyon. Giriş: Walt eve döner, kükürt kokusu, devrik mama kabı, duvarda "HE'S MINE. — L.", sigara yakar, bodrumdaki çatlaktan iner. Bitiş (komik twist): Lucifer yenilir, Biscuit önce Lucifer'e koşar, sonra Walt'a döner, Lucifer'e tıslar; evde koltukta Walt ve uyuyan Biscuit, televizyonda kükürt kokusu haberi. Animasyonlar PixelLab karakter görsellerinden bir yapay zekâ video/animasyon aracıyla üretilecek; giriş ilk Play'de oynar ve geçilebilir,
+	boss sonrası Walt'ın tek cümlelik repliği ve boss'tan düşen kedi izi (STORY.md tablosu; başarımlarla bağlanabilir),
+	altın görseli: mevcut GoldSpin/GoldCollect yerine kükürt sikkesi (sulfur coin) üretilecek (PixelLab; dönme ve toplanma animasyonu), hikâyedeki cehennem para birimi,
+	mağaza akışı = kanatlı gezgin iblis tüccar (PixelLab ile üretilecek; uçma/iniş/havalanma animasyonu): dalga bitince tüccar havadan kanatlarıyla oyuncunun yanına iner -> mağaza penceresi açılır (pencerede tüccarın portresi/görüntüsü) -> oyuncu alışverişi bitirince pencere kapanır -> tüccar kanatlanıp havalanarak ekrandan çıkar -> yeni dalga ondan sonra başlar. break_time / shop_requested akışına iniş ve kalkış animasyonu eklenir,
 	sigara mekaniği,
 	silah/alet çeşitliliği,
-	final boss (şeytan),
+	final boss Lucifer (100. dalga, tahtında kucağında Biscuit; bkz. STORY.md),
 	ses efektleri ve müzikler (altyapı hazır, Adım 22): müzik sistemi hazır, oyuna bağlı; menu, gameplay_01 (Neural Malfunction) ve gameplay_02 (Shadows Awaken Within; ikisi de vitalezzz, OpenGameArt) ve shop (tichec, freesound) eklendi, boss_music (Boss Battle Music, SubspaceAudio, OpenGameArt) eklendi, kalan parça bulunacak: final_boss (şimdilik 100. dalga da boss dalgası olduğu için boss_music çalıyor),
 	ana menü arka planında sessiz demo savaş döngüsü,
 
@@ -123,6 +130,6 @@ Silah sprite'ları sağa bakacak şekilde hazırlanır.
 Yeni yaratık paket halinde eklenir: sprite (PixelLab: duruş + koşu/yürüme + attack animasyonu, 5 yön) + attack_* değerleri + sesler (<yaratık>_hit, <yaratık>_death; freesound.org) + CREDITS.md satırları + .tres (hit_sound/death_sound dahil) aynı adımda hazırlanır.
 
 Önemli notlar
-Ana karakter Constantine'den esinlenen özgün bir karakter olmalı. Warner/DC'ye ait ad ve birebir görünüm (isim, sarı trençkot vb.) Steam satışı için risklidir. Karakter adını ve tasarımı satıştan önce netleştir.
+Ana karakter Walt Ember (özgün karakter, bkz. STORY.md). Constantine/Warner/DC'ye ait ad, sarı trençkot ya da birebir görünüm kullanılmaz; ilk fikir Constantine esinliydi, kedi hikâyesiyle tamamen özgün bir karaktere dönüştü.
 Oyun adı Hellstake. (Hellscape ve Escape From Hell adlı oyunlar Steam'de zaten var; Hellstake yok.)
 Hedef: özgün müzik, mimari, yaratıklar ve senaryo; satın almaya değer, zevkli bir oynanış.
