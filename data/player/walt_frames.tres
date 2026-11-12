@@ -1,0 +1,415 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/south/frame_000.png" id="run_south_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/south/frame_001.png" id="run_south_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/south/frame_002.png" id="run_south_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/south/frame_003.png" id="run_south_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/south/frame_004.png" id="run_south_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/south/frame_005.png" id="run_south_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/south/frame_006.png" id="run_south_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/south/frame_007.png" id="run_south_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/south/frame_008.png" id="run_south_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/south-east/frame_000.png" id="run_south_east_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/south-east/frame_001.png" id="run_south_east_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/south-east/frame_002.png" id="run_south_east_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/south-east/frame_003.png" id="run_south_east_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/south-east/frame_004.png" id="run_south_east_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/south-east/frame_005.png" id="run_south_east_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/south-east/frame_006.png" id="run_south_east_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/south-east/frame_007.png" id="run_south_east_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/south-east/frame_008.png" id="run_south_east_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/east/frame_000.png" id="run_east_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/east/frame_001.png" id="run_east_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/east/frame_002.png" id="run_east_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/east/frame_003.png" id="run_east_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/east/frame_004.png" id="run_east_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/east/frame_005.png" id="run_east_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/east/frame_006.png" id="run_east_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/east/frame_007.png" id="run_east_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/east/frame_008.png" id="run_east_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/north-east/frame_000.png" id="run_north_east_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/north-east/frame_001.png" id="run_north_east_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/north-east/frame_002.png" id="run_north_east_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/north-east/frame_003.png" id="run_north_east_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/north-east/frame_004.png" id="run_north_east_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/north-east/frame_005.png" id="run_north_east_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/north-east/frame_006.png" id="run_north_east_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/north-east/frame_007.png" id="run_north_east_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/north-east/frame_008.png" id="run_north_east_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/north/frame_000.png" id="run_north_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/north/frame_001.png" id="run_north_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/north/frame_002.png" id="run_north_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/north/frame_003.png" id="run_north_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/north/frame_004.png" id="run_north_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/north/frame_005.png" id="run_north_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/north/frame_006.png" id="run_north_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/north/frame_007.png" id="run_north_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/run/north/frame_008.png" id="run_north_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/south/frame_000.png" id="idle_south_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/south/frame_001.png" id="idle_south_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/south/frame_002.png" id="idle_south_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/south/frame_003.png" id="idle_south_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/south/frame_004.png" id="idle_south_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/south/frame_005.png" id="idle_south_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/south/frame_006.png" id="idle_south_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/south/frame_007.png" id="idle_south_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/south/frame_008.png" id="idle_south_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/south-east/frame_000.png" id="idle_south_east_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/south-east/frame_001.png" id="idle_south_east_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/south-east/frame_002.png" id="idle_south_east_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/south-east/frame_003.png" id="idle_south_east_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/south-east/frame_004.png" id="idle_south_east_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/south-east/frame_005.png" id="idle_south_east_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/south-east/frame_006.png" id="idle_south_east_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/south-east/frame_007.png" id="idle_south_east_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/south-east/frame_008.png" id="idle_south_east_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/east/frame_000.png" id="idle_east_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/east/frame_001.png" id="idle_east_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/east/frame_002.png" id="idle_east_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/east/frame_003.png" id="idle_east_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/east/frame_004.png" id="idle_east_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/east/frame_005.png" id="idle_east_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/east/frame_006.png" id="idle_east_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/east/frame_007.png" id="idle_east_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/east/frame_008.png" id="idle_east_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/north-east/frame_000.png" id="idle_north_east_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/north-east/frame_001.png" id="idle_north_east_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/north-east/frame_002.png" id="idle_north_east_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/north-east/frame_003.png" id="idle_north_east_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/north-east/frame_004.png" id="idle_north_east_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/north-east/frame_005.png" id="idle_north_east_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/north-east/frame_006.png" id="idle_north_east_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/north-east/frame_007.png" id="idle_north_east_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/north-east/frame_008.png" id="idle_north_east_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/north/frame_000.png" id="idle_north_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/north/frame_001.png" id="idle_north_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/north/frame_002.png" id="idle_north_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/north/frame_003.png" id="idle_north_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/north/frame_004.png" id="idle_north_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/north/frame_005.png" id="idle_north_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/north/frame_006.png" id="idle_north_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/north/frame_007.png" id="idle_north_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/player/walt/pockets/animations/idle/north/frame_008.png" id="idle_north_8"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("run_south_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_8")
+}],
+"loop": true,
+"name": &"run_south",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("run_south_east_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_east_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_east_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_east_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_east_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_east_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_east_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_east_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_east_8")
+}],
+"loop": true,
+"name": &"run_south_east",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("run_east_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_east_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_east_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_east_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_east_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_east_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_east_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_east_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_east_8")
+}],
+"loop": true,
+"name": &"run_east",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("run_north_east_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_east_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_east_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_east_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_east_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_east_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_east_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_east_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_east_8")
+}],
+"loop": true,
+"name": &"run_north_east",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("run_north_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_8")
+}],
+"loop": true,
+"name": &"run_north",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("idle_south_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_south_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_south_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_south_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_south_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_south_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_south_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_south_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_south_8")
+}],
+"loop": true,
+"name": &"idle_south",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("idle_south_east_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_south_east_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_south_east_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_south_east_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_south_east_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_south_east_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_south_east_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_south_east_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_south_east_8")
+}],
+"loop": true,
+"name": &"idle_south_east",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("idle_east_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_east_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_east_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_east_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_east_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_east_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_east_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_east_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_east_8")
+}],
+"loop": true,
+"name": &"idle_east",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("idle_north_east_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_north_east_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_north_east_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_north_east_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_north_east_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_north_east_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_north_east_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_north_east_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_north_east_8")
+}],
+"loop": true,
+"name": &"idle_north_east",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("idle_north_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_north_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_north_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_north_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_north_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_north_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_north_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_north_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_north_8")
+}],
+"loop": true,
+"name": &"idle_north",
+"speed": 8.0
+}]

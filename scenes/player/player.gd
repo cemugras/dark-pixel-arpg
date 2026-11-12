@@ -2,12 +2,16 @@ extends CharacterBody2D
 
 @export var invulnerability_time: float = 0.5  # hasar aldıktan sonra dokunulmazlık süresi
 
-# 45 derecelik 8 dilim. İndeks 0 = sağ, saat yönünde (Godot'ta y aşağı doğru artar).
-# Sol yönler, sağ yönlerin yatay çevrilmiş halidir.
+# 45 derecelik 8 dilim. İndeks 0 = sağ (doğu), saat yönünde (Godot'ta y aşağı doğru artar).
+# Sol (batı) yönler, sağ yönlerin yatay çevrilmiş halidir. Adlar PixelLab yönleriyle aynı (yaratıklardaki gibi).
 const DIR_NAMES: Array[String] = [
-	"right", "down_right", "down", "down_right",
-	"right", "up_right", "up", "up_right"
+	"east", "south_east", "south", "south_east",
+	"east", "north_east", "north", "north_east"
 ]
+
+# Walt Ember: şimdilik hep eller cepte (silahlar etrafında süzülür). Silahı tutan eller planı: CLAUDE.md "DEVAM EDİLECEK"
+const FRAMES_WALT: SpriteFrames = preload("res://data/player/walt_frames.tres")
+const SPRITE_SCALE: float = 0.5  # yaratıklarla aynı ölçek (64 px PixelLab karakteri ~32 px görünür)
 const DIR_FLIP: Array[bool] = [
 	false, false, false, true,
 	true, true, false, false
@@ -30,6 +34,9 @@ func _ready() -> void:
 	add_to_group("player")
 	GameState.stats_changed.connect(_on_stats_changed)
 	EventBus.wave_started.connect(_on_wave_started)
+	sprite.sprite_frames = FRAMES_WALT
+	sprite.scale = Vector2.ONE * SPRITE_SCALE
+	sprite.play("idle_" + DIR_NAMES[facing_idx])
 	max_health = GameState.stats.max_health
 	health = max_health
 	_apply_stats()
