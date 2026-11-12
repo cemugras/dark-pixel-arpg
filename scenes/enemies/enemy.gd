@@ -10,6 +10,7 @@ var _base_color: Color = Color.WHITE
 const DIRECTION_BIAS: float = 1.2  # 4 yön: eksen değiştirme eşiği (titreme önleme)
 const SECTOR_MARGIN: float = 0.12  # 8 yön: dilim değiştirme payı (radyan, titreme önleme)
 const BOSS_DEATH_MUSIC_FADE: float = 0.1  # boss ölünce müzik bu sürede kesilir (ani kesilme tıkırtısı olmasın)
+const HEALTH_PER_WAVE: float = 0.12  # her dalgada can tabanın %12si kadar artar (Brotato tarzı: kalabalık hızlı, can yavaş artar)
 
 # 8 yön: 45 derecelik dilimler, indeks 0 = doğu, saat yönünde (Godot'ta y aşağı artar).
 # Batı tarafı, doğu tarafının yatay çevrilmiş halidir (oyuncudaki gibi).
@@ -37,7 +38,7 @@ var _dying: bool = false
 func setup(enemy_data: EnemyData, wave: int) -> void:
 	data = enemy_data
 	var w := wave - 1
-	max_health = int(data.max_health * (1.0 + 0.2 * w))
+	max_health = roundi(data.max_health * (1.0 + HEALTH_PER_WAVE * w))
 	contact_damage = int(data.contact_damage * (1.0 + 0.1 * w))
 	move_speed = data.move_speed * minf(1.0 + 0.01 * w, 1.5)
 	coin_value = data.coin_value

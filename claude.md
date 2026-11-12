@@ -28,6 +28,7 @@ assets/sprites/gold/ (GoldCollect.png; altının toplanma sprite'ı, GoldSpin.pn
 assets/sprites/gun/ (Ak47.png, Ak47Shoot.png, Glock.png, GlockShoot.png, Bullet.png; hepsi sağa bakıyor)
 assets/sprites/monster/ (Monster1IdleSheet.png, Monster1RunSheet.png; yaratıkların sprite'larının bulunduğu yer. Sayfalar 64x64 kare, 4 satır: aşağı, yukarı, sol, sağ; monster1_frames.tres içinde run_down/up/left/right olarak kullanılıyor)
 assets/sprites/monster/hell_harpy/ (Hell Harpy, kanatlı iblis; eski adı Hell Bat. Adlandırma: dosyalarda hell_harpy, kodda HellHarpy, oyunda "Hell Harpy". PixelLab ile üretildi. run/animations/<uzun klasör adı>/<yön>/frame_000-008.png: 5 yön (south, south-east, east, north-east, north) x 9 kare, kare boyutu yöne göre 84-92 px. run/rotations/ içindeki duruş pozları kullanılmıyor)
+assets/sprites/monster/damned_soul/ ve assets/sprites/monster/hellhound/ (PixelLab Pro Flash, Hell Harpy stil referansıyla 64x64 üretildi; paket olduğu gibi: Idle/rotations/ (kullanılmıyor), Idle/animations/walk (Damned Soul) veya run (Hellhound)/<yön>/frame_000-008.png, 5 yön x 9 kare, kare 84-88 px. SpriteFrames .tres dosyaları bu klasörlerden üretildi, animasyon adları run_south/south_east/east/north_east/north)
 assets/sprites/player/ (IdleSheet 16x16.png, RunSheet 16x16.png karakterin idle ve run sprite'ları, sword.png sağa dönük kılıç sprite'ı)
 scenes/enemies/enemy.tscn (düşman yaratık sahnesi)
 scenes/levels/main.tscn (projenin ana sahnesi)
@@ -41,12 +42,12 @@ scenes/weapons/sword.tscn (kılıç sahnesi)
 scenes/weapons/gun.tscn (menzilli silah sahnesi; görünümü WeaponData'dan koddan kurulur), scenes/weapons/bullet.tscn (mermi), scenes/weapons/gun_slots.gd (Player/GunSlots düğümünün scripti, silahları yuvalara yerleştirir)
 scenes/ui/start_choice.gd (oyun başı silah seçim ekranı, Main/StartChoice düğümü; arayüzü koddan kurar)
 scenes/ui/main_menu.tscn + main_menu.gd (oyunun açılış sahnesi; tscn sadece kök Control, arayüz koddan kurulur. Play: müziği durdurur, GameState.reset(), main.tscn açar. Options şimdilik pasif. Quit: çıkış. Pause menüsündeki Main Menu buraya döner)
-data/enemies/ (monster1.tres = Imp, hell_harpy.tres = Hell Harpy, boss1.tres; monster1_frames.tres ve hell_harpy_frames.tres animasyonlar), data/upgrades/, data/weapons/ (sword, glock, ak47)
+data/enemies/ (damned_soul.tres, hell_harpy.tres, hellhound.tres, boss1.tres ve her birinin *_frames.tres animasyonu; monster1.tres = eski Imp, artık havuzda değil, monster1_frames.tres boss1 ve enemy.tscn tarafından hâlâ kullanılıyor), data/upgrades/, data/weapons/ (sword, glock, ak47)
 Düşman yön sistemi (enemy.gd): SpriteFrames'teki animasyon adlarına göre otomatik seçilir. run_east/south_east/south/north_east/north varsa 8 yön (batı tarafı flip), run_down/up/left/right varsa 4 yön, ikisi de yoksa tek "run" + yatay flip. Yeni yaratık için 8 yönlü sprite'ta sadece bu 5 yön üretilir.
 Duraklatma menüsü: CanvasLayer > Dim, Center > VBox > Title, ResumeButton, MainMenuButton; pause_menu.gd, Esc ile açılır/kapanır. Ayrıca HUD'da sol üstte (MarginContainer/VBoxContainer sonunda, Timer yazısının altında) koddan kurulan "II" PauseButton var; Esc ve buton pause_menu.try_pause() kullanır (mağaza açıkken / oyuncu ölüyken açılmaz).
 Ses sistemi: Audio autoload (autoload/audio.gd). Audio.play_sfx("ad") ile çalınır; assets/audio/sfx/ otomatik okunur, dosya adı = ses adı (uzantısız). Varyasyonlar ad_01, ad_02 ... şeklinde, rastgele seçilir + hafif perde oynaması. Dosyası olmayan ses sessizce atlanır. Sesler arası seviye dengesi SFX_VOLUME_DB içinde. SFX ve Music bus'ları koddan oluşturulur. Silah ateş sesi WeaponData.shoot_sound alanından seçilir. Müzik: Audio.play_music("ad") assets/audio/music/ad.ogg dosyasını döngüde çalar (loop koddan açılır, import ayarına gerek yok), parça değişince 1 sn crossfade; Audio.stop_music() kısarak durdurur. Müzik seviyeleri MUSIC_VOLUME_DB içinde; önce dosya adına (gameplay_02), yoksa grup adına (gameplay) bakılır (menu -8 dB, gameplay_01 ve gameplay_02 -16.5 dB, shop 0 dB, boss_music -14 dB). Varyasyonlar: play_music("gameplay") gameplay_01, gameplay_02 ... arasından rastgele seçer; variant parametresiyle sırayla seçilir. Dalga müziği sırayla çalar: tek dalgalar gameplay_01, çift dalgalar gameplay_02 (3. parça gelirse 1-2-3 döner); boss_music.ogg yoksa boss dalgasında sıradaki gameplay parçası çalar. Dosyası olmayan müzikte çalan parça değişmez. Müzik akışı: dalga başı gameplay (boss dalgası: önceki müzik kısılır, boss_spawn sesi bitince boss_music başlar; boss ölünce boss_music 0.1 sn içinde kesilir, sonra boss_death çalar), dalga sonu müzik 0.8 sn kısılır -> shop (wave_start/wave_complete sesleri müzikle çakıştığı için tamamen kaldırıldı, geri eklenmeyecek); ölünce müzik susar, game over ekranı bilerek sessiz (game_over müziği yok, eklenmeyecek); ana menü menu. Müzik dosyaları sfx/ değil music/ altına konur; ham WAV raw/ altında saklanır, oyuna OGG girer.
 Ses kaynağı: sesler freesound.org'dan alınıyor (arama sonuçlarında License filtresiyle sadece CC0 / Attribution). Kesme işlemi audiomass.co ile yapılıyor.
-Düşman sesleri EnemyData.hit_sound / death_sound / spawn_sound alanlarından seçilir (boşsa ses yok; boss ise ortak boss_hit/boss_death/boss_spawn). Şu an sadece Hell Harpy'nin sesi var (hell_harpy_hit, hell_harpy_death); Imp değiştirileceği için sessiz.
+Düşman sesleri EnemyData.hit_sound / death_sound / spawn_sound alanlarından seçilir (boşsa ses yok; boss ise ortak boss_hit/boss_death/boss_spawn). Hell Harpy sesli (hell_harpy_hit, hell_harpy_death). Damned Soul sesli (damned_soul_hit 3 varyasyon -8 dB, damned_soul_death -6 dB). Hellhound sesli (hellhound_hit 3 varyasyon, hellhound_death; ikisi de -6 dB).
 Ses kuralları: sesler lisansı uygun kaynaklardan (CC0, CC-BY; NC yasak) alınır, her ses CREDITS.md'ye eklenir (kullanıcı freesound attribution metnini verir, Claude ekler). Efektler başındaki sessizlik kırpılmış 16 bit mono WAV; ham dosya raw/ altında _raw ekiyle saklanır.
 Test arenası en uzak gidilebilir tile koordinatları: sol üst (-10,-10), sol alt (-10,9), sağ üst (9,-10), sağ alt (9,9). Düşman spawn alanı bu koordinatlara göre ayarlıdır.
 
@@ -55,7 +56,7 @@ Her yeni dalgada oyuncunun canı tamamen dolar.
 Dalga bitince canavarlar silinmez; kalanlar öldürülünce mağaza/sonraki dalga gelir.
 Dalga sonu mağaza öncesi bekleme (break_time) sabit 1 saniye.
 Coin magnet (pickup range) geliştirmesi yok; dalga sonunda altın otomatik toplanır.
-Boss can çubuğu kırmızı ve içinde "BOSS" yazar (oyuncu canından ayırt edilsin diye).
+Boss can çubuğu kırmızı ve içinde "BOSS" yazar (oyuncu canından ayırt edilsin diye). Çubuk sadece boss dalgasında görünür (boss ölünce ve her dalga sonunda gizlenir).
 Menzilli silahlar en yakın canavara otomatik ateş eder. Silahlar oyuncunun etrafındaki görünmez bir çemberde (GunSlots: orbit_radius 10, orbit_speed 9) hedefe en yakın noktaya kayar ve düşmana döner; hedef yokken el konumuna (slot_offsets) döner. İki silah aynı hedefe bakarken pair_spread_degrees (25°) ile yan yana durur. Menzil/hedef seçimi çember merkezinden yapılır.
 Silah yuvası 2 tane (çift elle tutma hissi).
 İki menzilli silah aynı anda ateş etmez: GunSlots.request_shot() sıra verir, atışlar arası boşluk = en hızlı silahın atış aralığı / silah sayısı (shot_gap_ratio ile ayarlanır). Atışlar seri halinde arka arkaya gelir, sesler üst üste binmez.
@@ -66,8 +67,9 @@ Silah satışı: o silah için harcanan toplam paranın %50'si iade edilir (SELL
 Glock tek tek ateş eder; AK47 otomatik silahtır. Şu anki değerler: Glock 10 hasar / 1.5 atış/sn / 30 altın, AK47 6 hasar / 3 atış/sn / 60 altın, Kılıç 40 altın (.tres içinden ayarlanır).
 Damage geliştirmesi kılıca ve menzilli silahlara birlikte uygulanır; Fire Rate sadece menzilli silahlara.
 Extra Sword ve Spin Speed geliştirmeleri kılıç yoksa kilitlidir; Fire Rate menzilli silah yoksa kilitlidir.
-Her dalgada Imp ve daha zayıf/hızlı Hell Harpy birlikte çıkar (spawn_weight eşit). Hell Harpy'nin özgün 8 yönlü sprite'ı var (body_scale 0.5).
-Yaratıklar gittikleri yöne bakar (Imp 4 yön, Hell Harpy 8 yön).
+Normal düşmanlar (hepsi PixelLab, 8 yön, body_scale 0.5): Damned Soul (yavaş kalabalık; 20 can, 35 hız, 5 hasar, ağırlık 1.5, 1. dalgadan), Hell Harpy (hızlı zayıf; 10 can, 60 hız, 3 hasar, ağırlık 1 + dalga başına 0.05, 3. dalgadan), Hellhound (hızlı dayanıklı; 30 can, 70 hız, 7 hasar, 2 altın, ağırlık 0.5 + dalga başına 0.08, 5. dalgadan). Yaratıklar kademeli tanıtılır (1-2. dalga sadece Soul). Imp havuzdan çıkarıldı.
+Zorluk eğrisi Brotato tarzı: kalabalık hızlı artar, can yavaş. Doğma aralığı 1.0 sn - dalga başına 0.04 (en az 0.25), dalga süresi 20 sn + dalga başına 2 (en fazla 60), can dalga başına +%12 (enemy.gd HEALTH_PER_WAVE), hasar +%10, hız +%1. EnemyData.spawn_weight_per_wave ile yeni türler dalgalar ilerledikçe sıklaşır. boss1 tabanı 540 can (10. dalgada ~1120).
+Yaratıklar gittikleri yöne bakar (hepsi 8 yön; boss1 hâlâ eski 4 yönlü Imp sprite.ını kullanıyor).
 İleride: karakter silahı tuttuğu yöne bakacak.
 Mağazada "Your weapons" bölümündeki yuva/kılıç butonlarında silahın görseli gösterilir.
 Mağaza ekranı görsel olarak şimdilik amatör, ileride güzelleştirilecek.
@@ -80,15 +82,19 @@ Ara adım (20b) tamamlandı: menzilli silahlar oyuncu etrafındaki çemberde hed
 Adım 21 tamamlandı: ekranda pause butonu (HUD sol üst, Esc bilmeyenler için). Oyunda test edildi.
 Adım 22 (devam ediyor): ses altyapısı (Audio autoload, SFX/Music bus, CREDITS.md, raw/ klasörü). Eklenen sesler: glock_shoot, ak47_shoot (-12 dB), coin_pickup (-7 dB), hell_harpy_hit (3 varyasyon, -6 dB), hell_harpy_death (-6 dB), player_hurt (3 varyasyon, hasar alıp hayatta kalınca), player_death (ölünce, hurt yerine çalar), boss_spawn / boss_hit / boss_death (tüm boss'lar ortak; EnemyData get_*_sound() alan boşsa ve is_boss ise bunları döndürür, özel ses için .tres alanı doldurulur; boss_spawn boss dalgası başlarken çalar; boss_hit üst üste çalmaz, Audio.SFX_MAX_INSTANCES). ui_click (tüm butonlar; mağazada alım/satım sadece başarılı olunca çalar, ayrı buy/sell sesi yok). Audio.play_sfx() çalan AudioStreamPlayer'ı döndürür. İki silahın sırayla ateş etmesi eklendi. Oyunda test edildi.
 Not: "gun logic" commit'inde main.tscn yanlışlıkla hud.tscn içeriğiyle kaydedilmişti (siyah ekran); 2da1c97'den geri alınıp düzeltildi. Claude dosya değiştirdiğinde Godot'nun sorusuna "Reload from disk" seçilmeli ve editörde kaydedilmemiş değişiklik bırakılmamalı.
+Adım 23 (devam ediyor): Imp yerine Damned Soul, üçüncü düşman Hellhound (PixelLab). Sprite + .tres + havuz hazır, zorluk eğrisi yeniden ayarlandı (Brotato tarzı); Damned Soul ve Hellhound sesleri eklendi (freesound, CREDITS.md). Oyunda test edildi: 17. dalgaya kadar.
 Ana menü (Adım 22 içinde) tamamlandı: oyun ana menüden açılır, menu müziği çalar. Oyunda test edildi. İleride menü arka planına sessiz bir "demo savaş" döngüsü eklenecek: elinde 2 AK47 olan karakter sağa sola yürür, yaratıklar doğar ve kesilir; bu arka plan savaşının hiçbir sesi çalmaz (sadece menü müziği), sadece aksiyon görünür.
 Sonrasında:
 	düşman saldırı animasyonu/mekaniği (şu an sadece temas hasarı var; PixelLab'de attack animasyonu 5 yön üretilecek),
 	yeni hikayeye uygun boss çeşitliliği,
+	boss çubuğunda "BOSS" yerine o dalganın boss adı yazacak (ör. "Lilith"); ad EnemyData.display_name alanından gelir (HUD BossBar/BossLabel),
 	sigara mekaniği,
 	silah/alet çeşitliliği,
 	final boss (şeytan),
 	ses efektleri ve müzikler (altyapı hazır, Adım 22): müzik sistemi hazır, oyuna bağlı; menu, gameplay_01 (Neural Malfunction) ve gameplay_02 (Shadows Awaken Within; ikisi de vitalezzz, OpenGameArt) ve shop (tichec, freesound) eklendi, boss_music (Boss Battle Music, SubspaceAudio, OpenGameArt) eklendi, kalan parça bulunacak: final_boss (şimdilik 100. dalga da boss dalgası olduğu için boss_music çalıyor),
-	ana menüde Options ekranı (ses seviyeleri SFX/Music bus üzerinden) ve arka planda sessiz demo savaş döngüsü,
+	Options ekranı: hem ana menüden hem duraklatma menüsünden açılır. Oyun içi sesler (SFX bus) ve müzik (Music bus) için ayrı ayrı artırma/azaltma ayarı. Ayar KAYDEDİLMEZ: sadece o oyun oturumu boyunca geçerli, oyun kapatılıp açılınca bizim varsayılan seviyelerimizle başlar (dosyaya yazma yok),
+	ana menü arka planında sessiz demo savaş döngüsü,
+	yaratıklar birbirinin içine girmesin (iç içe yığılınca görüntü kötü): düşmanlar arası ayrışma/itme (separation) eklenecek,
 
 Çalışma kuralları (Claude için)
 İş numaralı adımlarla ilerler. Her adımın sonunda neyin değiştiğini ve nasıl test edeceğimi kısaca söyle.

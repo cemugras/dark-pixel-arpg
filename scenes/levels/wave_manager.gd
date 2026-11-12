@@ -160,18 +160,22 @@ func _is_boss_alive() -> bool:
 # Bu dalgada doğabilecek türlerden ağırlığa göre rastgele seç
 func _pick_enemy_data() -> EnemyData:
 	var candidates: Array[EnemyData] = []
+	var weights: Array[float] = []
 	var total_weight := 0.0
 	for e in enemy_pool:
 		if not e.is_boss and wave >= e.min_wave and wave <= e.max_wave:
+			var wt := e.get_spawn_weight(wave)
 			candidates.append(e)
-			total_weight += e.spawn_weight
+			weights.append(wt)
+			total_weight += wt
 
 	if candidates.is_empty():
 		return null
 
 	var roll := randf() * total_weight
-	for e in candidates:
-		roll -= e.spawn_weight
+	for i in candidates.size():
+		var e := candidates[i]
+		roll -= weights[i]
 		if roll <= 0.0:
 			return e
 	return candidates.back()
@@ -220,7 +224,8 @@ func _wave_duration(w: int) -> float:
 	return minf(20.0 + 2.0 * (w - 1), 60.0)  # 20 sn'den başlar, 60 sn'ye kadar çıkar
 
 func _enemy_count(w: int) -> int:
-	return 5 + 2 * w                          # "hepsini öldür" modunda dalgadaki toplam düşman
+	return 15 + 4 * w                         # "hepsini öldür" modunda dalgadaki toplam düşman (süreli moda yakın)
 
+# Brotato tarzı: kalabalık hızlı artar (can artışı yavaş, bkz. enemy.gd HEALTH_PER_WAVE)
 func _spawn_interval(w: int) -> float:
-	return maxf(0.25, 1.2 - 0.015 * w)        # dalga ilerledikçe daha sık doğarlar
+	return maxf(0.25, 1.0 - 0.04 * (w - 1))   # 1. dalga 1 sn, 9. dalga 0.68 sn, 20. dalgadan sonra 0.25 sn

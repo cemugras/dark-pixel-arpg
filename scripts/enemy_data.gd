@@ -12,7 +12,8 @@ extends Resource
 @export var move_speed: float = 40.0
 @export var contact_damage: int = 5
 @export var coin_value: int = 1
-@export var spawn_weight: float = 1.0            # doğma olasılığı ağırlığı
+@export var spawn_weight: float = 1.0            # doğma olasılığı ağırlığı (min_wave'deki değer)
+@export var spawn_weight_per_wave: float = 0.0   # min_wave'den sonraki her dalgada ağırlığa eklenir (yeni türler giderek sıklaşır)
 @export var min_wave: int = 1
 @export var max_wave: int = 100
 @export var is_boss: bool = false                # boss'lar normal havuzdan doğmaz
@@ -21,6 +22,9 @@ extends Resource
 @export var hit_sound: String = ""             # Audio sfx adı: hasar alınca (boşsa ses yok)
 @export var death_sound: String = ""           # Audio sfx adı: ölünce (boşsa ses yok)
 @export var spawn_sound: String = ""           # Audio sfx adı: doğunca (boşsa ses yok)
+
+func get_spawn_weight(wave: int) -> float:
+	return spawn_weight + spawn_weight_per_wave * maxi(wave - min_wave, 0)
 
 # Boss sesleri: alan boşsa tüm boss'lar ortak sesleri kullanır (boss_hit, boss_death, boss_spawn).
 # Özel ses isteyen boss için .tres içinde alanı doldurmak yeterli.

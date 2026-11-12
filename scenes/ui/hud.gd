@@ -16,6 +16,7 @@ func _ready() -> void:
 	GameState.gold_changed.connect(_on_gold_changed)
 	
 	EventBus.boss_spawned.connect(_on_boss_spawned)
+	EventBus.wave_ended.connect(func(_w: int) -> void: _hide_boss_bar())  # boss çubuğu sadece boss dalgasında görünür
 	_style_bar(boss_bar, Color(0.8, 0.1, 0.1))
 	_style_bar(health_bar, Color(0.2, 0.7, 0.2))
 	boss_bar.hide()
@@ -53,12 +54,13 @@ func _refresh_initial() -> void:
 		_on_wave_started(_wave_manager.wave)
 
 func _process(_delta: float) -> void:
-	if _boss != null:
+	# Not: Godot 4'te silinmiş nesne "== null" sayılır, bu yüzden "_boss != null" kontrolü
+	# boss ölünce hiç girilmiyordu ve çubuk ekranda kalıyordu. Görünürlük üzerinden kontrol edilir.
+	if boss_bar.visible:
 		if is_instance_valid(_boss):
 			boss_bar.value = _boss.health
 		else:
-			_boss = null
-			boss_bar.hide()
+			_hide_boss_bar()
 
 	if _wave_manager == null:
 		return
@@ -85,6 +87,10 @@ func _on_gold_changed(amount: int) -> void:
 
 func _on_wave_started(wave: int) -> void:
 	wave_label.text = "Wave %d" % wave
+
+func _hide_boss_bar() -> void:
+	_boss = null
+	boss_bar.hide()
 
 func _on_boss_spawned(boss: Node) -> void:
 	_boss = boss

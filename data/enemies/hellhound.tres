@@ -1,0 +1,20 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" uid="uid://cqlw7x1k6q18i" path="res://scripts/enemy_data.gd" id="1_hellhound"]
+[ext_resource type="SpriteFrames" path="res://data/enemies/hellhound_frames.tres" id="2_hellhound"]
+
+[resource]
+script = ExtResource("1_hellhound")
+id = "hellhound"
+display_name = "Hellhound"
+sprite_frames = ExtResource("2_hellhound")
+body_scale = 0.5
+max_health = 30
+move_speed = 70.0
+contact_damage = 7
+coin_value = 2
+spawn_weight = 0.5
+spawn_weight_per_wave = 0.08
+min_wave = 5
+hit_sound = "hellhound_hit"
+death_sound = "hellhound_death"

@@ -20,6 +20,10 @@ const SFX_VOLUME_DB: Dictionary = {
 	"coin_pickup": -7.0,
 	"hell_harpy_hit": -6.0,
 	"hell_harpy_death": -6.0,
+	"damned_soul_hit": -8.0,     # en kalabalık düşman, çok sık çalar
+	"damned_soul_death": -6.0,
+	"hellhound_hit": -6.0,
+	"hellhound_death": -6.0,
 	"player_hurt": 0.0,
 	"player_death": 0.0,
 	"boss_spawn": 0.0,

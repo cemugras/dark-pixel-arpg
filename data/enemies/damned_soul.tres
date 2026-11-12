@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" uid="uid://cqlw7x1k6q18i" path="res://scripts/enemy_data.gd" id="1_damned_soul"]
+[ext_resource type="SpriteFrames" path="res://data/enemies/damned_soul_frames.tres" id="2_damned_soul"]
+
+[resource]
+script = ExtResource("1_damned_soul")
+id = "damned_soul"
+display_name = "Damned Soul"
+sprite_frames = ExtResource("2_damned_soul")
+body_scale = 0.5
+max_health = 20
+move_speed = 35.0
+contact_damage = 5
+coin_value = 1
+spawn_weight = 1.5
+hit_sound = "damned_soul_hit"
+death_sound = "damned_soul_death"
