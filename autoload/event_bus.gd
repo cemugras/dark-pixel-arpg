@@ -10,3 +10,4 @@ signal player_health_changed(current: int, maximum: int)
 signal shop_requested(wave: int)
 signal next_wave_requested
 signal boss_spawned(boss: Node)
+signal boss_defeated(boss_id: String)  # boss ölünce (EnemyData.id); ileride Steam başarımları bunu dinleyecek

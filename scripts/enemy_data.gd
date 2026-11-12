@@ -8,6 +8,7 @@ extends Resource
 @export var sprite_frames: SpriteFrames
 @export var sprite_faces_right: bool = true      # sadece tek yönlü sprite için: sprite sağa mı bakıyor
 @export var body_scale: float = 1.0              # 1.5 yaparsan daha büyük
+@export var hitbox_scale: float = 1.0            # çarpışma çemberi ve kişisel alan, body_scale'e ek olarak bu kadar büyür (iri gövdeli boss'lar için)
 @export var max_health: int = 30
 @export var move_speed: float = 40.0
 @export var contact_damage: int = 5

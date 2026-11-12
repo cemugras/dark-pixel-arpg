@@ -61,6 +61,11 @@ func _ready() -> void:
 	add_to_group("enemy")
 	if data:
 		sprite.sprite_frames = data.sprite_frames
+		if not is_equal_approx(data.hitbox_scale, 1.0):
+			# Şekil sahnede ortak kaynak: kopyalanmazsa tüm yaratıkların çemberi büyür
+			var collision := $CollisionShape2D as CollisionShape2D
+			collision.shape = collision.shape.duplicate()
+			collision.shape.radius *= data.hitbox_scale
 		_base_color = data.tint
 		sprite.modulate = _base_color
 	health = max_health
@@ -98,7 +103,7 @@ func _physics_process(_delta: float) -> void:
 				sprite.flip_h = (dir.x < 0.0) == faces_right
 
 func _separation_radius() -> float:
-	return SEPARATION_RADIUS * scale.x
+	return SEPARATION_RADIUS * scale.x * (data.hitbox_scale if data else 1.0)
 
 static func _cell_of(pos: Vector2) -> Vector2i:
 	return Vector2i(floori(pos.x / GRID_CELL), floori(pos.y / GRID_CELL))
@@ -209,6 +214,7 @@ func die() -> void:
 	if data:
 		if data.is_boss:
 			Audio.stop_music(BOSS_DEATH_MUSIC_FADE)  # boss müziği ölüm sesinden önce kesilir
+			EventBus.boss_defeated.emit(data.id)  # Steam başarımı vb. için (ör. "moloch")
 		Audio.play_sfx(data.get_death_sound())
 	EventBus.enemy_died.emit(global_position, coin_value)
 	queue_free()

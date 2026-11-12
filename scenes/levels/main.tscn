@@ -11,7 +11,7 @@
 [ext_resource type="PackedScene" uid="uid://cunha02yfnu41" path="res://scenes/ui/shop.tscn" id="8_vkq25"]
 [ext_resource type="Resource" path="res://data/enemies/damned_soul.tres" id="16_damned_soul"]
 [ext_resource type="Resource" path="res://data/enemies/hellhound.tres" id="17_hellhound"]
-[ext_resource type="Resource" uid="uid://djnp5rpt1qdkr" path="res://data/enemies/boss1.tres" id="10_hwp66"]
+[ext_resource type="Resource" uid="uid://djnp5rpt1qdkr" path="res://data/enemies/moloch.tres" id="10_hwp66"]
 [ext_resource type="PackedScene" uid="uid://bjf3dljmdhkl7" path="res://scenes/ui/game_over.tscn" id="12_2xkjh"]
 [ext_resource type="PackedScene" uid="uid://b4aj6k3rhanhd" path="res://scenes/ui/pause_menu.tscn" id="13_dj21o"]
 [ext_resource type="Script" path="res://scenes/ui/start_choice.gd" id="14_start"]

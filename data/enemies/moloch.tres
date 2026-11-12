@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3 uid="uid://djnp5rpt1qdkr"]
+
+[ext_resource type="Script" uid="uid://cqlw7x1k6q18i" path="res://scripts/enemy_data.gd" id="1_moloch"]
+[ext_resource type="SpriteFrames" path="res://data/enemies/moloch_frames.tres" id="2_moloch"]
+
+[resource]
+script = ExtResource("1_moloch")
+id = "moloch"
+display_name = "Moloch"
+sprite_frames = ExtResource("2_moloch")
+body_scale = 1.0
+hitbox_scale = 2.0
+max_health = 540
+move_speed = 30.0
+contact_damage = 15
+coin_value = 100
+is_boss = true
+boss_wave = 10

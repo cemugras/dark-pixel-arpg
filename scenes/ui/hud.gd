@@ -6,6 +6,7 @@ extends CanvasLayer
 @onready var wave_label: Label = $MarginContainer/VBoxContainer/WaveLabel
 @onready var timer_label: Label = $MarginContainer/VBoxContainer/TimerLabel
 @onready var boss_bar: ProgressBar = $BossBar
+@onready var boss_label: Label = $BossBar/BossLabel
 
 var _boss: Node
 var _wave_manager: Node
@@ -94,6 +95,9 @@ func _hide_boss_bar() -> void:
 
 func _on_boss_spawned(boss: Node) -> void:
 	_boss = boss
+	# Çubukta boss'un adı yazar (ör. "MOLOCH"); adı yoksa "BOSS"
+	var boss_name: String = boss.data.display_name if boss.data else ""
+	boss_label.text = boss_name.to_upper() if boss_name != "" else "BOSS"
 	boss_bar.max_value = boss.max_health
 	boss_bar.value = boss.health
 	boss_bar.show()
