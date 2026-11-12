@@ -45,6 +45,18 @@ var _facing: String = "down"   # 4 yön modu
 var _dir8_idx: int = 2         # 8 yön modu, başlangıçta güney
 var _dying: bool = false
 
+# --- Saldırı durumu (bkz. EnemyData attack_*) ---
+const ATTACK_HIT_RANGE_MULT: float = 1.4  # attack_hit_range boşsa: başlatma menzilinin bu katı (kılpayı ıska olmasın)
+const ATTACK_LUNGE_FRAMES: int = 2        # vuruş karesinden önceki kaç karede ileri atılır
+enum State { CHASE, ATTACK }
+var _state: State = State.CHASE
+var _has_attack: bool = false
+var attack_damage: int = 0
+var _attack_cooldown_left: float = 0.0
+var _attack_dir: Vector2 = Vector2.RIGHT
+var _attack_hit_done: bool = false
+var _lunge_speed: float = 0.0
+
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 # Dalga yöneticisi, düşmanı sahneye eklemeden önce bunu çağırır
@@ -53,6 +65,7 @@ func setup(enemy_data: EnemyData, wave: int) -> void:
 	var w := wave - 1
 	max_health = roundi(data.max_health * (1.0 + HEALTH_PER_WAVE * w))
 	contact_damage = int(data.contact_damage * (1.0 + 0.1 * w))
+	attack_damage = int(data.attack_damage * (1.0 + 0.1 * w))
 	move_speed = data.move_speed * minf(1.0 + 0.01 * w, 1.5)
 	coin_value = data.coin_value
 	scale = Vector2.ONE * data.body_scale
@@ -82,14 +95,39 @@ func _ready() -> void:
 		_mode = SpriteMode.SINGLE
 		sprite.play("run")
 
-func _physics_process(_delta: float) -> void:
+	# Saldırı: veri + 8 yönlü attack animasyonu varsa açılır, yoksa sadece temas hasarı
+	_has_attack = data != null and data.attack_range > 0.0 and _mode == SpriteMode.EIGHT_DIR \
+		and frames.has_animation("attack_east")
+	if _has_attack:
+		var fps := frames.get_animation_speed("attack_east")
+		_lunge_speed = data.attack_lunge * fps / ATTACK_LUNGE_FRAMES
+		sprite.frame_changed.connect(_on_sprite_frame_changed)
+		sprite.animation_finished.connect(_on_sprite_animation_finished)
+
+func _physics_process(delta: float) -> void:
 	if not is_instance_valid(target):
 		return
+	if _attack_cooldown_left > 0.0:
+		_attack_cooldown_left -= delta
 
-	var dir := global_position.direction_to(target.global_position)
+	var separation := _separation() * maxf(move_speed, SEPARATION_MIN_SPEED) * SEPARATION_STRENGTH
+	if _state == State.ATTACK:
+		# Saldırırken durur (itme devam eder); vuruştan hemen önce saldırı yönüne atılır
+		velocity = separation
+		if _is_lunge_frame():
+			velocity += _attack_dir * _lunge_speed
+		move_and_slide()
+		return
+
+	var to_target := target.global_position - global_position
+	var dir := to_target.normalized()
 	# Yön (bakış) oyuncuya göre kalır; itme sadece hareketi etkiler, böylece sprite titremez
-	velocity = dir * move_speed + _separation() * maxf(move_speed, SEPARATION_MIN_SPEED) * SEPARATION_STRENGTH
+	velocity = dir * move_speed + separation
 	move_and_slide()
+
+	if _can_start_attack(to_target.length()):
+		_start_attack(dir)
+		return
 
 	match _mode:
 		SpriteMode.EIGHT_DIR:
@@ -101,6 +139,45 @@ func _physics_process(_delta: float) -> void:
 				# Tek yönlü sprite: sadece yatay çevir
 				var faces_right := data.sprite_faces_right if data else true
 				sprite.flip_h = (dir.x < 0.0) == faces_right
+
+func _can_start_attack(distance: float) -> bool:
+	if not _has_attack or _attack_cooldown_left > 0.0 or _dying:
+		return false
+	if "is_dead" in target and target.is_dead:
+		return false
+	return distance <= data.attack_range
+
+func _start_attack(dir: Vector2) -> void:
+	_state = State.ATTACK
+	_attack_dir = dir
+	_attack_hit_done = false
+	# Saldırı yönüne kesin dön (koşudaki titreme payı burada uygulanmaz)
+	_dir8_idx = wrapi(roundi(dir.angle() / (PI / 4.0)), 0, 8)
+	sprite.flip_h = DIR8_FLIP[_dir8_idx]
+	sprite.play("attack_" + DIR8_NAMES[_dir8_idx])
+	sprite.frame = 0
+
+func _is_lunge_frame() -> bool:
+	var f := sprite.frame
+	return f >= data.attack_hit_frame - ATTACK_LUNGE_FRAMES and f < data.attack_hit_frame
+
+# Vuruş karesi: oyuncu hâlâ menzildeyse hasar (kaçtıysa ıska)
+func _on_sprite_frame_changed() -> void:
+	if _state != State.ATTACK or _attack_hit_done or sprite.frame < data.attack_hit_frame:
+		return
+	_attack_hit_done = true
+	if not is_instance_valid(target) or _dying:
+		return
+	var hit_range := data.attack_hit_range if data.attack_hit_range > 0.0 else data.attack_range * ATTACK_HIT_RANGE_MULT
+	if global_position.distance_to(target.global_position) <= hit_range and target.has_method("try_hit"):
+		target.try_hit(attack_damage)
+
+func _on_sprite_animation_finished() -> void:
+	if _state != State.ATTACK:
+		return
+	_state = State.CHASE
+	_attack_cooldown_left = data.attack_cooldown
+	sprite.play("run_" + DIR8_NAMES[_dir8_idx])
 
 func _separation_radius() -> float:
 	return SEPARATION_RADIUS * scale.x * (data.hitbox_scale if data else 1.0)

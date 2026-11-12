@@ -78,6 +78,13 @@ func _regenerate(delta: float) -> void:
 		health = mini(health + heal, max_health)
 		EventBus.player_health_changed.emit(health, max_health)
 
+# Yaratık saldırıları bunu kullanır: dokunulmazlık süresindeyken ya da ölüyken hasar yok sayılır.
+func try_hit(amount: int) -> bool:
+	if is_dead or invulnerable_timer > 0.0:
+		return false
+	take_damage(amount)
+	return true
+
 func take_damage(amount: int) -> void:
 	if is_dead:
 		return

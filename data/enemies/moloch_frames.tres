@@ -1,80 +1,125 @@
 [gd_resource type="SpriteFrames" format=3]
 
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south/frame_000.png" id="south_0"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south/frame_001.png" id="south_1"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south/frame_002.png" id="south_2"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south/frame_003.png" id="south_3"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south/frame_004.png" id="south_4"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south/frame_005.png" id="south_5"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south/frame_006.png" id="south_6"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south/frame_007.png" id="south_7"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south/frame_008.png" id="south_8"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south-east/frame_000.png" id="south_east_0"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south-east/frame_001.png" id="south_east_1"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south-east/frame_002.png" id="south_east_2"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south-east/frame_003.png" id="south_east_3"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south-east/frame_004.png" id="south_east_4"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south-east/frame_005.png" id="south_east_5"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south-east/frame_006.png" id="south_east_6"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south-east/frame_007.png" id="south_east_7"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south-east/frame_008.png" id="south_east_8"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/east/frame_000.png" id="east_0"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/east/frame_001.png" id="east_1"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/east/frame_002.png" id="east_2"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/east/frame_003.png" id="east_3"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/east/frame_004.png" id="east_4"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/east/frame_005.png" id="east_5"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/east/frame_006.png" id="east_6"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/east/frame_007.png" id="east_7"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/east/frame_008.png" id="east_8"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north-east/frame_000.png" id="north_east_0"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north-east/frame_001.png" id="north_east_1"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north-east/frame_002.png" id="north_east_2"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north-east/frame_003.png" id="north_east_3"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north-east/frame_004.png" id="north_east_4"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north-east/frame_005.png" id="north_east_5"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north-east/frame_006.png" id="north_east_6"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north-east/frame_007.png" id="north_east_7"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north-east/frame_008.png" id="north_east_8"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north/frame_000.png" id="north_0"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north/frame_001.png" id="north_1"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north/frame_002.png" id="north_2"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north/frame_003.png" id="north_3"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north/frame_004.png" id="north_4"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north/frame_005.png" id="north_5"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north/frame_006.png" id="north_6"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north/frame_007.png" id="north_7"]
-[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north/frame_008.png" id="north_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south/frame_000.png" id="run_south_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south/frame_001.png" id="run_south_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south/frame_002.png" id="run_south_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south/frame_003.png" id="run_south_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south/frame_004.png" id="run_south_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south/frame_005.png" id="run_south_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south/frame_006.png" id="run_south_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south/frame_007.png" id="run_south_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south/frame_008.png" id="run_south_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south-east/frame_000.png" id="run_south_east_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south-east/frame_001.png" id="run_south_east_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south-east/frame_002.png" id="run_south_east_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south-east/frame_003.png" id="run_south_east_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south-east/frame_004.png" id="run_south_east_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south-east/frame_005.png" id="run_south_east_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south-east/frame_006.png" id="run_south_east_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south-east/frame_007.png" id="run_south_east_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/south-east/frame_008.png" id="run_south_east_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/east/frame_000.png" id="run_east_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/east/frame_001.png" id="run_east_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/east/frame_002.png" id="run_east_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/east/frame_003.png" id="run_east_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/east/frame_004.png" id="run_east_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/east/frame_005.png" id="run_east_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/east/frame_006.png" id="run_east_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/east/frame_007.png" id="run_east_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/east/frame_008.png" id="run_east_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north-east/frame_000.png" id="run_north_east_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north-east/frame_001.png" id="run_north_east_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north-east/frame_002.png" id="run_north_east_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north-east/frame_003.png" id="run_north_east_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north-east/frame_004.png" id="run_north_east_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north-east/frame_005.png" id="run_north_east_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north-east/frame_006.png" id="run_north_east_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north-east/frame_007.png" id="run_north_east_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north-east/frame_008.png" id="run_north_east_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north/frame_000.png" id="run_north_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north/frame_001.png" id="run_north_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north/frame_002.png" id="run_north_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north/frame_003.png" id="run_north_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north/frame_004.png" id="run_north_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north/frame_005.png" id="run_north_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north/frame_006.png" id="run_north_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north/frame_007.png" id="run_north_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/walk/north/frame_008.png" id="run_north_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/south/frame_000.png" id="attack_south_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/south/frame_001.png" id="attack_south_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/south/frame_002.png" id="attack_south_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/south/frame_003.png" id="attack_south_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/south/frame_004.png" id="attack_south_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/south/frame_005.png" id="attack_south_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/south/frame_006.png" id="attack_south_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/south/frame_007.png" id="attack_south_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/south/frame_008.png" id="attack_south_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/south-east/frame_000.png" id="attack_south_east_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/south-east/frame_001.png" id="attack_south_east_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/south-east/frame_002.png" id="attack_south_east_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/south-east/frame_003.png" id="attack_south_east_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/south-east/frame_004.png" id="attack_south_east_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/south-east/frame_005.png" id="attack_south_east_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/south-east/frame_006.png" id="attack_south_east_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/south-east/frame_007.png" id="attack_south_east_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/south-east/frame_008.png" id="attack_south_east_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/east/frame_000.png" id="attack_east_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/east/frame_001.png" id="attack_east_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/east/frame_002.png" id="attack_east_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/east/frame_003.png" id="attack_east_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/east/frame_004.png" id="attack_east_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/east/frame_005.png" id="attack_east_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/east/frame_006.png" id="attack_east_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/east/frame_007.png" id="attack_east_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/east/frame_008.png" id="attack_east_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/north-east/frame_000.png" id="attack_north_east_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/north-east/frame_001.png" id="attack_north_east_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/north-east/frame_002.png" id="attack_north_east_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/north-east/frame_003.png" id="attack_north_east_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/north-east/frame_004.png" id="attack_north_east_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/north-east/frame_005.png" id="attack_north_east_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/north-east/frame_006.png" id="attack_north_east_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/north-east/frame_007.png" id="attack_north_east_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/north-east/frame_008.png" id="attack_north_east_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/north/frame_000.png" id="attack_north_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/north/frame_001.png" id="attack_north_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/north/frame_002.png" id="attack_north_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/north/frame_003.png" id="attack_north_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/north/frame_004.png" id="attack_north_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/north/frame_005.png" id="attack_north_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/north/frame_006.png" id="attack_north_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/north/frame_007.png" id="attack_north_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/moloch/Idle/animations/attack/north/frame_008.png" id="attack_north_8"]
 
 [resource]
 animations = [{
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("south_0")
+"texture": ExtResource("run_south_0")
 }, {
 "duration": 1.0,
-"texture": ExtResource("south_1")
+"texture": ExtResource("run_south_1")
 }, {
 "duration": 1.0,
-"texture": ExtResource("south_2")
+"texture": ExtResource("run_south_2")
 }, {
 "duration": 1.0,
-"texture": ExtResource("south_3")
+"texture": ExtResource("run_south_3")
 }, {
 "duration": 1.0,
-"texture": ExtResource("south_4")
+"texture": ExtResource("run_south_4")
 }, {
 "duration": 1.0,
-"texture": ExtResource("south_5")
+"texture": ExtResource("run_south_5")
 }, {
 "duration": 1.0,
-"texture": ExtResource("south_6")
+"texture": ExtResource("run_south_6")
 }, {
 "duration": 1.0,
-"texture": ExtResource("south_7")
+"texture": ExtResource("run_south_7")
 }, {
 "duration": 1.0,
-"texture": ExtResource("south_8")
+"texture": ExtResource("run_south_8")
 }],
 "loop": true,
 "name": &"run_south",
@@ -82,31 +127,31 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("south_east_0")
+"texture": ExtResource("run_south_east_0")
 }, {
 "duration": 1.0,
-"texture": ExtResource("south_east_1")
+"texture": ExtResource("run_south_east_1")
 }, {
 "duration": 1.0,
-"texture": ExtResource("south_east_2")
+"texture": ExtResource("run_south_east_2")
 }, {
 "duration": 1.0,
-"texture": ExtResource("south_east_3")
+"texture": ExtResource("run_south_east_3")
 }, {
 "duration": 1.0,
-"texture": ExtResource("south_east_4")
+"texture": ExtResource("run_south_east_4")
 }, {
 "duration": 1.0,
-"texture": ExtResource("south_east_5")
+"texture": ExtResource("run_south_east_5")
 }, {
 "duration": 1.0,
-"texture": ExtResource("south_east_6")
+"texture": ExtResource("run_south_east_6")
 }, {
 "duration": 1.0,
-"texture": ExtResource("south_east_7")
+"texture": ExtResource("run_south_east_7")
 }, {
 "duration": 1.0,
-"texture": ExtResource("south_east_8")
+"texture": ExtResource("run_south_east_8")
 }],
 "loop": true,
 "name": &"run_south_east",
@@ -114,31 +159,31 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("east_0")
+"texture": ExtResource("run_east_0")
 }, {
 "duration": 1.0,
-"texture": ExtResource("east_1")
+"texture": ExtResource("run_east_1")
 }, {
 "duration": 1.0,
-"texture": ExtResource("east_2")
+"texture": ExtResource("run_east_2")
 }, {
 "duration": 1.0,
-"texture": ExtResource("east_3")
+"texture": ExtResource("run_east_3")
 }, {
 "duration": 1.0,
-"texture": ExtResource("east_4")
+"texture": ExtResource("run_east_4")
 }, {
 "duration": 1.0,
-"texture": ExtResource("east_5")
+"texture": ExtResource("run_east_5")
 }, {
 "duration": 1.0,
-"texture": ExtResource("east_6")
+"texture": ExtResource("run_east_6")
 }, {
 "duration": 1.0,
-"texture": ExtResource("east_7")
+"texture": ExtResource("run_east_7")
 }, {
 "duration": 1.0,
-"texture": ExtResource("east_8")
+"texture": ExtResource("run_east_8")
 }],
 "loop": true,
 "name": &"run_east",
@@ -146,31 +191,31 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("north_east_0")
+"texture": ExtResource("run_north_east_0")
 }, {
 "duration": 1.0,
-"texture": ExtResource("north_east_1")
+"texture": ExtResource("run_north_east_1")
 }, {
 "duration": 1.0,
-"texture": ExtResource("north_east_2")
+"texture": ExtResource("run_north_east_2")
 }, {
 "duration": 1.0,
-"texture": ExtResource("north_east_3")
+"texture": ExtResource("run_north_east_3")
 }, {
 "duration": 1.0,
-"texture": ExtResource("north_east_4")
+"texture": ExtResource("run_north_east_4")
 }, {
 "duration": 1.0,
-"texture": ExtResource("north_east_5")
+"texture": ExtResource("run_north_east_5")
 }, {
 "duration": 1.0,
-"texture": ExtResource("north_east_6")
+"texture": ExtResource("run_north_east_6")
 }, {
 "duration": 1.0,
-"texture": ExtResource("north_east_7")
+"texture": ExtResource("run_north_east_7")
 }, {
 "duration": 1.0,
-"texture": ExtResource("north_east_8")
+"texture": ExtResource("run_north_east_8")
 }],
 "loop": true,
 "name": &"run_north_east",
@@ -178,33 +223,193 @@ animations = [{
 }, {
 "frames": [{
 "duration": 1.0,
-"texture": ExtResource("north_0")
+"texture": ExtResource("run_north_0")
 }, {
 "duration": 1.0,
-"texture": ExtResource("north_1")
+"texture": ExtResource("run_north_1")
 }, {
 "duration": 1.0,
-"texture": ExtResource("north_2")
+"texture": ExtResource("run_north_2")
 }, {
 "duration": 1.0,
-"texture": ExtResource("north_3")
+"texture": ExtResource("run_north_3")
 }, {
 "duration": 1.0,
-"texture": ExtResource("north_4")
+"texture": ExtResource("run_north_4")
 }, {
 "duration": 1.0,
-"texture": ExtResource("north_5")
+"texture": ExtResource("run_north_5")
 }, {
 "duration": 1.0,
-"texture": ExtResource("north_6")
+"texture": ExtResource("run_north_6")
 }, {
 "duration": 1.0,
-"texture": ExtResource("north_7")
+"texture": ExtResource("run_north_7")
 }, {
 "duration": 1.0,
-"texture": ExtResource("north_8")
+"texture": ExtResource("run_north_8")
 }],
 "loop": true,
 "name": &"run_north",
 "speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("attack_south_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_south_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_south_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_south_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_south_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_south_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_south_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_south_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_south_8")
+}],
+"loop": false,
+"name": &"attack_south",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("attack_south_east_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_south_east_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_south_east_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_south_east_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_south_east_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_south_east_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_south_east_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_south_east_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_south_east_8")
+}],
+"loop": false,
+"name": &"attack_south_east",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("attack_east_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_east_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_east_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_east_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_east_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_east_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_east_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_east_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_east_8")
+}],
+"loop": false,
+"name": &"attack_east",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("attack_north_east_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_north_east_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_north_east_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_north_east_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_north_east_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_north_east_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_north_east_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_north_east_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_north_east_8")
+}],
+"loop": false,
+"name": &"attack_north_east",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("attack_north_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_north_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_north_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_north_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_north_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_north_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_north_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_north_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("attack_north_8")
+}],
+"loop": false,
+"name": &"attack_north",
+"speed": 10.0
 }]

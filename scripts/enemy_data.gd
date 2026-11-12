@@ -11,7 +11,18 @@ extends Resource
 @export var hitbox_scale: float = 1.0            # çarpışma çemberi ve kişisel alan, body_scale'e ek olarak bu kadar büyür (iri gövdeli boss'lar için)
 @export var max_health: int = 30
 @export var move_speed: float = 40.0
-@export var contact_damage: int = 5
+@export var contact_damage: int = 5             # içine girince verilen hasar (saldırısı olan yaratıkta düşük tutulur)
+
+# --- Saldırı (yakın dövüş) ---
+# attack_range 0 ise ya da sprite'ta attack_<yön> animasyonu yoksa yaratık sadece temasla hasar verir.
+# Akış: menzile girince durur, oyuncuya döner, animasyon oynar; attack_hit_frame karesinde oyuncu
+# hâlâ vuruş menzilindeyse hasar alır (kaçarsa ıska). Vuruştan hemen önce attack_lunge kadar ileri atılır.
+@export var attack_range: float = 0.0            # saldırıyı başlatma mesafesi (merkezden merkeze, px)
+@export var attack_hit_range: float = 0.0        # vuruş karesinde hasar mesafesi (0 = attack_range x 1.4)
+@export var attack_damage: int = 0               # saldırı hasarı (dalgayla temas hasarı gibi artar)
+@export var attack_hit_frame: int = 5            # hasarın verildiği animasyon karesi (0'dan sayılır)
+@export var attack_lunge: float = 0.0            # vuruştan önceki 2 karede ileri atılma mesafesi (px)
+@export var attack_cooldown: float = 1.2         # saldırı bitince tekrar saldırmadan önce bekleme (sn)
 @export var coin_value: int = 1
 @export var spawn_weight: float = 1.0            # doğma olasılığı ağırlığı (min_wave'deki değer)
 @export var spawn_weight_per_wave: float = 0.0   # min_wave'den sonraki her dalgada ağırlığa eklenir (yeni türler giderek sıklaşır)
