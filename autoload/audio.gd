@@ -90,6 +90,25 @@ func _ensure_bus(bus_name: String) -> void:
 	AudioServer.set_bus_name(index, bus_name)
 	AudioServer.set_bus_send(index, "Master")
 
+# --- Oyuncu ses ayarı (Options ekranı) ---
+# 0.0 - 1.0 arası; 1.0 = bizim varsayılan karışımımız (SFX_VOLUME_DB / MUSIC_VOLUME_DB olduğu gibi).
+# Bilerek KAYDEDİLMEZ: sadece bu oyun oturumu boyunca bellekte tutulur, oyun yeniden açılınca 1.0'a döner.
+const DEFAULT_BUS_VOLUME: float = 1.0
+var _bus_volume: Dictionary = {}  # bus adı -> 0.0-1.0
+
+func get_bus_volume(bus_name: String) -> float:
+	return _bus_volume.get(bus_name, DEFAULT_BUS_VOLUME)
+
+func set_bus_volume(bus_name: String, value: float) -> void:
+	value = clampf(value, 0.0, 1.0)
+	_bus_volume[bus_name] = value
+	var index := AudioServer.get_bus_index(bus_name)
+	if index == -1:
+		return
+	AudioServer.set_bus_mute(index, value <= 0.0)
+	# Kulak sesi logaritmik duyar: değerin karesi kullanılır, %50 belirgin şekilde yarı ses gibi gelir (-12 dB)
+	AudioServer.set_bus_volume_db(index, linear_to_db(maxf(value * value, 0.0001)))
+
 func _load_sfx() -> void:
 	if not DirAccess.dir_exists_absolute(SFX_FOLDER):
 		return

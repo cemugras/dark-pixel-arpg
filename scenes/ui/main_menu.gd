@@ -5,6 +5,8 @@ const GAME_SCENE: String = "res://scenes/levels/main.tscn"
 const MENU_MUSIC: String = "menu"
 
 var _play_button: Button
+var _options_button: Button
+var _options: OptionsMenu
 
 func _ready() -> void:
 	get_tree().paused = false  # pause menüsünden dönülürse oyun durmuş kalmasın
@@ -39,10 +41,12 @@ func _build_ui() -> void:
 	vbox.add_child(spacer)
 
 	_play_button = _add_button(vbox, "Play", _on_play_pressed)
-	var options_button := _add_button(vbox, "Options", Callable())
-	options_button.disabled = true  # Options menüsü ileride yapılacak
-	options_button.tooltip_text = "Coming soon"
+	_options_button = _add_button(vbox, "Options", _on_options_pressed)
 	_add_button(vbox, "Quit", _on_quit_pressed)
+
+	_options = OptionsMenu.new()
+	add_child(_options)
+	_options.closed.connect(func() -> void: _options_button.grab_focus())
 
 func _add_button(parent: Node, text: String, on_pressed: Callable) -> Button:
 	var button := Button.new()
@@ -60,6 +64,10 @@ func _on_play_pressed() -> void:
 	Audio.stop_music()
 	GameState.reset()
 	get_tree().change_scene_to_file(GAME_SCENE)
+
+func _on_options_pressed() -> void:
+	Audio.play_sfx("ui_click")
+	_options.open()
 
 func _on_quit_pressed() -> void:
 	Audio.play_sfx("ui_click")

@@ -4,6 +4,10 @@ const MAIN_MENU_SCENE := "res://scenes/ui/main_menu.tscn"
 
 @onready var resume_button: Button = $Center/VBox/ResumeButton
 @onready var main_menu_button: Button = $Center/VBox/MainMenuButton
+@onready var center: CenterContainer = $Center
+
+var _options_button: Button
+var _options: OptionsMenu
 
 func _ready() -> void:
 	# Oyun durunca bu menü çalışmaya devam etmeli
@@ -12,10 +16,35 @@ func _ready() -> void:
 	add_to_group("pause_menu")  # HUD'daki pause butonu buradan bulur
 	resume_button.pressed.connect(_on_resume_pressed)
 	main_menu_button.pressed.connect(_on_main_menu_pressed)
+	_build_options()
+
+# Options butonu koddan eklenir (Resume ile Main Menu arasına); tscn değişmez
+func _build_options() -> void:
+	_options_button = Button.new()
+	_options_button.text = "Options"
+	_options_button.custom_minimum_size = resume_button.custom_minimum_size
+	_options_button.pressed.connect(_on_options_pressed)
+	center.get_node("VBox").add_child(_options_button)
+	center.get_node("VBox").move_child(_options_button, main_menu_button.get_index())
+
+	_options = OptionsMenu.new()
+	add_child(_options)
+	_options.closed.connect(_on_options_closed)
+
+func _on_options_pressed() -> void:
+	Audio.play_sfx("ui_click")
+	center.hide()  # Options açıkken pause butonları arkada görünmesin
+	_options.open()
+
+func _on_options_closed() -> void:
+	center.show()
+	_options_button.grab_focus()
 
 func _unhandled_input(event: InputEvent) -> void:
 	if not event.is_action_pressed("ui_cancel"):
 		return
+	if _options.visible:
+		return  # Esc'i Options ekranı kendisi işler (geri döner)
 	if visible:
 		resume()
 	else:
