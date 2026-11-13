@@ -21,6 +21,9 @@ Kurallar:
 | player_death.wav | Medium Male Pain Grunts | unfa | https://freesound.org/s/610998/ | CC0 | Trimmed from raw/player_death_raw.flac |
 | moloch_spawn.wav, moloch_hit.wav, moloch_death.wav | Monster screams.wav | gpag1 | https://freesound.org/s/391552/ | CC0 | Cut into 3 clips from raw/moloch_raw.wav |
 | belphegor_spawn.wav, belphegor_hit.wav, belphegor_death.wav, belphegor_charge.wav | SFX - Dragon Low Growls Breathing.wav | Karma-Ron | https://freesound.org/s/486596/ | CC0 | Cut into 4 clips from raw/belphegor_raw.wav, mono |
+| merchant_wings.wav | Wing flap, flutter, carpet, fabric, foley (2012).wav | TRP | https://freesound.org/s/616859/ | CC0 | Cut from raw/merchant_wings_raw.wav, mono |
+| merchant_land.wav | Human Impact on Ground | alegemaate | https://freesound.org/s/364690/ | CC0 | Cut from raw/merchant_land_raw.wav, mono |
+| merchant_greet.wav | Goblin Cackle.wav | spookymodem | https://freesound.org/s/202096/ | CC0 | Cut from raw/merchant_greet_raw.wav, mono |
 | ui_click.wav | Click.wav | budek | https://freesound.org/s/513481/ | CC0 | - |
 
 ## Music (music/)

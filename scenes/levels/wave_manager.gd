@@ -27,11 +27,12 @@ var _player: Node2D
 var _boss: Node = null
 var _wave_audio_pending: bool = false  # dalga müziği/boss giriş sesi, oyun duraklatılmamışken ilk karede başlar
 
-const WAVE_END_MUSIC_FADE: float = 0.8  # dalga bitince müzik bu sürede kısılır, sonra shop müziği başlar
+const WAVE_END_MUSIC_FADE: float = 0.8  # dalga bitince müzik bu sürede kısılır; shop müziği mağaza açılınca (tüccar indikten sonra) başlar
 
 func _ready() -> void:
 	add_to_group("wave_manager")
 	EventBus.next_wave_requested.connect(start_next_wave)
+	EventBus.shop_requested.connect(func(_w: int) -> void: _play_shop_music())
 	wave = start_wave - 1
 	start_next_wave.call_deferred()
 
@@ -70,7 +71,12 @@ func _physics_process(delta: float) -> void:
 		_break_left -= delta
 		if _break_left <= 0.0:
 			_in_break = false
-			EventBus.shop_requested.emit(wave)
+			# Tüccar varsa önce iner, indiğinde mağazayı o açar; yoksa mağaza hemen açılır
+			var merchant := get_tree().get_first_node_in_group("merchant")
+			if merchant:
+				merchant.arrive(wave)
+			else:
+				EventBus.shop_requested.emit(wave)
 		return
 
 	if not wave_active:
@@ -212,9 +218,9 @@ func _end_wave() -> void:
 	_boss = null
 	get_tree().call_group("coin", "attract_to_player")
 	EventBus.wave_ended.emit(wave)
-	# Müzik yavaşça kısılır, sustuğunda mağaza müziği başlar
+	# Müzik yavaşça kısılır; mağaza müziği mağaza açılınca başlar (EventBus.shop_requested, _ready'de bağlı):
+	# tüccar önce iner ve yere değme sesi çalar, müzik ondan sonra girer
 	Audio.stop_music(WAVE_END_MUSIC_FADE)
-	get_tree().create_timer(WAVE_END_MUSIC_FADE).timeout.connect(_play_shop_music)
 	_in_break = true
 	_break_left = break_time
 

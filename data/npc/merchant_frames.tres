@@ -1,0 +1,108 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/npc/merchant/Idle/animations/fly/south/frame_000.png" id="fly_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/npc/merchant/Idle/animations/fly/south/frame_001.png" id="fly_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/npc/merchant/Idle/animations/fly/south/frame_002.png" id="fly_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/npc/merchant/Idle/animations/fly/south/frame_003.png" id="fly_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/npc/merchant/Idle/animations/fly/south/frame_004.png" id="fly_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/npc/merchant/Idle/animations/fly/south/frame_005.png" id="fly_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/npc/merchant/Idle/animations/fly/south/frame_006.png" id="fly_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/npc/merchant/Idle/animations/fly/south/frame_007.png" id="fly_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/npc/merchant/Idle/animations/fly/south/frame_008.png" id="fly_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/npc/merchant/Idle/animations/idle/south/frame_000.png" id="idle_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/npc/merchant/Idle/animations/idle/south/frame_001.png" id="idle_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/npc/merchant/Idle/animations/idle/south/frame_002.png" id="idle_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/npc/merchant/Idle/animations/idle/south/frame_003.png" id="idle_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/npc/merchant/Idle/animations/idle/south/frame_004.png" id="idle_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/npc/merchant/Idle/animations/idle/south/frame_005.png" id="idle_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/npc/merchant/Idle/animations/idle/south/frame_006.png" id="idle_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/npc/merchant/Idle/animations/idle/south/frame_007.png" id="idle_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/npc/merchant/Idle/animations/idle/south/frame_008.png" id="idle_8"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("fly_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("fly_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("fly_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("fly_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("fly_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("fly_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("fly_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("fly_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("fly_8")
+}],
+"loop": true,
+"name": &"fly",
+"speed": 12.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("idle_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_8")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("idle_1")
+}],
+"loop": true,
+"name": &"idle",
+"speed": 8.0
+}]

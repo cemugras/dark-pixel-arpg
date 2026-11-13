@@ -19,7 +19,7 @@ const COIN_ICON_PATH: String = "res://assets/sprites/gold/coin_icon.png"
 const COIN_ICON: Texture2D = preload("res://assets/sprites/gold/coin_icon.png")
 const PRICE_ICON_SIZE: int = 10       # buton içindeki sikke (ikon 20 px, yarısı: piksel bozulmaz)
 const HEADER_ICON_SIZE: int = 20      # üstteki altın satırındaki sikke
-const BUTTON_FONT_SIZE: int = 8
+const BUTTON_FONT_SIZE: int = 10   # 8 px'de "0" ile "8" karışıyordu (10 sikke 18 gibi okunuyordu)
 const BUTTON_MIN_HEIGHT: float = 30.0
 const WEAPON_ICON_WIDTH: int = 48     # silah görselli butonlarda yazı bu genişliğin sağından başlar
 
@@ -33,15 +33,73 @@ func _ready() -> void:
 	GameState.weapons_changed.connect(_refresh)
 	next_wave_button.pressed.connect(_on_next_wave_pressed)
 
+	_build_merchant_panel()
 	_build_gold_header()
 	_build_buttons()
 	_build_weapon_section()
+
+# --- Tüccar şeridi (mağazanın en üstünde): nefes alan Brimm (idle animasyonu), adı ve her açılışta değişen replik ---
+const MERCHANT_NAME: String = "Brimm"
+const MERCHANT_FRAMES_PATH: String = "res://data/npc/merchant_frames.tres"
+const MERCHANT_SCALE: float = 2.0                     # 88 px kare, karakter ~62x60 px -> ekranda ~124x120
+const MERCHANT_BOX: Vector2 = Vector2(132, 124)       # animasyonun durduğu alan
+const MERCHANT_LINES: Array[String] = [
+	"Heard a cat was seen near the sleeping halls. Orange. Rude.",
+	"Silver bullets. Demons hate 'em. Business loves 'em.",
+	"Brimstone only. No refunds. Well... half.",
+	"Your cat? Never seen it. Buy something and I might remember.",
+	"Every lord down here has met your furball. None of them liked it.",
+	"Fresh stock. Slightly cursed. Mostly fine.",
+	"You again? Good. I was running low on your money.",
+	"Word is Moloch said your cat was too hot to handle. Coming from him!",
+	"Keep the guns clean and the coins coming.",
+	"Deeper you go, the pricier it gets. That's just economics.",
+]
+var _merchant_line: Label
+
+# shop.tscn'e dokunmamak için koddan, içerik VBox'ının en üstüne eklenir; mağazanın geri kalanı altında tam genişlikte kalır
+func _build_merchant_panel() -> void:
+	var content := title_label.get_parent()  # Background/MarginContainer/VBoxContainer
+	title_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER  # "Wave X complete" Brimm'in altında ortalı
+	var column := VBoxContainer.new()
+	column.name = "MerchantRow"
+	column.add_theme_constant_override("separation", 2)
+	content.add_child(column)
+	content.move_child(column, 0)
+
+	# Brimm ortada: mağaza açıkken oyun durur ama Shop PROCESS_MODE_ALWAYS olduğu için animasyon oynar
+	var holder := Control.new()
+	holder.custom_minimum_size = MERCHANT_BOX
+	holder.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
+	column.add_child(holder)
+	if ResourceLoader.exists(MERCHANT_FRAMES_PATH):
+		var sprite := AnimatedSprite2D.new()
+		sprite.sprite_frames = load(MERCHANT_FRAMES_PATH)
+		sprite.scale = Vector2.ONE * MERCHANT_SCALE
+		sprite.position = MERCHANT_BOX * 0.5
+		sprite.play("idle")
+		holder.add_child(sprite)
+
+	# Adı ve repliği hemen altında, ortalı
+	var name_label := Label.new()
+	name_label.text = MERCHANT_NAME
+	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	name_label.add_theme_font_size_override("font_size", 14)
+	column.add_child(name_label)
+
+	_merchant_line = Label.new()
+	_merchant_line.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
+	_merchant_line.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
+	_merchant_line.add_theme_font_size_override("font_size", 10)
+	_merchant_line.modulate = Color(0.85, 0.8, 0.7)
+	column.add_child(_merchant_line)
 
 # Üstteki altın satırı: sabit sikke ikonu + sayı (shop.tscn'e dokunmamak için GoldLabel koddan bir HBox'a taşınır)
 func _build_gold_header() -> void:
 	var vbox := gold_label.get_parent()
 	var row := HBoxContainer.new()
 	row.name = "GoldRow"
+	row.alignment = BoxContainer.ALIGNMENT_CENTER  # Brimm'in altında ortalı
 	row.add_theme_constant_override("separation", 6)
 	vbox.add_child(row)
 	vbox.move_child(row, gold_label.get_index())
@@ -124,7 +182,7 @@ func _build_buttons() -> void:
 			_upgrades.append(upgrade)
 	for upgrade in _upgrades:
 		var button := Button.new()
-		button.add_theme_font_size_override("font_size", 8)
+		button.add_theme_font_size_override("font_size", BUTTON_FONT_SIZE)
 		button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 		button.pressed.connect(_on_upgrade_pressed.bind(upgrade))
 		upgrade_list.add_child(button)
@@ -132,6 +190,7 @@ func _build_buttons() -> void:
 
 func open(wave: int) -> void:
 	title_label.text = "Wave %d complete" % wave
+	_merchant_line.text = "\"%s\"" % MERCHANT_LINES.pick_random()
 	visible = true
 	get_tree().paused = true
 	_refresh()
@@ -158,7 +217,7 @@ func _clear(container: Node) -> void:
 
 func _make_button(parent: Node, text: String, disabled: bool, on_pressed: Callable) -> Button:
 	var button := Button.new()
-	button.add_theme_font_size_override("font_size", 8)
+	button.add_theme_font_size_override("font_size", BUTTON_FONT_SIZE)
 	button.size_flags_horizontal = Control.SIZE_EXPAND_FILL
 	button.disabled = disabled
 	button.pressed.connect(on_pressed)
@@ -314,4 +373,8 @@ func _on_next_wave_pressed() -> void:
 	Audio.play_sfx("ui_click")
 	visible = false
 	get_tree().paused = false
-	EventBus.next_wave_requested.emit()
+	# Tüccar varsa havalanır, gidince yeni dalgayı o başlatır; yoksa dalga hemen başlar
+	if get_tree().get_first_node_in_group("merchant"):
+		EventBus.shop_closed.emit()
+	else:
+		EventBus.next_wave_requested.emit()

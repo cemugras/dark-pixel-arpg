@@ -9,5 +9,6 @@ signal wave_ended(wave: int)
 signal player_health_changed(current: int, maximum: int)
 signal shop_requested(wave: int)
 signal next_wave_requested
+signal shop_closed  # mağazada Next Wave basıldı; tüccar varsa havalanır, gidince next_wave_requested yayınlar
 signal boss_spawned(boss: Node)
 signal boss_defeated(boss_id: String)  # boss ölünce (EnemyData.id); ileride Steam başarımları bunu dinleyecek

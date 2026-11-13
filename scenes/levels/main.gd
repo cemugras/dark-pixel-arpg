@@ -2,6 +2,8 @@ extends Node2D
 
 @export var coin_scene: PackedScene
 
+const MERCHANT_SCRIPT: Script = preload("res://scenes/npc/merchant.gd")
+
 # Sikkeler bu düğümün altına eklenir. Zeminin (TileMapLayer) hemen arkasına yerleşir, böylece
 # zeminin üstünde ama oyuncu ve yaratıkların altında çizilir (yaratık üstünden geçince sikke altta kalır).
 var _coins: Node2D
@@ -13,6 +15,14 @@ func _ready() -> void:
 	add_child(_coins)
 	var floor_layer := get_node_or_null("TileMapLayer")
 	move_child(_coins, floor_layer.get_index() + 1 if floor_layer else 0)
+
+	# Kanatlı tüccar: oyuncunun hemen arkasında (oyuncunun üstünde çizilir); dalga sonu akışını o yürütür
+	var merchant: Node2D = MERCHANT_SCRIPT.new()
+	merchant.name = "Merchant"
+	add_child(merchant)
+	var player := get_node_or_null("Player")
+	if player:
+		move_child(merchant, player.get_index() + 1)
 
 func _on_enemy_died(pos: Vector2, coin_value: int) -> void:
 	# Büyük ödüller (boss) birden çok altın parçasına bölünür

@@ -30,9 +30,11 @@ Steam kısa açıklaması (taslak):
 
 - Tahtında, kucağında Biscuit ile oturur. Kediyi gerçekten sever; kaçırma bir intikam değil, sahiplenmedir.
 
-### Gezgin Tüccar (mağaza)
+### Brimm, gezgin tüccar (mağaza)
 
-- Kanatlı bir iblis tüccar. Ruhların düşürdüğü kükürt sikkeleriyle silah satar ve Walt'a hep "kedin hakkında bir şeyler duydum" diye ipucu verir. Görünümü ileride tasarlanacak.
+- Kanatlı bir iblis tüccar; adı "brimstone"dan (kükürt). Ruhların düşürdüğü kükürt sikkeleriyle silah satar ve Walt'a hep "kedin hakkında bir şeyler duydum" diye ipucu verir. Kurnaz ama sevimli bir esnaf; düşman değil.
+- **Görünüm:** ufak tefek, goblin benzeri bir iblis. Mor-gri ten, yeşil kukuleta, yuvarlak gözlükler ardında kehribar gözler, sivri kulaklar, küçük boynuzlar, mor yarasa kanatları, biblolarla dolu bir yelek, belinde sikke kesesi, sırtında rengârenk mallarla dolu tahta bir sandık. Mor-yeşil tonları onu kırmızı cehennem yaratıklarından ayırır.
+- **Konuşması:** mağaza her açıldığında kısa, iğneleyici bir replik söyler (ör. *"Silver bullets. Demons hate 'em. Business loves 'em."*, *"Brimstone only. No refunds. Well... half."*). Replikler arada Biscuit'in izine dair dedikodu da içerir.
 - **Akış:** dalga bitince havadan kanatlarıyla Walt'ın yanına iner, mağaza penceresi açılır (pencerede tüccarın görüntüsü), alışveriş bitince pencere kapanır, tüccar kanatlanıp havalanır ve gider; yeni dalga ondan sonra başlar.
 
 ### Mavi ve Kırmızı Melek (satın alınabilir yardımcılar)
@@ -45,7 +47,7 @@ Steam kısa açıklaması (taslak):
 | Mekanik | Hikâyedeki karşılığı |
 |---|---|
 | Altın | Cehennemin para birimi: lanetli ruhların düşürdüğü kükürt sikkeleri. Kükürt sarısı, kenarı pürüzlü, ortasında boynuzlu iblis damgası olan sikke. Ekranda "Gold" yazısı yok, sadece sikke ikonu ve sayı görünür (kodda adı hâlâ gold) |
-| Mağaza | Kanatlı gezgin iblis tüccar: her dalga sonunda havadan iner, alışveriş bitince havalanıp gider |
+| Mağaza | Kanatlı gezgin iblis tüccar Brimm: her dalga sonunda havadan iner, alışveriş bitince havalanıp gider |
 | Sigara | Walt dalga içinde bir kez sigara yakar, kısa bir rahatlama (küçük buff) |
 | Mavi / Kırmızı Melek | Biscuit'in eski koruyucuları |
 | Glock | Walt'ın gece bekçisi tabancası |
