@@ -21,10 +21,37 @@ func _ready() -> void:
 	_style_bar(boss_bar, Color(0.8, 0.1, 0.1))
 	_style_bar(health_bar, Color(0.2, 0.7, 0.2))
 	boss_bar.hide()
+	_build_coin_icon()
 	_build_pause_button()
 
 	_wave_manager = get_tree().get_first_node_in_group("wave_manager")
 	_refresh_initial.call_deferred()
+
+# Altın yazısının solunda, yerdeki sikkeyle aynı animasyonla dönen sikke ikonu ("Gold:" yazısı yerine).
+# hud.tscn'e dokunmamak için koddan kurulur: GoldLabel, aynı yerdeki bir HBox'ın içine taşınır.
+const COIN_FRAMES: SpriteFrames = preload("res://data/pickups/coin_frames.tres")
+const HUD_COIN_SCALE: float = 1.0
+
+func _build_coin_icon() -> void:
+	var vbox := gold_label.get_parent()
+	var row := HBoxContainer.new()
+	row.name = "GoldRow"
+	row.add_theme_constant_override("separation", 4)
+	vbox.add_child(row)
+	vbox.move_child(row, gold_label.get_index())
+	gold_label.reparent(row)
+
+	var holder := Control.new()
+	holder.custom_minimum_size = Vector2(24, 24) * HUD_COIN_SCALE
+	var coin := AnimatedSprite2D.new()
+	coin.sprite_frames = COIN_FRAMES
+	coin.position = holder.custom_minimum_size * 0.5
+	coin.scale = Vector2.ONE * HUD_COIN_SCALE
+	coin.play("spin")
+	holder.add_child(coin)
+	row.add_child(holder)
+	row.move_child(holder, 0)
+	gold_label.size_flags_vertical = Control.SIZE_SHRINK_CENTER
 
 # Sol üstte, HUD yazılarının (Gold, Wave, Timer) altında pause butonu (Esc bilmeyenler için); hud.tscn'e dokunmamak için koddan kurulur
 func _build_pause_button() -> void:
@@ -84,7 +111,7 @@ func _on_player_damaged(current: int, maximum: int) -> void:
 	health_label.text = "HP %d/%d" % [current, maximum]
 
 func _on_gold_changed(amount: int) -> void:
-	gold_label.text = "Gold: %d" % amount
+	gold_label.text = "%d" % amount
 
 func _on_wave_started(wave: int) -> void:
 	wave_label.text = "Wave %d" % wave

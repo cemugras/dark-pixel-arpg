@@ -1,0 +1,115 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/gold/coin_spin.png" id="1_spin"]
+[ext_resource type="Texture2D" path="res://assets/sprites/gold/coin_collect.png" id="2_collect"]
+
+[sub_resource type="AtlasTexture" id="spin_0"]
+atlas = ExtResource("1_spin")
+region = Rect2(0, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="spin_1"]
+atlas = ExtResource("1_spin")
+region = Rect2(24, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="spin_2"]
+atlas = ExtResource("1_spin")
+region = Rect2(48, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="spin_3"]
+atlas = ExtResource("1_spin")
+region = Rect2(72, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="spin_4"]
+atlas = ExtResource("1_spin")
+region = Rect2(96, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="spin_5"]
+atlas = ExtResource("1_spin")
+region = Rect2(120, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="spin_6"]
+atlas = ExtResource("1_spin")
+region = Rect2(144, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="spin_7"]
+atlas = ExtResource("1_spin")
+region = Rect2(168, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="collect_0"]
+atlas = ExtResource("2_collect")
+region = Rect2(0, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="collect_1"]
+atlas = ExtResource("2_collect")
+region = Rect2(24, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="collect_2"]
+atlas = ExtResource("2_collect")
+region = Rect2(48, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="collect_3"]
+atlas = ExtResource("2_collect")
+region = Rect2(72, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="collect_4"]
+atlas = ExtResource("2_collect")
+region = Rect2(96, 0, 24, 24)
+
+[sub_resource type="AtlasTexture" id="collect_5"]
+atlas = ExtResource("2_collect")
+region = Rect2(120, 0, 24, 24)
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("spin_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("spin_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("spin_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("spin_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("spin_4")
+}, {
+"duration": 1.0,
+"texture": SubResource("spin_5")
+}, {
+"duration": 1.0,
+"texture": SubResource("spin_6")
+}, {
+"duration": 1.0,
+"texture": SubResource("spin_7")
+}],
+"loop": true,
+"name": &"spin",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": SubResource("collect_0")
+}, {
+"duration": 1.0,
+"texture": SubResource("collect_1")
+}, {
+"duration": 1.0,
+"texture": SubResource("collect_2")
+}, {
+"duration": 1.0,
+"texture": SubResource("collect_3")
+}, {
+"duration": 1.0,
+"texture": SubResource("collect_4")
+}, {
+"duration": 1.0,
+"texture": SubResource("collect_5")
+}],
+"loop": false,
+"name": &"collect",
+"speed": 16.0
+}]

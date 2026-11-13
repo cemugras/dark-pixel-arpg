@@ -44,12 +44,13 @@ Steam kısa açıklaması (taslak):
 
 | Mekanik | Hikâyedeki karşılığı |
 |---|---|
-| Altın | Cehennemin para birimi: lanetli ruhların düşürdüğü kükürt sikkeleri (görseli kükürt sikkesi olarak yeniden üretilecek) |
+| Altın | Cehennemin para birimi: lanetli ruhların düşürdüğü kükürt sikkeleri. Kükürt sarısı, kenarı pürüzlü, ortasında boynuzlu iblis damgası olan sikke. Ekranda "Gold" yazısı yok, sadece sikke ikonu ve sayı görünür (kodda adı hâlâ gold) |
 | Mağaza | Kanatlı gezgin iblis tüccar: her dalga sonunda havadan iner, alışveriş bitince havalanıp gider |
 | Sigara | Walt dalga içinde bir kez sigara yakar, kısa bir rahatlama (küçük buff) |
 | Mavi / Kırmızı Melek | Biscuit'in eski koruyucuları |
 | Glock | Walt'ın gece bekçisi tabancası |
-| Diğer silahlar, kılıç | Cehennemden toplanan ya da tüccardan alınan silahlar |
+| Diğer silahlar, kılıç | Cehennemden toplanan ya da tüccardan alınan silahlar: Revolver (ağır tek atış), AK47 (seri atış), dönen kılıç |
+| Gümüş mermi (planlı) | Tüccardan silah başına alınan, iblislere karşı gümüş mermiler: daha güçlü, parlak görünür |
 | Normal yaratıklar | Damned Soul (lanetli ruhlar), Hell Harpy, Hellhound: cehennemin sıradan sakinleri |
 
 ## Açılış (intro)
@@ -66,20 +67,27 @@ Hem yazıyla hem animasyonla anlatılacak (bkz. "Ara sahneler").
 
 Her boss Biscuit'i bir sonrakine teslim etmiştir. Walt her birinden kediye ait bir iz alır (başarım / ödül olarak kullanılabilir).
 
-| Dalga | Boss | Ne oldu | Bulunan iz |
-|---|---|---|---|
-| 10 | Moloch | Cehennemin kapı bekçisi. Kediyi kafeste görmüş ama "çok ateşliydi" diye Belphegor'a yollamış. | Yanmış tasma kopçası |
-| 20 | Belphegor | Kediyi kucağında uyutmaya çalışmış, kedi tırmalamış. | Yanağındaki pençe izi |
-| 30 | Mammon | Kediyi satmaya kalkmış. | "PRICELESS" fiyat etiketi |
-| 40 | Beelzebub | Kedi sineklerini avlamış, kızmış. | Oyuncak fare |
-| 50 | Lilith | Oyunun ortası, dönüm noktası: Walt'a Biscuit'in sırrını anlatır. | Biscuit'in eski cehennem fotoğrafı |
-| 60 | Leviathan | Kediyi lav denizinin karşısına taşımış. | Islak tüy yumağı |
-| 70 | Asmodeus | Üç başı kedinin kime ait olduğu konusunda kavga eder. | Kırık mama kabı |
-| 80 | Abaddon | Yıkım meleği; Walt'ı "geri dön" diye uyarır. | Kedinin çan sesi |
-| 90 | Azazel | Walt'a benzer silahlar kullanan düşmüş melek; Lucifer'in son kapısı. | Kapı anahtarı |
-| 100 | Lucifer | Tahtında, kucağında Biscuit. | — |
+Boss'lar zayıftan güçlüye sıralanır; her biri oyuna bir yeni mekanik getirir ve bu mekanik karakterinden gelir.
+
+| Dalga | Boss | Ne oldu | Mekanik | Bulunan iz |
+|---|---|---|---|---|
+| 10 | Moloch | Cehennemin kapı bekçisi. Kediyi kafeste görmüş ama "çok ateşliydi" diye Belphegor'a yollamış. | Yavaş tank, yeni mekanik yok (iki yumrukla yere vurur) | Yanmış tasma kopçası |
+| 20 | Belphegor | Kediyi kucağında uyutmaya çalışmış, kedi tırmalamış. | Uyuşuk yürür, aniden uyanıp hamle yapar, sonra yorulup esner | Yanağındaki pençe izi |
+| 30 | Mammon | Kediyi satmaya kalkmış. | Vurdukça altın saçar | "PRICELESS" fiyat etiketi |
+| 40 | Beelzebub | Kedi sineklerini avlamış, kızmış. | Sinek sürüsü çağırır | Oyuncak fare |
+| 50 | Lilith | Oyunun ortası, dönüm noktası: Walt'a Biscuit'in sırrını anlatır. | Hızlı, yaratık çağırır, büyü yapar | Biscuit'in eski cehennem fotoğrafı |
+| 60 | Leviathan | Kediyi lav denizinin karşısına taşımış. | Yere dalıp çıkar, alan saldırısı | Islak tüy yumağı |
+| 70 | Asmodeus | Üç başı kedinin kime ait olduğu konusunda kavga eder. | Her başın ayrı saldırısı (üç saldırı) | Kırık mama kabı |
+| 80 | Abaddon | Yıkım meleği; Walt'ı "geri dön" diye uyarır. | Çekirge sürüleri, geniş alan | Kedinin çan sesi |
+| 90 | Azazel | Walt'a benzer silahlar kullanan düşmüş melek; Lucifer'in son kapısı. | Oyuncu gibi silah kullanır | Kapı anahtarı |
+| 100 | Lucifer | Tahtında, kucağında Biscuit. | Önceki mekaniklerin karışımı | — |
 
 Yedek boss: Baal.
+
+### Oyunda olan boss'lar
+
+- **Moloch (10):** Boğa başlı, kızıl tenli dev; göğsünde içi yanan bir fırın, kollarında zincirler. Ağır adımlarla yürür, yakına gelince iki yumruğunu yere indirir.
+- **Belphegor (20):** Tembelliğin iblis lordu. İri, kambur, kül grisi; yarı kapalı uykulu kehribar gözler, kısa kıvrık boynuzlar, kürk yakalı yıpranmış mor bir saray sabahlığı. Yanağında Biscuit'in bıraktığı üç taze pençe izi görünür (Walt'ın bulduğu iz bu). Ayak sürüyerek yürür, yakındakine tembel bir ters tokat atar. Arada durur, gözleri kızarıp titrer ve oyuncuya doğru düz bir çizgide ani bir hamle yapar; hamleden sonra yorulup bir süre soluk renkte durur (oyuncunun vurma fırsatı).
 
 ## Final (komik twist)
 

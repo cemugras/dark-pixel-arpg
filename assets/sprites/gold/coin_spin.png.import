@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://wy60uvyx82cw"
-path="res://.godot/imported/GoldCollect.png-6841f4274a93f5023613b870fedf98c2.ctex"
+uid="uid://bqn87qoli5m74"
+path="res://.godot/imported/coin_spin.png-a88c8f11b6a2eaea2b3f62b223313dc9.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/gold/GoldCollect.png"
-dest_files=["res://.godot/imported/GoldCollect.png-6841f4274a93f5023613b870fedf98c2.ctex"]
+source_file="res://assets/sprites/gold/coin_spin.png"
+dest_files=["res://.godot/imported/coin_spin.png-a88c8f11b6a2eaea2b3f62b223313dc9.ctex"]
 
 [params]
 

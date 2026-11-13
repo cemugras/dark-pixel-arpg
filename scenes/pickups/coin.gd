@@ -15,6 +15,7 @@ func _ready() -> void:
 	add_to_group("coin")
 	_target = get_tree().get_first_node_in_group("player")
 	sprite.play("spin")
+	sprite.frame = randi() % sprite.sprite_frames.get_frame_count("spin")  # yerdeki sikkeler aynı anda dönmesin
 
 func attract_to_player() -> void:
 	magnet_range = INF
