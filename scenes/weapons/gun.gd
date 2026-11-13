@@ -28,6 +28,12 @@ var _rest_dir: Vector2 = Vector2.RIGHT
 var _grip_offset: Vector2 = Vector2.ZERO
 var _muzzle_offset: Vector2 = Vector2.ZERO
 
+# Ateş efekti (shoot_sheet yoksa): geri tepme + ağız ateşi
+const FLASH_TIME: float = 0.05
+var _flash: Sprite2D = null
+var _flash_timer: float = 0.0
+var _recoil_tween: Tween = null
+
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 @onready var muzzle: Marker2D = $Muzzle
 
@@ -53,13 +59,14 @@ func _ready() -> void:
 	_cooldown = randf() * _fire_interval()
 
 func _build_frames() -> void:
+	var tex: Texture2D = data.sprite if data.sprite else data.icon
 	var frames := SpriteFrames.new()
 	frames.rename_animation("default", "idle")
-	frames.add_frame("idle", data.icon)
+	frames.add_frame("idle", tex)
 
 	frames.add_animation("shoot")
 	frames.set_animation_loop("shoot", false)
-	var frame_width: float = data.icon.get_width()
+	var frame_width: float = tex.get_width()
 	if data.shoot_sheet:
 		var count := maxi(data.shoot_frame_count, 1)
 		frame_width = data.shoot_sheet.get_width() / float(count)
@@ -69,18 +76,30 @@ func _build_frames() -> void:
 			atlas.region = Rect2(i * frame_width, 0, frame_width, data.shoot_sheet.get_height())
 			frames.add_frame("shoot", atlas)
 	else:
-		frames.add_frame("shoot", data.icon)
+		frames.add_frame("shoot", tex)
 
 	sprite.sprite_frames = frames
 	sprite.scale = Vector2.ONE * data.sprite_scale
 	muzzle.position = Vector2(frame_width * 0.5 * data.sprite_scale, 0.0)  # namlu ucu
 	if use_hand_grip:
 		# Dönme noktası kabzaya taşınır: sprite kabza origin'e gelecek şekilde kaydırılır
-		var h: float = data.icon.get_height()
-		_grip_offset = Vector2(frame_width * (0.5 - GRIP_RATIO.x), h * (0.5 - GRIP_RATIO.y))
-		_muzzle_offset = Vector2(frame_width * (1.0 - GRIP_RATIO.x), h * (MUZZLE_Y_RATIO - GRIP_RATIO.y)) * data.sprite_scale
+		var size := Vector2(frame_width, tex.get_height())
+		var grip := data.grip_point if data.grip_point.x >= 0.0 else size * GRIP_RATIO
+		var tip := data.muzzle_point if data.muzzle_point.x >= 0.0 else Vector2(size.x, size.y * MUZZLE_Y_RATIO)
+		_grip_offset = size * 0.5 - grip
+		_muzzle_offset = (tip - grip) * data.sprite_scale
 		sprite.offset = _grip_offset
 		muzzle.position = _muzzle_offset
+
+	if data.muzzle_flash:
+		_flash = Sprite2D.new()
+		_flash.texture = data.muzzle_flash
+		_flash.hframes = maxi(data.muzzle_flash_frames, 1)
+		_flash.centered = false
+		_flash.offset = Vector2(0.0, -data.muzzle_flash.get_height() * 0.5)
+		_flash.scale = Vector2.ONE * data.sprite_scale
+		_flash.visible = false
+		muzzle.add_child(_flash)
 
 # GunSlots el modunda her karede çağırır: konum (oyuncuya göre), öne/arkaya çizim, hedef yokken bakış yönü
 func set_hand(pos: Vector2, front: bool, rest_dir: Vector2) -> void:
@@ -92,6 +111,11 @@ func set_hand(pos: Vector2, front: bool, rest_dir: Vector2) -> void:
 func _physics_process(delta: float) -> void:
 	if data == null or (_player and _player.is_dead):
 		return
+
+	if _flash and _flash.visible:
+		_flash_timer -= delta
+		if _flash_timer <= 0.0:
+			_flash.visible = false
 
 	_cooldown = maxf(_cooldown - delta, 0.0)
 	_retarget_timer -= delta
@@ -169,10 +193,28 @@ func _fire(dir: Vector2) -> void:
 
 	# ateş animasyonu bir sonraki atıştan önce bitsin
 	var anim_time := clampf(_fire_interval() * 0.9, 0.05, 0.35)
-	sprite.sprite_frames.set_animation_speed("shoot", sprite.sprite_frames.get_frame_count("shoot") / anim_time)
-	sprite.play("shoot")
-	sprite.frame = 0
+	if data.shoot_sheet:
+		sprite.sprite_frames.set_animation_speed("shoot", sprite.sprite_frames.get_frame_count("shoot") / anim_time)
+		sprite.play("shoot")
+		sprite.frame = 0
+	else:
+		_kick(minf(anim_time, 0.15))
+	if _flash:
+		_flash.frame = randi() % _flash.hframes
+		_flash.visible = true
+		_flash_timer = FLASH_TIME
 	Audio.play_sfx(data.shoot_sound)
+
+# Geri tepme: silah kabza etrafında namlu yukarı kalkar ve geri kayar, sonra yerine döner
+func _kick(duration: float) -> void:
+	var sign_y := -1.0 if sprite.flip_v else 1.0  # sola nişanda "yukarı" yerel eksende ters
+	if _recoil_tween:
+		_recoil_tween.kill()
+	sprite.position = Vector2(-data.recoil_distance * data.sprite_scale, 0.0)
+	sprite.rotation = deg_to_rad(-data.recoil_degrees) * sign_y
+	_recoil_tween = create_tween().set_parallel(true).set_trans(Tween.TRANS_QUAD).set_ease(Tween.EASE_OUT)
+	_recoil_tween.tween_property(sprite, "position", Vector2.ZERO, duration)
+	_recoil_tween.tween_property(sprite, "rotation", 0.0, duration)
 
 # GunSlots atışlar arası boşluğu hesaplarken kullanır
 func fire_interval() -> float:

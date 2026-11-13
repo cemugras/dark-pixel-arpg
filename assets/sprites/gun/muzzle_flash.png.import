@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://dblq536j7dg0n"
-path="res://.godot/imported/GlockShoot.png-9d656896d74314103b2999649db002ff.ctex"
+uid="uid://do28y5cg2cvjc"
+path="res://.godot/imported/muzzle_flash.png-562d609ac45702f57352238a03ac994e.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/sprites/gun/GlockShoot.png"
-dest_files=["res://.godot/imported/GlockShoot.png-9d656896d74314103b2999649db002ff.ctex"]
+source_file="res://assets/sprites/gun/muzzle_flash.png"
+dest_files=["res://.godot/imported/muzzle_flash.png-562d609ac45702f57352238a03ac994e.ctex"]
 
 [params]
 
