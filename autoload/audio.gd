@@ -17,6 +17,7 @@ const PITCH_JITTER: float = 0.06      # her çalışta perde +/- bu kadar oynar,
 const SFX_VOLUME_DB: Dictionary = {
 	"glock_shoot": -4.0,
 	"ak47_shoot": -12.0,
+	"revolver_shoot": -5.0,
 	"coin_pickup": -7.0,
 	"hell_harpy_hit": -6.0,
 	"hell_harpy_death": -6.0,
