@@ -48,8 +48,22 @@ var _dying: bool = false
 # --- Saldırı durumu (bkz. EnemyData attack_*) ---
 const ATTACK_HIT_RANGE_MULT: float = 1.4  # attack_hit_range boşsa: başlatma menzilinin bu katı (kılpayı ıska olmasın)
 const ATTACK_LUNGE_FRAMES: int = 2        # vuruş karesinden önceki kaç karede ileri atılır
-enum State { CHASE, ATTACK }
+enum State { CHASE, ATTACK, WINDUP, CHARGE, TIRED }
 var _state: State = State.CHASE
+
+# --- Hamle durumu (bkz. EnemyData charge_*) ---
+const CHARGE_RUN_SPEED_SCALE: float = 2.5     # charge_ animasyonu yoksa run bu hızda oynar
+const CHARGE_SHAKE: float = 1.5               # uyarıda titreme (sprite pikseli)
+const CHARGE_WINDUP_COLOR: Color = Color(1.8, 0.7, 0.6)  # uyarıda kızarma
+const CHARGE_TIRED_COLOR: Color = Color(0.7, 0.7, 0.85)  # yorgunken solukluk
+const CHARGE_STUCK_RATIO: float = 0.3         # hamlede beklenen yolun bu kadarından azı alınırsa (duvar) hamle biter
+var _has_charge: bool = false
+var charge_damage: int = 0
+var _charge_timer: float = 0.0
+var _state_timer: float = 0.0
+var _charge_dir: Vector2 = Vector2.RIGHT
+var _charge_left: float = 0.0
+var _charge_hit_done: bool = false
 var _has_attack: bool = false
 var attack_damage: int = 0
 var _attack_cooldown_left: float = 0.0
@@ -66,6 +80,7 @@ func setup(enemy_data: EnemyData, wave: int) -> void:
 	max_health = roundi(data.max_health * (1.0 + HEALTH_PER_WAVE * w))
 	contact_damage = int(data.contact_damage * (1.0 + 0.1 * w))
 	attack_damage = int(data.attack_damage * (1.0 + 0.1 * w))
+	charge_damage = int(data.charge_damage * (1.0 + 0.1 * w))
 	move_speed = data.move_speed * minf(1.0 + 0.01 * w, 1.5)
 	coin_value = data.coin_value
 	scale = Vector2.ONE * data.body_scale
@@ -104,11 +119,27 @@ func _ready() -> void:
 		sprite.frame_changed.connect(_on_sprite_frame_changed)
 		sprite.animation_finished.connect(_on_sprite_animation_finished)
 
+	# Hamle: sadece 8 yönlü sprite'ta (yön kilidi 8 yön sistemine göre)
+	_has_charge = data != null and data.charge_interval > 0.0 and _mode == SpriteMode.EIGHT_DIR
+	if _has_charge:
+		_charge_timer = data.charge_interval
+
 func _physics_process(delta: float) -> void:
 	if not is_instance_valid(target):
 		return
 	if _attack_cooldown_left > 0.0:
 		_attack_cooldown_left -= delta
+
+	match _state:
+		State.WINDUP:
+			_process_windup(delta)
+			return
+		State.CHARGE:
+			_process_charge(delta)
+			return
+		State.TIRED:
+			_process_tired(delta)
+			return
 
 	var separation := _separation() * maxf(move_speed, SEPARATION_MIN_SPEED) * SEPARATION_STRENGTH
 	if _state == State.ATTACK:
@@ -124,6 +155,12 @@ func _physics_process(delta: float) -> void:
 	# Yön (bakış) oyuncuya göre kalır; itme sadece hareketi etkiler, böylece sprite titremez
 	velocity = dir * move_speed + separation
 	move_and_slide()
+
+	if _has_charge:
+		_charge_timer -= delta
+		if _can_start_charge(to_target.length()):
+			_start_windup(dir)
+			return
 
 	if _can_start_attack(to_target.length()):
 		_start_attack(dir)
@@ -178,6 +215,90 @@ func _on_sprite_animation_finished() -> void:
 	_state = State.CHASE
 	_attack_cooldown_left = data.attack_cooldown
 	sprite.play("run_" + DIR8_NAMES[_dir8_idx])
+
+# --- Hamle: uyarı -> düz atılma -> yorgunluk ---
+func _can_start_charge(distance: float) -> bool:
+	if _charge_timer > 0.0 or _dying:
+		return false
+	if "is_dead" in target and target.is_dead:
+		return false
+	return distance >= data.charge_min_range and distance <= data.charge_max_range
+
+func _start_windup(dir: Vector2) -> void:
+	_state = State.WINDUP
+	_state_timer = data.charge_windup
+	# Yön uyarı başında kilitlenir: oyuncu uyarı süresince yana kaçabilir
+	_charge_dir = dir
+	var dist := global_position.distance_to(target.global_position)
+	_charge_left = minf(dist + data.charge_overshoot, data.charge_max_distance)
+	_face_exact(dir)
+	sprite.pause()
+
+func _process_windup(delta: float) -> void:
+	velocity = Vector2.ZERO
+	_state_timer -= delta
+	var t := 1.0 - _state_timer / maxf(data.charge_windup, 0.01)
+	sprite.position = Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)) * CHARGE_SHAKE * t
+	sprite.modulate = _base_color.lerp(CHARGE_WINDUP_COLOR, t)
+	if _state_timer <= 0.0:
+		_start_charge()
+
+func _start_charge() -> void:
+	_state = State.CHARGE
+	_charge_hit_done = false
+	sprite.position = Vector2.ZERO
+	sprite.modulate = _base_color
+	var anim := "charge_" + DIR8_NAMES[_dir8_idx]
+	if sprite.sprite_frames.has_animation(anim):
+		sprite.play(anim)
+	else:
+		sprite.play("run_" + DIR8_NAMES[_dir8_idx])
+		sprite.speed_scale = CHARGE_RUN_SPEED_SCALE
+	Audio.play_sfx(data.charge_sound)
+
+func _process_charge(delta: float) -> void:
+	var before := global_position
+	velocity = _charge_dir * data.charge_speed
+	move_and_slide()
+	var moved := before.distance_to(global_position)
+	_charge_left -= moved
+
+	if not _charge_hit_done and is_instance_valid(target) and target.has_method("try_hit"):
+		var hit_radius := data.charge_hit_radius if data.charge_hit_radius > 0.0 else _separation_radius() * 1.2
+		if global_position.distance_to(target.global_position) <= hit_radius:
+			_charge_hit_done = true
+			target.try_hit(charge_damage)
+
+	# Yol bitti ya da bir şeye takıldı (duvar): yorul
+	if _charge_left <= 0.0 or moved < data.charge_speed * delta * CHARGE_STUCK_RATIO:
+		_start_tired()
+
+func _start_tired() -> void:
+	_state = State.TIRED
+	_state_timer = data.charge_tired
+	sprite.speed_scale = 1.0
+	var anim := "tired_" + DIR8_NAMES[_dir8_idx]
+	if sprite.sprite_frames.has_animation(anim):
+		sprite.play(anim)
+	else:
+		sprite.play("run_" + DIR8_NAMES[_dir8_idx])
+		sprite.pause()
+	sprite.modulate = CHARGE_TIRED_COLOR * _base_color
+
+func _process_tired(delta: float) -> void:
+	velocity = _separation() * SEPARATION_MIN_SPEED * SEPARATION_STRENGTH
+	move_and_slide()
+	_state_timer -= delta
+	if _state_timer <= 0.0:
+		_state = State.CHASE
+		_charge_timer = data.charge_interval
+		sprite.modulate = _base_color
+		sprite.play("run_" + DIR8_NAMES[_dir8_idx])
+
+# Verilen yöne kesin dön (8 yön, titreme payı uygulanmaz)
+func _face_exact(dir: Vector2) -> void:
+	_dir8_idx = wrapi(roundi(dir.angle() / (PI / 4.0)), 0, 8)
+	sprite.flip_h = DIR8_FLIP[_dir8_idx]
 
 func _separation_radius() -> float:
 	return SEPARATION_RADIUS * scale.x * (data.hitbox_scale if data else 1.0)

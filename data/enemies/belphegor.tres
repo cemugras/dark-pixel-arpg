@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" uid="uid://cqlw7x1k6q18i" path="res://scripts/enemy_data.gd" id="1_belph"]
+[ext_resource type="SpriteFrames" path="res://data/enemies/belphegor_frames.tres" id="2_belph"]
+
+[resource]
+script = ExtResource("1_belph")
+id = "belphegor"
+display_name = "Belphegor"
+sprite_frames = ExtResource("2_belph")
+body_scale = 1.0
+hitbox_scale = 2.0
+max_health = 650
+move_speed = 22.0
+contact_damage = 5
+attack_range = 50.0
+attack_damage = 18
+attack_hit_frame = 5
+attack_lunge = 6.0
+attack_cooldown = 2.0
+charge_interval = 4.0
+charge_min_range = 70.0
+charge_max_range = 280.0
+charge_windup = 0.7
+charge_speed = 330.0
+charge_overshoot = 60.0
+charge_max_distance = 320.0
+charge_damage = 15
+charge_tired = 1.5
+charge_sound = "belphegor_charge"
+coin_value = 150
+is_boss = true
+boss_wave = 20
+hit_sound = "belphegor_hit"
+death_sound = "belphegor_death"
+spawn_sound = "belphegor_spawn"

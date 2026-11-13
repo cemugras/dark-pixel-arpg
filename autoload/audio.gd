@@ -30,12 +30,17 @@ const SFX_VOLUME_DB: Dictionary = {
 	"moloch_spawn": 0.0,
 	"moloch_death": 0.0,
 	"moloch_hit": 0.0,
+	"belphegor_spawn": 0.0,
+	"belphegor_death": 0.0,
+	"belphegor_hit": 0.0,
+	"belphegor_charge": 0.0,
 }
 
 # Aynı anda en fazla kaç kopya çalabileceği sese özel ayar (listede yoksa MAX_PER_SOUND).
 # 1 = ses bitmeden aynı ses tekrar çalmaz.
 const SFX_MAX_INSTANCES: Dictionary = {
 	"moloch_hit": 1,  # boss hit sesleri üst üste binmesin (her yeni boss için eklenir)
+	"belphegor_hit": 1,
 }
 
 # --- Müzik ---

@@ -23,8 +23,27 @@ extends Resource
 @export var attack_hit_frame: int = 5            # hasarın verildiği animasyon karesi (0'dan sayılır)
 @export var attack_lunge: float = 0.0            # vuruştan önceki 2 karede ileri atılma mesafesi (px)
 @export var attack_cooldown: float = 1.2         # saldırı bitince tekrar saldırmadan önce bekleme (sn)
+
+# --- Hamle (charge) ---
+# charge_interval 0 ise hamle yok. Akış: kovalarken süre dolunca ve oyuncu charge_min_range..charge_max_range
+# arasındaysa durur, titrer ve kızarır (uyarı, charge_windup sn; yön uyarı başında kilitlenir), sonra o yöne
+# charge_speed ile charge_distance kadar düz atılır (yolda oyuncuya çarparsa charge_damage), ardından
+# charge_tired sn yorgun durur (oyuncunun vurma penceresi). Animasyon: charge_<yön> varsa o, yoksa run hızlı oynar;
+# tired_<yön> varsa yorgunlukta o, yoksa kare donar.
+@export var charge_interval: float = 0.0         # iki hamle arası bekleme (sn, yorgunluk bitince sayılır)
+@export var charge_min_range: float = 70.0       # oyuncu bundan yakınsa hamle yerine normal saldırı
+@export var charge_max_range: float = 280.0      # oyuncu bundan uzaksa hamle yapmaz, yürür
+@export var charge_windup: float = 0.7           # uyarı süresi (sn)
+@export var charge_speed: float = 330.0          # hamle hızı (px/sn)
+@export var charge_overshoot: float = 60.0       # hamle, kilitlenen oyuncu konumunun bu kadar ötesine gider
+@export var charge_max_distance: float = 320.0   # hamle en fazla bu kadar gider
+@export var charge_damage: int = 0               # hamle çarpma hasarı (dalgayla artar)
+@export var charge_hit_radius: float = 0.0       # çarpma mesafesi (0 = kişisel alan x 1.2)
+@export var charge_tired: float = 1.5            # hamle sonrası yorgunluk (sn)
+@export var charge_sound: String = ""            # Audio sfx adı: hamle başlarken (boşsa ses yok)
+
 @export var coin_value: int = 1
-@export var spawn_weight: float = 1.0            # doğma olasılığı ağırlığı (min_wave'deki değer)
+@export var spawn_weight: float = 1.0           # doğma olasılığı ağırlığı (min_wave'deki değer)
 @export var spawn_weight_per_wave: float = 0.0   # min_wave'den sonraki her dalgada ağırlığa eklenir (yeni türler giderek sıklaşır)
 @export var min_wave: int = 1
 @export var max_wave: int = 100

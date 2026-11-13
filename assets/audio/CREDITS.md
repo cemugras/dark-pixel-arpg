@@ -20,6 +20,7 @@ Kurallar:
 | player_hurt_01.wav, player_hurt_02.wav, player_hurt_03.wav | hurts.wav | ttttrr | https://freesound.org/s/509566/ | CC0 | Cut into 3 clips from raw/player_hurt_raw.wav |
 | player_death.wav | Medium Male Pain Grunts | unfa | https://freesound.org/s/610998/ | CC0 | Trimmed from raw/player_death_raw.flac |
 | moloch_spawn.wav, moloch_hit.wav, moloch_death.wav | Monster screams.wav | gpag1 | https://freesound.org/s/391552/ | CC0 | Cut into 3 clips from raw/moloch_raw.wav |
+| belphegor_spawn.wav, belphegor_hit.wav, belphegor_death.wav, belphegor_charge.wav | SFX - Dragon Low Growls Breathing.wav | Karma-Ron | https://freesound.org/s/486596/ | CC0 | Cut into 4 clips from raw/belphegor_raw.wav, mono |
 | ui_click.wav | Click.wav | budek | https://freesound.org/s/513481/ | CC0 | - |
 
 ## Music (music/)
