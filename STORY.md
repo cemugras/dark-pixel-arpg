@@ -50,7 +50,7 @@ Steam kısa açıklaması (taslak):
 | Mavi / Kırmızı Melek | Biscuit'in eski koruyucuları |
 | Glock | Walt'ın gece bekçisi tabancası |
 | Diğer silahlar, kılıç | Cehennemden toplanan ya da tüccardan alınan silahlar: Revolver (ağır tek atış), AK47 (seri atış), dönen kılıç |
-| Gümüş mermi (planlı) | Tüccardan silah başına alınan, iblislere karşı gümüş mermiler: daha güçlü, parlak görünür |
+| Gümüş mermi | Tüccardan silah başına alınan, iblislere karşı gümüş mermiler: daha güçlü, parlak görünür |
 | Normal yaratıklar | Damned Soul (lanetli ruhlar), Hell Harpy, Hellhound: cehennemin sıradan sakinleri |
 
 ## Açılış (intro)

@@ -4,6 +4,9 @@ extends Node2D
 @export var retarget_interval: float = 0.15  # hedef ne sıklıkla yeniden aranır (saniye)
 
 var data: WeaponData
+var silver: bool = false  # gümüş mermi (GunSlots sahneye eklemeden önce ayarlar): x2 hasar, parlak mermi, beyaz-mavi ağız ateşi
+
+const SILVER_FLASH_COLOR: Color = Color(0.85, 0.95, 1.6)  # ağız ateşi beyaz-mavimsi (sarı-turuncu yerine)
 
 var _cooldown: float = 0.0
 var _target: Node2D = null
@@ -99,6 +102,8 @@ func _build_frames() -> void:
 		_flash.offset = Vector2(0.0, -data.muzzle_flash.get_height() * 0.5)
 		_flash.scale = Vector2.ONE * data.sprite_scale
 		_flash.visible = false
+		if silver:
+			_flash.modulate = SILVER_FLASH_COLOR
 		muzzle.add_child(_flash)
 
 # GunSlots el modunda her karede çağırır: konum (oyuncuya göre), öne/arkaya çizim, hedef yokken bakış yönü
@@ -187,7 +192,7 @@ func _fire(dir: Vector2) -> void:
 	var spread := deg_to_rad(randf_range(-data.spread_degrees, data.spread_degrees))
 	var bullet := bullet_scene.instantiate()
 	# menzilin biraz ötesine gitsin, hareket eden hedefi kaçırmasın
-	bullet.setup(_damage(), data.bullet_speed, data.attack_range * 1.2, dir.angle() + spread)
+	bullet.setup(_damage(), data.bullet_speed, data.attack_range * 1.2, dir.angle() + spread, silver)
 	get_tree().current_scene.add_child(bullet)
 	bullet.global_position = muzzle.global_position
 
@@ -224,4 +229,5 @@ func _fire_interval() -> float:
 	return 1.0 / maxf(data.fire_rate * GameState.stats.fire_rate_multiplier, 0.01)
 
 func _damage() -> int:
-	return maxi(1, roundi(data.damage * GameState.stats.damage_multiplier))
+	var mult := GameState.stats.damage_multiplier * (GameState.SILVER_DAMAGE_MULT if silver else 1.0)
+	return maxi(1, roundi(data.damage * mult))

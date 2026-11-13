@@ -103,7 +103,7 @@ func _build_weapon_section() -> void:
 	_weapons = WeaponPool.load_all()
 
 	_owned_label = _add_label("Your weapons (sell refunds 50% of everything spent on it)")
-	_owned_list = _add_grid(3)
+	_owned_list = _add_grid(2)  # her silah yuvası bir satır: [Sat] [Gümüş mermi]; kılıç tek buton
 	_weapons_label = _add_label("")
 	_weapon_list = _add_grid(2)
 
@@ -193,9 +193,16 @@ func _refresh_owned() -> void:
 
 	for slot in GameState.guns.size():
 		var gun := GameState.guns[slot]
-		var text := "Slot %d: %s\nSell (%s)%s" % [slot + 1, gun.display_name, _price(GameState.get_gun_sell_price(slot), true), last_text]
+		var silver := GameState.has_silver(slot)
+		var gun_name := gun.display_name + (" (Silver)" if silver else "")
+		var text := "Slot %d: %s\nSell (%s)%s" % [slot + 1, gun_name, _price(GameState.get_gun_sell_price(slot), true), last_text]
 		var button := _make_button(_owned_list, text, not can_sell, _on_sell_gun_pressed.bind(slot))
 		_set_weapon_icon(button, gun)
+
+		# Gümüş mermi: yuva başına tek seferlik
+		var silver_text := "Silver Bullets\nOwned" if silver \
+			else "Silver Bullets - %s\nx2 damage, bright bullets" % _price(GameState.SILVER_COST)
+		_make_button(_owned_list, silver_text, not GameState.can_buy_silver(slot), _on_silver_pressed.bind(slot))
 
 	if GameState.has_sword():
 		var text := "Sword x%d\nSell (%s)%s" % [GameState.stats.sword_count, _price(GameState.get_sword_sell_price(), true), last_text]
@@ -244,6 +251,10 @@ func _on_weapon_pressed(weapon: WeaponData) -> void:
 
 func _on_sell_gun_pressed(slot: int) -> void:
 	if GameState.sell_gun(slot):
+		Audio.play_sfx("ui_click")
+
+func _on_silver_pressed(slot: int) -> void:
+	if GameState.buy_silver(slot):
 		Audio.play_sfx("ui_click")
 
 func _on_sell_sword_pressed() -> void:

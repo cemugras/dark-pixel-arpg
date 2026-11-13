@@ -14,7 +14,13 @@ var upgrade_levels: Dictionary = {}  # geliştirme id -> kaç kez alındı
 var guns: Array[WeaponData] = []     # takılı menzilli silahlar (yuva sırasıyla)
 
 # Satış iadesi için harcama takibi
-var gun_spent: Array[int] = []       # guns ile paralel: her yuvadaki silaha ödenen para
+var gun_spent: Array[int] = []       # guns ile paralel: her yuvadaki silaha ödenen para (gümüş mermi dahil)
+var gun_silver: Array[bool] = []     # guns ile paralel: yuvadaki silahta gümüş mermi var mı
+
+# Gümüş mermi: yuva başına tek seferlik yükseltme. Hasar Damage geliştirmesiyle çarpılır.
+# Harcama yuvanın gun_spent'ine eklenir, satışta/değiştirmede %50'si iade edilir; değiştirince gümüş gider.
+const SILVER_COST: int = 100
+const SILVER_DAMAGE_MULT: float = 2.0
 var sword_spent: int = 0             # kılıç fiyatı + kılıca bağlı geliştirmeler (requires = "sword")
 var gun_upgrade_spent: int = 0       # menzilli silahlara bağlı ortak geliştirmeler (requires = "gun"); son silah satılınca iade edilir
 
@@ -85,6 +91,7 @@ func give_weapon(weapon: WeaponData, paid: int = 0) -> void:
 	else:
 		guns.append(weapon)
 		gun_spent.append(paid)
+		gun_silver.append(false)
 	weapons_changed.emit()
 
 func buy_weapon(weapon: WeaponData) -> bool:
@@ -135,6 +142,7 @@ func sell_gun(slot: int) -> bool:
 	add_gold(get_gun_sell_price(slot))
 	guns.remove_at(slot)
 	gun_spent.remove_at(slot)
+	gun_silver.remove_at(slot)
 	if guns.is_empty():
 		_reset_upgrades_requiring("gun")
 		gun_upgrade_spent = 0
@@ -164,7 +172,24 @@ func swap_gun(slot: int, weapon: WeaponData) -> bool:
 		add_gold(-net)
 	guns[slot] = weapon
 	gun_spent[slot] = weapon.cost
+	gun_silver[slot] = false  # gümüş eski silahla gider (harcamasının yarısı yukarıda iade edildi)
 	weapons_changed.emit()
+	return true
+
+# --- Gümüş mermi ---
+
+func has_silver(slot: int) -> bool:
+	return slot >= 0 and slot < gun_silver.size() and gun_silver[slot]
+
+func can_buy_silver(slot: int) -> bool:
+	return slot >= 0 and slot < guns.size() and not has_silver(slot) and gold >= SILVER_COST
+
+func buy_silver(slot: int) -> bool:
+	if not can_buy_silver(slot) or not spend_gold(SILVER_COST):
+		return false
+	gun_silver[slot] = true
+	gun_spent[slot] += SILVER_COST
+	weapons_changed.emit()  # silahlar yeniden kurulur, yeni mermiyle ateş eder
 	return true
 
 # Silah satılınca ona bağlı geliştirmelerin seviyesi ve etkisi geri alınır
@@ -193,6 +218,7 @@ func reset() -> void:
 	upgrade_levels.clear()
 	guns.clear()
 	gun_spent.clear()
+	gun_silver.clear()
 	sword_spent = 0
 	gun_upgrade_spent = 0
 	gold_changed.emit(gold)

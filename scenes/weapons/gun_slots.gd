@@ -154,6 +154,7 @@ func rebuild() -> void:
 	for i in count:
 		var gun := gun_scene.instantiate()
 		gun.setup(GameState.guns[i])
+		gun.silver = GameState.has_silver(i)
 		gun.use_hand_grip = hand_mode
 		var rest_angle := (slot_offsets[i] - orbit_center).angle()
 		# tek silah varsa ortadan, iki silah varsa yan yana nişan alır (sol yuva -, sağ yuva +)
