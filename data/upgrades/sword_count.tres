@@ -10,4 +10,6 @@ description = "+1 sword"
 base_cost = 40
 cost_step = 40
 stat = "sword_count"
+sort_order = 1
 requires = "sword"
+scope = "melee"

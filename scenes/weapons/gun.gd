@@ -4,6 +4,7 @@ extends Node2D
 @export var retarget_interval: float = 0.15  # hedef ne sıklıkla yeniden aranır (saniye)
 
 var data: WeaponData
+var slot: int = -1        # GameState.guns içindeki yuva (GunSlots ayarlar); silah başına geliştirmeler buradan okunur
 var silver: bool = false  # gümüş mermi (GunSlots sahneye eklemeden önce ayarlar): x2 hasar, parlak mermi, beyaz-mavi ağız ateşi
 
 const SILVER_FLASH_COLOR: Color = Color(0.85, 0.95, 1.6)  # ağız ateşi beyaz-mavimsi (sarı-turuncu yerine)
@@ -226,8 +227,8 @@ func fire_interval() -> float:
 	return _fire_interval()
 
 func _fire_interval() -> float:
-	return 1.0 / maxf(data.fire_rate * GameState.stats.fire_rate_multiplier, 0.01)
+	return 1.0 / maxf(data.fire_rate * GameState.get_gun_multiplier(slot, "fire_rate_multiplier"), 0.01)
 
 func _damage() -> int:
-	var mult := GameState.stats.damage_multiplier * (GameState.SILVER_DAMAGE_MULT if silver else 1.0)
+	var mult := GameState.get_gun_multiplier(slot, "damage_multiplier") * (GameState.SILVER_DAMAGE_MULT if silver else 1.0)
 	return maxi(1, roundi(data.damage * mult))

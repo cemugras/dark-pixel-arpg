@@ -10,5 +10,6 @@ description = "+0.4 rotation speed"
 base_cost = 15
 stat = "rotation_speed"
 amount = 0.4
-sort_order = 1
+sort_order = 2
 requires = "sword"
+scope = "melee"

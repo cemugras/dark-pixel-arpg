@@ -6,9 +6,11 @@
 script = ExtResource("1_ep6jo")
 id = "damage"
 display_name = "Damage"
-description = "+15% damage"
+description = "+15% sword damage"
 base_cost = 20
 cost_step = 15
 stat = "damage_multiplier"
 amount = 0.15
-sort_order = 2
+sort_order = 0
+requires = "sword"
+scope = "melee"

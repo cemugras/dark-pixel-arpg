@@ -9,8 +9,8 @@ var armor: float = 0.0
 var move_speed: float = 90.0
 var sword_count: int = 0          # 0 = kılıç yok; başlangıç seçimi ya da mağaza 1 yapar
 var rotation_speed: float = 3.0
-var damage_multiplier: float = 1.0   # kılıca ve menzilli silahlara uygulanır
-var fire_rate_multiplier: float = 1.0
+var damage_multiplier: float = 1.0   # sadece kılıç (Melee Damage); menzilli silahların hasarı yuva başına (GameState.get_gun_multiplier)
+var fire_rate_multiplier: float = 1.0  # kullanılmıyor: atış hızı yuva başına (GameState.get_gun_multiplier)
 
 func sword_damage() -> int:
 	return roundi(BASE_SWORD_DAMAGE * damage_multiplier)

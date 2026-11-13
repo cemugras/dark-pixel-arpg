@@ -16,13 +16,14 @@ var guns: Array[WeaponData] = []     # takılı menzilli silahlar (yuva sırası
 # Satış iadesi için harcama takibi
 var gun_spent: Array[int] = []       # guns ile paralel: her yuvadaki silaha ödenen para (gümüş mermi dahil)
 var gun_silver: Array[bool] = []     # guns ile paralel: yuvadaki silahta gümüş mermi var mı
+var gun_upgrades: Array[Dictionary] = []  # guns ile paralel: yuvadaki silahın geliştirmeleri (scope "gun" geliştirme id -> seviye)
 
 # Gümüş mermi: yuva başına tek seferlik yükseltme. Hasar Damage geliştirmesiyle çarpılır.
 # Harcama yuvanın gun_spent'ine eklenir, satışta/değiştirmede %50'si iade edilir; değiştirince gümüş gider.
 const SILVER_COST: int = 100
 const SILVER_DAMAGE_MULT: float = 2.0
 var sword_spent: int = 0             # kılıç fiyatı + kılıca bağlı geliştirmeler (requires = "sword")
-var gun_upgrade_spent: int = 0       # menzilli silahlara bağlı ortak geliştirmeler (requires = "gun"); son silah satılınca iade edilir
+var gun_upgrade_spent: int = 0       # menzilli silahlara bağlı ORTAK geliştirmeler (requires = "gun"); şu an yok (Damage/Fire Rate silah başına, gun_upgrades), ileride ortak bir geliştirme eklenirse son silah satılınca iade edilir
 
 func _ready() -> void:
 	EventBus.coin_collected.connect(_on_coin_collected)
@@ -43,7 +44,45 @@ func spend_gold(amount: int) -> bool:
 	return true
 
 func get_upgrade_cost(upgrade: UpgradeData) -> int:
-	return upgrade.base_cost + upgrade.cost_step * upgrade_levels.get(upgrade.id, 0)
+	return _scaled_cost(upgrade, upgrade_levels.get(upgrade.id, 0))
+
+func _scaled_cost(upgrade: UpgradeData, level: int) -> int:
+	return ceili((upgrade.base_cost + upgrade.cost_step * level) * upgrade.price_ratio)
+
+# --- Silah başına geliştirmeler (UpgradeData.scope == "gun": Damage, Fire Rate) ---
+# Seviye o yuvadaki silaha aittir; harcama yuvanın gun_spent'ine eklenir (satışta %50 iade, değiştirince silahla gider).
+
+func get_gun_upgrade_level(slot: int, upgrade: UpgradeData) -> int:
+	if slot < 0 or slot >= gun_upgrades.size():
+		return 0
+	return gun_upgrades[slot].get(upgrade.id, 0)
+
+func get_gun_upgrade_cost(slot: int, upgrade: UpgradeData) -> int:
+	return _scaled_cost(upgrade, get_gun_upgrade_level(slot, upgrade))
+
+func can_buy_gun_upgrade(slot: int, upgrade: UpgradeData) -> bool:
+	return slot >= 0 and slot < guns.size() and gold >= get_gun_upgrade_cost(slot, upgrade)
+
+func buy_gun_upgrade(slot: int, upgrade: UpgradeData) -> bool:
+	if not can_buy_gun_upgrade(slot, upgrade):
+		return false
+	var cost := get_gun_upgrade_cost(slot, upgrade)
+	if not spend_gold(cost):
+		return false
+	gun_upgrades[slot][upgrade.id] = get_gun_upgrade_level(slot, upgrade) + 1
+	gun_spent[slot] += cost
+	stats_changed.emit()
+	return true
+
+# Yuvadaki silahın bir istatistik çarpanı (ör. "damage_multiplier", "fire_rate_multiplier"): 1 + seviye x miktar
+func get_gun_multiplier(slot: int, stat: String) -> float:
+	var mult := 1.0
+	if slot < 0 or slot >= gun_upgrades.size():
+		return mult
+	for upgrade in UpgradePool.load_all():
+		if upgrade.scope == "gun" and upgrade.stat == stat:
+			mult += upgrade.amount * gun_upgrades[slot].get(upgrade.id, 0)
+	return mult
 
 func buy_upgrade(upgrade: UpgradeData) -> bool:
 	var cost := get_upgrade_cost(upgrade)
@@ -92,6 +131,7 @@ func give_weapon(weapon: WeaponData, paid: int = 0) -> void:
 		guns.append(weapon)
 		gun_spent.append(paid)
 		gun_silver.append(false)
+		gun_upgrades.append({})
 	weapons_changed.emit()
 
 func buy_weapon(weapon: WeaponData) -> bool:
@@ -143,6 +183,7 @@ func sell_gun(slot: int) -> bool:
 	guns.remove_at(slot)
 	gun_spent.remove_at(slot)
 	gun_silver.remove_at(slot)
+	gun_upgrades.remove_at(slot)
 	if guns.is_empty():
 		_reset_upgrades_requiring("gun")
 		gun_upgrade_spent = 0
@@ -172,7 +213,8 @@ func swap_gun(slot: int, weapon: WeaponData) -> bool:
 		add_gold(-net)
 	guns[slot] = weapon
 	gun_spent[slot] = weapon.cost
-	gun_silver[slot] = false  # gümüş eski silahla gider (harcamasının yarısı yukarıda iade edildi)
+	gun_silver[slot] = false  # gümüş ve geliştirmeler eski silahla gider (harcamalarının yarısı yukarıda iade edildi)
+	gun_upgrades[slot] = {}
 	weapons_changed.emit()
 	return true
 
@@ -219,6 +261,7 @@ func reset() -> void:
 	guns.clear()
 	gun_spent.clear()
 	gun_silver.clear()
+	gun_upgrades.clear()
 	sword_spent = 0
 	gun_upgrade_spent = 0
 	gold_changed.emit(gold)
