@@ -28,6 +28,10 @@ Kurallar:
 | mammon_hit.wav | Monster Chase Grunts | surfaceknight68 | https://freesound.org/s/432197/ | CC0 | Cut from raw/mammon_hit_raw.wav, mono |
 | mammon_death.wav | monster_sound_big_death.wav | Leadstarson | https://freesound.org/s/568000/ | CC0 | Trimmed from raw/mammon_death_raw.wav, mono |
 | mammon_spill.wav | spilled coins | Norman_Hittle | https://freesound.org/s/395824/ | CC0 | Converted from raw/mammon_spill_raw.wav (24 bit stereo) to 16 bit mono |
+| beelzebub_spawn.wav | weird laugh.wav | Reitanna | https://freesound.org/s/242634/ | CC0 | Cut from raw/beelzebub_spawn_raw.wav, normalized |
+| beelzebub_hit.wav | Surge Leech 2 | scorpion67890 | https://freesound.org/s/205754/ | CC0 | Cut from raw/beelzebub_hit_raw.wav (8 bit), 16 bit mono |
+| beelzebub_death.wav | Fly Insect Smash Dead | EminYILDIRIM | https://freesound.org/s/592220/ | CC0 | Cut from raw/beelzebub_death_raw.wav (24 bit stereo), 16 bit mono |
+| beelzebub_summon.wav | Fly_buzzing_1.wav | cribbler | https://freesound.org/s/440422/ | CC0 | Cut from raw/beelzebub_summon_raw.wav (32 bit float stereo), 16 bit mono |
 | ui_click.wav | Click.wav | budek | https://freesound.org/s/513481/ | CC0 | - |
 
 ## Music (music/)

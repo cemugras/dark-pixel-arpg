@@ -48,7 +48,7 @@ var _dying: bool = false
 # --- Saldırı durumu (bkz. EnemyData attack_*) ---
 const ATTACK_HIT_RANGE_MULT: float = 1.4  # attack_hit_range boşsa: başlatma menzilinin bu katı (kılpayı ıska olmasın)
 const ATTACK_LUNGE_FRAMES: int = 2        # vuruş karesinden önceki kaç karede ileri atılır
-enum State { CHASE, ATTACK, WINDUP, CHARGE, TIRED, THROW }
+enum State { CHASE, ATTACK, WINDUP, CHARGE, TIRED, THROW, SUMMON }
 var _state: State = State.CHASE
 
 # --- Hamle durumu (bkz. EnemyData charge_*) ---
@@ -78,6 +78,15 @@ var _throw_timer: float = 0.0
 var _throw_released: bool = false
 var _throw_count_toggle: bool = false  # throw_alternate: her ikinci atışta +1 mermi
 
+# --- Çağırma durumu (bkz. EnemyData summon_*) ---
+const MINION_GROUP: String = "summoned_minion"  # çağrılmış yaratıklar; çağıran boss ölünce silinir
+var _has_summon: bool = false
+var _summon_timer: float = 0.0
+var _summon_released: bool = false
+var _minions: Array = []  # bu yaratığın çağırdıkları (sayı sınırı için)
+var _summon_sound_until: int = 0  # ms; çağırma sesi bu ana kadar çalar, o sürede hit sesi çalmaz (vızıltı duyulsun)
+var _wave: int = 1
+
 # --- Sikke saçma (bkz. EnemyData spill_*) ---
 var _spill_next: int = 0  # can bu değerin altına inince sikke saçılır
 
@@ -86,6 +95,7 @@ var _spill_next: int = 0  # can bu değerin altına inince sikke saçılır
 # Dalga yöneticisi, düşmanı sahneye eklemeden önce bunu çağırır
 func setup(enemy_data: EnemyData, wave: int) -> void:
 	data = enemy_data
+	_wave = wave
 	var w := wave - 1
 	max_health = roundi(data.max_health * (1.0 + HEALTH_PER_WAVE * w))
 	contact_damage = int(data.contact_damage * (1.0 + 0.1 * w))
@@ -134,7 +144,13 @@ func _ready() -> void:
 	if _has_throw:
 		_throw_timer = data.throw_interval * 0.5  # boss belirince ilk atış biraz erken gelsin
 
-	if _has_attack or _has_throw:
+	# Çağırma: veri + 8 yönlü summon animasyonu varsa açılır
+	_has_summon = data != null and data.summon_data != null and data.summon_count > 0 \
+		and _mode == SpriteMode.EIGHT_DIR and frames.has_animation("summon_east")
+	if _has_summon:
+		_summon_timer = data.summon_interval * 0.4  # boss belirince ilk sürü biraz erken gelsin
+
+	if _has_attack or _has_throw or _has_summon:
 		sprite.frame_changed.connect(_on_sprite_frame_changed)
 		sprite.animation_finished.connect(_on_sprite_animation_finished)
 
@@ -164,8 +180,8 @@ func _physics_process(delta: float) -> void:
 			return
 
 	var separation := _separation() * maxf(move_speed, SEPARATION_MIN_SPEED) * SEPARATION_STRENGTH
-	if _state == State.THROW:
-		# Atarken durur (itme devam eder)
+	if _state == State.THROW or _state == State.SUMMON:
+		# Atarken / çağırırken durur (itme devam eder)
 		velocity = separation
 		move_and_slide()
 		return
@@ -197,6 +213,12 @@ func _physics_process(delta: float) -> void:
 		_throw_timer -= delta
 		if _can_start_throw(to_target.length()):
 			_start_throw(dir)
+			return
+
+	if _has_summon:
+		_summon_timer -= delta
+		if _can_start_summon():
+			_start_summon(dir)
 			return
 
 	match _mode:
@@ -266,8 +288,56 @@ func _release_throw() -> void:
 		get_parent().add_child(p)
 	Audio.play_sfx(data.throw_sound)
 
+# --- Çağırma: dur, dön, animasyon; bırakma karesinde etrafa yaratık ---
+func _alive_minions() -> int:
+	_minions = _minions.filter(func(m): return is_instance_valid(m) and not m.is_queued_for_deletion())
+	return _minions.size()
+
+func _can_start_summon() -> bool:
+	if _summon_timer > 0.0 or _dying:
+		return false
+	if "is_dead" in target and target.is_dead:
+		return false
+	return _alive_minions() < data.summon_max_alive  # sürü doluysa bekler, süre dolu kalır
+
+func _start_summon(dir: Vector2) -> void:
+	_state = State.SUMMON
+	_summon_released = false
+	_face_exact(dir)
+	sprite.play("summon_" + DIR8_NAMES[_dir8_idx])
+	sprite.frame = 0
+
+# Yaratıklar çağıranın etrafına eşit aralıklı çember üzerinde çıkar (ilki rastgele açıda)
+func _release_summon() -> void:
+	_summon_released = true
+	if _dying:
+		return
+	var count := mini(data.summon_count, data.summon_max_alive - _alive_minions())
+	if count <= 0:
+		return
+	var scene := load(scene_file_path) as PackedScene
+	var start := randf() * TAU
+	for i in count:
+		var m := scene.instantiate()
+		m.setup(data.summon_data, _wave)
+		m.coin_value = 0  # çağrılan yaratık altın düşürmez
+		m.position = global_position + Vector2.RIGHT.rotated(start + TAU * i / count) * data.summon_radius
+		m.add_to_group(MINION_GROUP)
+		get_parent().add_child(m)
+		_minions.append(m)
+	# Çalan hit sesi kesilir, çağırma sesi bitene kadar yenisi çalmaz (take_damage)
+	Audio.stop_sfx(data.get_hit_sound())
+	# Oynatıcı havuzdan geldiği için kendisi tutulmaz (bitince başka sese verilir); bitiş zamanı saklanır
+	var player := Audio.play_sfx(data.summon_sound)
+	if player and player.stream:
+		_summon_sound_until = Time.get_ticks_msec() + int(player.stream.get_length() / player.pitch_scale * 1000.0)
+
 # Vuruş karesi: oyuncu hâlâ menzildeyse hasar (kaçtıysa ıska)
 func _on_sprite_frame_changed() -> void:
+	if _state == State.SUMMON:
+		if not _summon_released and sprite.frame >= data.summon_release_frame:
+			_release_summon()
+		return
 	if _state == State.THROW:
 		if not _throw_released and sprite.frame >= data.throw_release_frame:
 			_release_throw()
@@ -282,6 +352,13 @@ func _on_sprite_frame_changed() -> void:
 		target.try_hit(attack_damage)
 
 func _on_sprite_animation_finished() -> void:
+	if _state == State.SUMMON:
+		if not _summon_released:
+			_release_summon()
+		_state = State.CHASE
+		_summon_timer = data.summon_interval
+		sprite.play("run_" + DIR8_NAMES[_dir8_idx])
+		return
 	if _state == State.THROW:
 		if not _throw_released:
 			_release_throw()
@@ -482,7 +559,8 @@ func take_damage(amount: int) -> void:
 		die()
 		return
 	if data:
-		Audio.play_sfx(data.get_hit_sound())
+		if Time.get_ticks_msec() >= _summon_sound_until:
+			Audio.play_sfx(data.get_hit_sound())
 		_check_spill()
 
 # Canın her spill_health_step kadarı gidince sikke saçar (tek vuruşta birden çok eşik geçilirse hepsi birlikte)
@@ -509,6 +587,8 @@ func die() -> void:
 			EventBus.boss_defeated.emit(data.id)  # Steam başarımı vb. için (ör. "moloch")
 			for p in get_tree().get_nodes_in_group("enemy_projectile"):
 				p.queue_free()  # havadaki sikkeler dalga sonunda (tüccar inerken) oyuncuya çarpmasın
+			for m in get_tree().get_nodes_in_group(MINION_GROUP):
+				m.queue_free()  # çağrılmış sinekler boss'la birlikte gider (altınsız, sessiz)
 		Audio.play_sfx(data.get_death_sound())
 	EventBus.enemy_died.emit(global_position, coin_value)
 	queue_free()

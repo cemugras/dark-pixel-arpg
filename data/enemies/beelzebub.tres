@@ -1,0 +1,29 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" uid="uid://cqlw7x1k6q18i" path="res://scripts/enemy_data.gd" id="1_beelzebub"]
+[ext_resource type="SpriteFrames" path="res://data/enemies/beelzebub_frames.tres" id="2_beelzebub"]
+[ext_resource type="Resource" path="res://data/enemies/hell_fly.tres" id="3_hell_fly"]
+
+[resource]
+script = ExtResource("1_beelzebub")
+id = "beelzebub"
+display_name = "Beelzebub"
+sprite_frames = ExtResource("2_beelzebub")
+body_scale = 0.85
+hitbox_scale = 2.0
+max_health = 620
+move_speed = 26.0
+contact_damage = 5
+summon_data = ExtResource("3_hell_fly")
+summon_count = 5
+summon_max_alive = 12
+summon_interval = 6.0
+summon_release_frame = 6
+summon_radius = 40.0
+summon_sound = "beelzebub_summon"
+coin_value = 250
+is_boss = true
+boss_wave = 40
+hit_sound = "beelzebub_hit"
+death_sound = "beelzebub_death"
+spawn_sound = "beelzebub_spawn"

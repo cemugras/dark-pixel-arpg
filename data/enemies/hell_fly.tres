@@ -1,0 +1,18 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" uid="uid://cqlw7x1k6q18i" path="res://scripts/enemy_data.gd" id="1_hell_fly"]
+[ext_resource type="SpriteFrames" path="res://data/enemies/hell_fly_frames.tres" id="2_hell_fly"]
+
+[resource]
+script = ExtResource("1_hell_fly")
+id = "hell_fly"
+display_name = "Hell Fly"
+sprite_frames = ExtResource("2_hell_fly")
+body_scale = 0.5
+max_health = 5
+move_speed = 75.0
+contact_damage = 2
+coin_value = 1
+spawn_weight = 0.6
+spawn_weight_per_wave = 0.05
+min_wave = 41

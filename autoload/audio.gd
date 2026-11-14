@@ -37,6 +37,10 @@ const SFX_VOLUME_DB: Dictionary = {
 	"mammon_death": 0.0,
 	"mammon_hit": 0.0,
 	"mammon_spill": 0.0,
+	"beelzebub_spawn": 0.0,
+	"beelzebub_death": 0.0,
+	"beelzebub_hit": -6.0,      # yarı ses: 1.1 sn uzun, sık çalıyor ve sinek sesini bastırıyordu
+	"beelzebub_summon": 3.0,   # dosyadaki tek tık bastırılıp vızıltı +12 dB yapıldı; üstüne +3
 	"belphegor_charge": 0.0,
 }
 
@@ -46,6 +50,7 @@ const SFX_MAX_INSTANCES: Dictionary = {
 	"moloch_hit": 1,  # boss hit sesleri üst üste binmesin (her yeni boss için eklenir)
 	"belphegor_hit": 1,
 	"mammon_hit": 1,
+	"beelzebub_hit": 1,
 }
 
 # --- Müzik ---
@@ -166,10 +171,20 @@ func play_sfx(sound_name: String, volume_db: float = 0.0, exclusive: bool = fals
 	player.volume_db = SFX_VOLUME_DB.get(sound_name, 0.0) + volume_db
 	player.pitch_scale = randf_range(1.0 - PITCH_JITTER, 1.0 + PITCH_JITTER)
 	_player_sound[player] = sound_name
+	# Havuzdaki oynatıcı tekrar kullanılıyor: tek başına çalan ses bitmiş demektir, artık başka sesleri susturmasın
+	# (eskiden kahkaha biten oynatıcı ateş sesi çalarken tüm efektler susuyordu)
+	if player == _exclusive_player:
+		_exclusive_player = null
 	if exclusive:
 		_exclusive_player = player
 	player.play()
 	return player
+
+# Çalan tüm kopyalarını hemen susturur (ör. Beelzebub sinek çağırırken uzun hit sesi vızıltıyı bastırmasın)
+func stop_sfx(sound_name: String) -> void:
+	for player in _players:
+		if player.playing and _player_sound.get(player, "") == sound_name:
+			player.stop()
 
 func _playing_count(sound_name: String) -> int:
 	var count := 0

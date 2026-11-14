@@ -53,6 +53,8 @@ func _on_coins_spilled(pos: Vector2, coin_value: int) -> void:
 		hop.tween_property(coin.sprite, "position:y", 0.0, SPILL_TIME * 0.5).set_ease(Tween.EASE_IN).set_trans(Tween.TRANS_QUAD)
 
 func _on_enemy_died(pos: Vector2, coin_value: int) -> void:
+	if coin_value <= 0:
+		return  # altınsız yaratık (ör. boss'un çağırdığı sinekler)
 	# Büyük ödüller (boss) birden çok altın parçasına bölünür
 	var pieces := clampi(ceili(coin_value / 5.0), 1, 20)
 	var remaining := coin_value

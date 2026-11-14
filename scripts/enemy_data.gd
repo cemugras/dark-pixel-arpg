@@ -60,6 +60,19 @@ extends Resource
 @export var throw_distance: float = 320.0        # mermi en fazla bu kadar gider
 @export var throw_sound: String = ""             # Audio sfx adı: mermiler çıkarken (boşsa ses yok)
 
+# --- Çağırma (ör. Beelzebub'un sinek sürüsü) ---
+# summon_data boşsa ya da sprite'ta summon_<yön> animasyonu yoksa çağırma yok. Akış: kovalarken summon_interval
+# dolunca durur, oyuncuya döner, summon_<yön> animasyonu (döngüsüz) oynar; summon_release_frame karesinde etrafına
+# summon_count yaratık çıkarır (aynı anda en fazla summon_max_alive). Çağrılanlar altın düşürmez (yaratığı öldürüp
+# altın kasılmasın), çağıran ölünce hepsi ölür.
+@export var summon_data: EnemyData                # çağrılan yaratık (boşsa çağırma yok)
+@export var summon_count: int = 5                # bir çağırmada çıkan sayı
+@export var summon_max_alive: int = 12           # aynı anda en fazla bu kadar çağrılmış yaratık
+@export var summon_interval: float = 6.0         # iki çağırma arası bekleme (sn, çağırma bitince sayılır)
+@export var summon_release_frame: int = 6        # yaratıkların çıktığı animasyon karesi (0'dan sayılır)
+@export var summon_radius: float = 40.0          # çağıranın etrafında bu uzaklıkta çıkarlar (px)
+@export var summon_sound: String = ""            # Audio sfx adı: yaratıklar çıkarken (boşsa ses yok)
+
 # --- Vurdukça sikke saçma (Mammon) ---
 # spill_health_step 0 ise yok. Canın her spill_health_step kadarı (ör. 0.1 = %10) gidince yere spill_value
 # değerinde sikke saçılır (oyuncu yaklaşınca toplanır, kalanlar dalga sonunda otomatik toplanır).
