@@ -24,6 +24,10 @@ Kurallar:
 | merchant_wings.wav | Wing flap, flutter, carpet, fabric, foley (2012).wav | TRP | https://freesound.org/s/616859/ | CC0 | Cut from raw/merchant_wings_raw.wav, mono |
 | merchant_land.wav | Human Impact on Ground | alegemaate | https://freesound.org/s/364690/ | CC0 | Cut from raw/merchant_land_raw.wav, mono |
 | merchant_greet.wav | Goblin Cackle.wav | spookymodem | https://freesound.org/s/202096/ | CC0 | Cut from raw/merchant_greet_raw.wav, mono |
+| mammon_spawn.wav | Evil Laugh 2 | AntumDeluge | https://freesound.org/s/609909/ | CC0 | Cut from raw/mammon_spawn_raw.flac, mono |
+| mammon_hit.wav | Monster Chase Grunts | surfaceknight68 | https://freesound.org/s/432197/ | CC0 | Cut from raw/mammon_hit_raw.wav, mono |
+| mammon_death.wav | monster_sound_big_death.wav | Leadstarson | https://freesound.org/s/568000/ | CC0 | Trimmed from raw/mammon_death_raw.wav, mono |
+| mammon_spill.wav | spilled coins | Norman_Hittle | https://freesound.org/s/395824/ | CC0 | Converted from raw/mammon_spill_raw.wav (24 bit stereo) to 16 bit mono |
 | ui_click.wav | Click.wav | budek | https://freesound.org/s/513481/ | CC0 | - |
 
 ## Music (music/)

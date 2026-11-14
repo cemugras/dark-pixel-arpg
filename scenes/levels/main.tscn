@@ -13,6 +13,7 @@
 [ext_resource type="Resource" path="res://data/enemies/hellhound.tres" id="17_hellhound"]
 [ext_resource type="Resource" uid="uid://djnp5rpt1qdkr" path="res://data/enemies/moloch.tres" id="10_hwp66"]
 [ext_resource type="Resource" path="res://data/enemies/belphegor.tres" id="11_belph"]
+[ext_resource type="Resource" path="res://data/enemies/mammon.tres" id="18_mammon"]
 [ext_resource type="PackedScene" uid="uid://bjf3dljmdhkl7" path="res://scenes/ui/game_over.tscn" id="12_2xkjh"]
 [ext_resource type="PackedScene" uid="uid://b4aj6k3rhanhd" path="res://scenes/ui/pause_menu.tscn" id="13_dj21o"]
 [ext_resource type="Script" path="res://scenes/ui/start_choice.gd" id="14_start"]
@@ -256,7 +257,7 @@ y_sort_enabled = true
 script = ExtResource("6_b6bv0")
 enemy_scene = ExtResource("3_y0acb")
 enemy_pool = Array[ExtResource("8_rssyh")]([ExtResource("16_damned_soul"), ExtResource("15_hell_harpy"), ExtResource("17_hellhound")])
-boss_pool = Array[ExtResource("8_rssyh")]([ExtResource("10_hwp66"), ExtResource("11_belph")])
+boss_pool = Array[ExtResource("8_rssyh")]([ExtResource("10_hwp66"), ExtResource("11_belph"), ExtResource("18_mammon")])
 
 [node name="Shop" parent="." unique_id=1465708622 instance=ExtResource("8_vkq25")]
 

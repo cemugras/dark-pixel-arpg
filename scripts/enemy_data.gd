@@ -42,6 +42,31 @@ extends Resource
 @export var charge_tired: float = 1.5            # hamle sonrası yorgunluk (sn)
 @export var charge_sound: String = ""            # Audio sfx adı: hamle başlarken (boşsa ses yok)
 
+# --- Fırlatma (menzilli saldırı, ör. Mammon'un sikke yağmuru) ---
+# throw_count 0 ise ya da sprite'ta throw_<yön> animasyonu yoksa fırlatma yok. Akış: kovalarken throw_interval
+# dolunca ve oyuncu throw_min_range..throw_max_range arasındaysa durur, oyuncuya döner, throw_<yön> animasyonu
+# (döngüsüz) oynar; throw_release_frame karesinde oyuncuya doğru yelpaze şeklinde throw_count mermi atar.
+# throw_alternate açıksa her ikinci atışta bir mermi fazla atılır: tek sayıda ortadaki mermi oyuncuya gider,
+# çift sayıda ortada boşluk kalır (oyuncu yerini değiştirmeyi öğrenir).
+@export var throw_count: int = 0                 # bir atıştaki mermi sayısı (0 = fırlatma yok)
+@export var throw_alternate: bool = false        # her ikinci atışta +1 mermi
+@export var throw_spread_degrees: float = 15.0   # yan yana iki mermi arasındaki açı
+@export var throw_interval: float = 3.0          # iki atış arası bekleme (sn, atış bitince sayılır)
+@export var throw_min_range: float = 0.0         # oyuncu bundan yakınsa atmaz
+@export var throw_max_range: float = 260.0       # oyuncu bundan uzaksa atmaz, yürür
+@export var throw_release_frame: int = 5         # mermilerin çıktığı animasyon karesi (0'dan sayılır)
+@export var throw_damage: int = 0                # mermi hasarı (dalgayla temas hasarı gibi artar)
+@export var throw_speed: float = 150.0           # mermi hızı (px/sn)
+@export var throw_distance: float = 320.0        # mermi en fazla bu kadar gider
+@export var throw_sound: String = ""             # Audio sfx adı: mermiler çıkarken (boşsa ses yok)
+
+# --- Vurdukça sikke saçma (Mammon) ---
+# spill_health_step 0 ise yok. Canın her spill_health_step kadarı (ör. 0.1 = %10) gidince yere spill_value
+# değerinde sikke saçılır (oyuncu yaklaşınca toplanır, kalanlar dalga sonunda otomatik toplanır).
+@export var spill_health_step: float = 0.0
+@export var spill_value: int = 0
+@export var spill_sound: String = ""             # Audio sfx adı: sikke saçılınca (boşsa ses yok)
+
 @export var coin_value: int = 1
 @export var spawn_weight: float = 1.0           # doğma olasılığı ağırlığı (min_wave'deki değer)
 @export var spawn_weight_per_wave: float = 0.0   # min_wave'den sonraki her dalgada ağırlığa eklenir (yeni türler giderek sıklaşır)

@@ -33,6 +33,10 @@ const SFX_VOLUME_DB: Dictionary = {
 	"belphegor_spawn": 0.0,
 	"belphegor_death": 0.0,
 	"belphegor_hit": 0.0,
+	"mammon_spawn": 0.0,
+	"mammon_death": 0.0,
+	"mammon_hit": 0.0,
+	"mammon_spill": 0.0,
 	"belphegor_charge": 0.0,
 }
 
@@ -41,6 +45,7 @@ const SFX_VOLUME_DB: Dictionary = {
 const SFX_MAX_INSTANCES: Dictionary = {
 	"moloch_hit": 1,  # boss hit sesleri üst üste binmesin (her yeni boss için eklenir)
 	"belphegor_hit": 1,
+	"mammon_hit": 1,
 }
 
 # --- Müzik ---
@@ -64,6 +69,7 @@ const MUSIC_VOLUME_DB: Dictionary = {
 var _sounds: Dictionary = {}          # ses adı -> Array[AudioStream] (varyasyonlar)
 var _players: Array[AudioStreamPlayer] = []
 var _player_sound: Dictionary = {}    # AudioStreamPlayer -> çaldığı ses adı
+var _exclusive_player: AudioStreamPlayer = null  # çalarken başka efekt çalmaz (boss giriş sesi)
 
 # İki müzik çalar: biri kısılırken diğeri açılır (crossfade)
 var _music_players: Array[AudioStreamPlayer] = []
@@ -143,8 +149,12 @@ func has_sfx(sound_name: String) -> bool:
 
 # Çalan AudioStreamPlayer'ı döndürür (ses bitince bir şey yapmak için finished sinyaline bağlanılabilir).
 # Ses çalmadıysa null döner.
-func play_sfx(sound_name: String, volume_db: float = 0.0) -> AudioStreamPlayer:
+# exclusive = true: bu ses bitene kadar diğer efektler çalmaz (boss giriş kahkahası vuruş seslerine bastırılmasın diye).
+# Müzik bundan etkilenmez.
+func play_sfx(sound_name: String, volume_db: float = 0.0, exclusive: bool = false) -> AudioStreamPlayer:
 	if sound_name == "" or not _sounds.has(sound_name):
+		return null
+	if is_instance_valid(_exclusive_player) and _exclusive_player.playing:
 		return null
 	if _playing_count(sound_name) >= SFX_MAX_INSTANCES.get(sound_name, MAX_PER_SOUND):
 		return null
@@ -156,6 +166,8 @@ func play_sfx(sound_name: String, volume_db: float = 0.0) -> AudioStreamPlayer:
 	player.volume_db = SFX_VOLUME_DB.get(sound_name, 0.0) + volume_db
 	player.pitch_scale = randf_range(1.0 - PITCH_JITTER, 1.0 + PITCH_JITTER)
 	_player_sound[player] = sound_name
+	if exclusive:
+		_exclusive_player = player
 	player.play()
 	return player
 

@@ -150,7 +150,7 @@ func _start_boss_intro() -> void:
 	Audio.stop_music()
 	var player: AudioStreamPlayer = null
 	if _boss.data:
-		player = Audio.play_sfx(_boss.data.get_spawn_sound())
+		player = Audio.play_sfx(_boss.data.get_spawn_sound(), 0.0, true)  # kahkaha bitene kadar başka efekt yok
 	if player:
 		player.finished.connect(_on_boss_intro_finished, CONNECT_ONE_SHOT)
 	else:

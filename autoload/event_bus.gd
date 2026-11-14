@@ -1,6 +1,7 @@
 extends Node
 
 signal enemy_died(position: Vector2, coin_value: int)
+signal coins_spilled(position: Vector2, coin_value: int)  # yaratık ölmeden sikke saçar (Mammon vuruldukça); sikkeler etrafa savrulur
 signal coin_collected(value: int)
 signal player_damaged(current_hp: int, max_hp: int)
 signal player_died

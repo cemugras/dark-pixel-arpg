@@ -1,0 +1,415 @@
+[gd_resource type="SpriteFrames" format=3]
+
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/south/frame_000.png" id="run_south_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/south/frame_001.png" id="run_south_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/south/frame_002.png" id="run_south_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/south/frame_003.png" id="run_south_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/south/frame_004.png" id="run_south_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/south/frame_005.png" id="run_south_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/south/frame_006.png" id="run_south_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/south/frame_007.png" id="run_south_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/south/frame_008.png" id="run_south_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/south-east/frame_000.png" id="run_south_east_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/south-east/frame_001.png" id="run_south_east_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/south-east/frame_002.png" id="run_south_east_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/south-east/frame_003.png" id="run_south_east_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/south-east/frame_004.png" id="run_south_east_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/south-east/frame_005.png" id="run_south_east_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/south-east/frame_006.png" id="run_south_east_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/south-east/frame_007.png" id="run_south_east_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/south-east/frame_008.png" id="run_south_east_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/east/frame_000.png" id="run_east_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/east/frame_001.png" id="run_east_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/east/frame_002.png" id="run_east_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/east/frame_003.png" id="run_east_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/east/frame_004.png" id="run_east_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/east/frame_005.png" id="run_east_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/east/frame_006.png" id="run_east_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/east/frame_007.png" id="run_east_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/east/frame_008.png" id="run_east_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/north-east/frame_000.png" id="run_north_east_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/north-east/frame_001.png" id="run_north_east_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/north-east/frame_002.png" id="run_north_east_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/north-east/frame_003.png" id="run_north_east_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/north-east/frame_004.png" id="run_north_east_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/north-east/frame_005.png" id="run_north_east_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/north-east/frame_006.png" id="run_north_east_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/north-east/frame_007.png" id="run_north_east_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/north-east/frame_008.png" id="run_north_east_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/north/frame_000.png" id="run_north_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/north/frame_001.png" id="run_north_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/north/frame_002.png" id="run_north_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/north/frame_003.png" id="run_north_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/north/frame_004.png" id="run_north_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/north/frame_005.png" id="run_north_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/north/frame_006.png" id="run_north_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/north/frame_007.png" id="run_north_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/walk/north/frame_008.png" id="run_north_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/south/frame_000.png" id="throw_south_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/south/frame_001.png" id="throw_south_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/south/frame_002.png" id="throw_south_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/south/frame_003.png" id="throw_south_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/south/frame_004.png" id="throw_south_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/south/frame_005.png" id="throw_south_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/south/frame_006.png" id="throw_south_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/south/frame_007.png" id="throw_south_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/south/frame_008.png" id="throw_south_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/south-east/frame_000.png" id="throw_south_east_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/south-east/frame_001.png" id="throw_south_east_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/south-east/frame_002.png" id="throw_south_east_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/south-east/frame_003.png" id="throw_south_east_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/south-east/frame_004.png" id="throw_south_east_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/south-east/frame_005.png" id="throw_south_east_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/south-east/frame_006.png" id="throw_south_east_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/south-east/frame_007.png" id="throw_south_east_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/south-east/frame_008.png" id="throw_south_east_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/east/frame_000.png" id="throw_east_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/east/frame_001.png" id="throw_east_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/east/frame_002.png" id="throw_east_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/east/frame_003.png" id="throw_east_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/east/frame_004.png" id="throw_east_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/east/frame_005.png" id="throw_east_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/east/frame_006.png" id="throw_east_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/east/frame_007.png" id="throw_east_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/east/frame_008.png" id="throw_east_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/north-east/frame_000.png" id="throw_north_east_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/north-east/frame_001.png" id="throw_north_east_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/north-east/frame_002.png" id="throw_north_east_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/north-east/frame_003.png" id="throw_north_east_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/north-east/frame_004.png" id="throw_north_east_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/north-east/frame_005.png" id="throw_north_east_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/north-east/frame_006.png" id="throw_north_east_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/north-east/frame_007.png" id="throw_north_east_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/north-east/frame_008.png" id="throw_north_east_8"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/north/frame_000.png" id="throw_north_0"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/north/frame_001.png" id="throw_north_1"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/north/frame_002.png" id="throw_north_2"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/north/frame_003.png" id="throw_north_3"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/north/frame_004.png" id="throw_north_4"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/north/frame_005.png" id="throw_north_5"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/north/frame_006.png" id="throw_north_6"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/north/frame_007.png" id="throw_north_7"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/mammon/Idle/animations/throw/north/frame_008.png" id="throw_north_8"]
+
+[resource]
+animations = [{
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("run_south_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_8")
+}],
+"loop": true,
+"name": &"run_south",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("run_south_east_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_east_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_east_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_east_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_east_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_east_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_east_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_east_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_south_east_8")
+}],
+"loop": true,
+"name": &"run_south_east",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("run_east_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_east_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_east_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_east_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_east_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_east_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_east_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_east_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_east_8")
+}],
+"loop": true,
+"name": &"run_east",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("run_north_east_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_east_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_east_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_east_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_east_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_east_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_east_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_east_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_east_8")
+}],
+"loop": true,
+"name": &"run_north_east",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("run_north_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("run_north_8")
+}],
+"loop": true,
+"name": &"run_north",
+"speed": 8.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("throw_south_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_south_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_south_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_south_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_south_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_south_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_south_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_south_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_south_8")
+}],
+"loop": false,
+"name": &"throw_south",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("throw_south_east_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_south_east_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_south_east_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_south_east_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_south_east_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_south_east_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_south_east_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_south_east_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_south_east_8")
+}],
+"loop": false,
+"name": &"throw_south_east",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("throw_east_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_east_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_east_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_east_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_east_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_east_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_east_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_east_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_east_8")
+}],
+"loop": false,
+"name": &"throw_east",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("throw_north_east_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_north_east_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_north_east_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_north_east_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_north_east_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_north_east_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_north_east_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_north_east_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_north_east_8")
+}],
+"loop": false,
+"name": &"throw_north_east",
+"speed": 10.0
+}, {
+"frames": [{
+"duration": 1.0,
+"texture": ExtResource("throw_north_0")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_north_1")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_north_2")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_north_3")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_north_4")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_north_5")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_north_6")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_north_7")
+}, {
+"duration": 1.0,
+"texture": ExtResource("throw_north_8")
+}],
+"loop": false,
+"name": &"throw_north",
+"speed": 10.0
+}]

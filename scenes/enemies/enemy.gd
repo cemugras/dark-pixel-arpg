@@ -48,7 +48,7 @@ var _dying: bool = false
 # --- Saldırı durumu (bkz. EnemyData attack_*) ---
 const ATTACK_HIT_RANGE_MULT: float = 1.4  # attack_hit_range boşsa: başlatma menzilinin bu katı (kılpayı ıska olmasın)
 const ATTACK_LUNGE_FRAMES: int = 2        # vuruş karesinden önceki kaç karede ileri atılır
-enum State { CHASE, ATTACK, WINDUP, CHARGE, TIRED }
+enum State { CHASE, ATTACK, WINDUP, CHARGE, TIRED, THROW }
 var _state: State = State.CHASE
 
 # --- Hamle durumu (bkz. EnemyData charge_*) ---
@@ -71,6 +71,16 @@ var _attack_dir: Vector2 = Vector2.RIGHT
 var _attack_hit_done: bool = false
 var _lunge_speed: float = 0.0
 
+# --- Fırlatma durumu (bkz. EnemyData throw_*) ---
+var _has_throw: bool = false
+var throw_damage: int = 0
+var _throw_timer: float = 0.0
+var _throw_released: bool = false
+var _throw_count_toggle: bool = false  # throw_alternate: her ikinci atışta +1 mermi
+
+# --- Sikke saçma (bkz. EnemyData spill_*) ---
+var _spill_next: int = 0  # can bu değerin altına inince sikke saçılır
+
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 # Dalga yöneticisi, düşmanı sahneye eklemeden önce bunu çağırır
@@ -81,6 +91,7 @@ func setup(enemy_data: EnemyData, wave: int) -> void:
 	contact_damage = int(data.contact_damage * (1.0 + 0.1 * w))
 	attack_damage = int(data.attack_damage * (1.0 + 0.1 * w))
 	charge_damage = int(data.charge_damage * (1.0 + 0.1 * w))
+	throw_damage = int(data.throw_damage * (1.0 + 0.1 * w))
 	move_speed = data.move_speed * minf(1.0 + 0.01 * w, 1.5)
 	coin_value = data.coin_value
 	scale = Vector2.ONE * data.body_scale
@@ -116,6 +127,14 @@ func _ready() -> void:
 	if _has_attack:
 		var fps := frames.get_animation_speed("attack_east")
 		_lunge_speed = data.attack_lunge * fps / ATTACK_LUNGE_FRAMES
+
+	# Fırlatma: veri + 8 yönlü throw animasyonu varsa açılır
+	_has_throw = data != null and data.throw_count > 0 and _mode == SpriteMode.EIGHT_DIR \
+		and frames.has_animation("throw_east")
+	if _has_throw:
+		_throw_timer = data.throw_interval * 0.5  # boss belirince ilk atış biraz erken gelsin
+
+	if _has_attack or _has_throw:
 		sprite.frame_changed.connect(_on_sprite_frame_changed)
 		sprite.animation_finished.connect(_on_sprite_animation_finished)
 
@@ -123,6 +142,9 @@ func _ready() -> void:
 	_has_charge = data != null and data.charge_interval > 0.0 and _mode == SpriteMode.EIGHT_DIR
 	if _has_charge:
 		_charge_timer = data.charge_interval
+
+	if data and data.spill_health_step > 0.0 and data.spill_value > 0:
+		_spill_next = max_health - roundi(max_health * data.spill_health_step)
 
 func _physics_process(delta: float) -> void:
 	if not is_instance_valid(target):
@@ -142,6 +164,11 @@ func _physics_process(delta: float) -> void:
 			return
 
 	var separation := _separation() * maxf(move_speed, SEPARATION_MIN_SPEED) * SEPARATION_STRENGTH
+	if _state == State.THROW:
+		# Atarken durur (itme devam eder)
+		velocity = separation
+		move_and_slide()
+		return
 	if _state == State.ATTACK:
 		# Saldırırken durur (itme devam eder); vuruştan hemen önce saldırı yönüne atılır
 		velocity = separation
@@ -165,6 +192,12 @@ func _physics_process(delta: float) -> void:
 	if _can_start_attack(to_target.length()):
 		_start_attack(dir)
 		return
+
+	if _has_throw:
+		_throw_timer -= delta
+		if _can_start_throw(to_target.length()):
+			_start_throw(dir)
+			return
 
 	match _mode:
 		SpriteMode.EIGHT_DIR:
@@ -198,8 +231,47 @@ func _is_lunge_frame() -> bool:
 	var f := sprite.frame
 	return f >= data.attack_hit_frame - ATTACK_LUNGE_FRAMES and f < data.attack_hit_frame
 
+# --- Fırlatma: dur, dön, animasyon; bırakma karesinde oyuncuya yelpaze mermi ---
+func _can_start_throw(distance: float) -> bool:
+	if _throw_timer > 0.0 or _dying:
+		return false
+	if "is_dead" in target and target.is_dead:
+		return false
+	return distance >= data.throw_min_range and distance <= data.throw_max_range
+
+func _start_throw(dir: Vector2) -> void:
+	_state = State.THROW
+	_throw_released = false
+	_face_exact(dir)
+	sprite.play("throw_" + DIR8_NAMES[_dir8_idx])
+	sprite.frame = 0
+
+# Yelpaze, bırakma anında oyuncunun o anki konumuna nişanlanır
+func _release_throw() -> void:
+	_throw_released = true
+	if not is_instance_valid(target) or _dying:
+		return
+	var count := data.throw_count
+	if data.throw_alternate:
+		if _throw_count_toggle:
+			count += 1
+		_throw_count_toggle = not _throw_count_toggle
+	var aim := (target.global_position - global_position).normalized()
+	var step := deg_to_rad(data.throw_spread_degrees)
+	var first := -step * (count - 1) * 0.5
+	for i in count:
+		var p := CoinProjectile.new()
+		p.setup(throw_damage, data.throw_speed, data.throw_distance, aim.rotated(first + step * i))
+		p.position = global_position  # yaratığın ebeveyninde (WaveManager) doğar, yaratık ölse de uçmaya devam eder
+		get_parent().add_child(p)
+	Audio.play_sfx(data.throw_sound)
+
 # Vuruş karesi: oyuncu hâlâ menzildeyse hasar (kaçtıysa ıska)
 func _on_sprite_frame_changed() -> void:
+	if _state == State.THROW:
+		if not _throw_released and sprite.frame >= data.throw_release_frame:
+			_release_throw()
+		return
 	if _state != State.ATTACK or _attack_hit_done or sprite.frame < data.attack_hit_frame:
 		return
 	_attack_hit_done = true
@@ -210,6 +282,13 @@ func _on_sprite_frame_changed() -> void:
 		target.try_hit(attack_damage)
 
 func _on_sprite_animation_finished() -> void:
+	if _state == State.THROW:
+		if not _throw_released:
+			_release_throw()
+		_state = State.CHASE
+		_throw_timer = data.throw_interval
+		sprite.play("run_" + DIR8_NAMES[_dir8_idx])
+		return
 	if _state != State.ATTACK:
 		return
 	_state = State.CHASE
@@ -401,8 +480,23 @@ func take_damage(amount: int) -> void:
 	_flash()
 	if health <= 0:
 		die()
-	elif data:
+		return
+	if data:
 		Audio.play_sfx(data.get_hit_sound())
+		_check_spill()
+
+# Canın her spill_health_step kadarı gidince sikke saçar (tek vuruşta birden çok eşik geçilirse hepsi birlikte)
+func _check_spill() -> void:
+	if data.spill_health_step <= 0.0 or data.spill_value <= 0:
+		return
+	var step := maxi(roundi(max_health * data.spill_health_step), 1)
+	var total := 0
+	while health <= _spill_next and _spill_next > 0:
+		total += data.spill_value
+		_spill_next -= step
+	if total > 0:
+		EventBus.coins_spilled.emit(global_position, total)
+		Audio.play_sfx(data.spill_sound)
 
 func die() -> void:
 	# Aynı karede iki vuruş gelirse iki kez ölmesin (çift altın / çift ses olmasın)
@@ -413,6 +507,8 @@ func die() -> void:
 		if data.is_boss:
 			Audio.stop_music(BOSS_DEATH_MUSIC_FADE)  # boss müziği ölüm sesinden önce kesilir
 			EventBus.boss_defeated.emit(data.id)  # Steam başarımı vb. için (ör. "moloch")
+			for p in get_tree().get_nodes_in_group("enemy_projectile"):
+				p.queue_free()  # havadaki sikkeler dalga sonunda (tüccar inerken) oyuncuya çarpmasın
 		Audio.play_sfx(data.get_death_sound())
 	EventBus.enemy_died.emit(global_position, coin_value)
 	queue_free()
