@@ -28,6 +28,10 @@ window/size/viewport_height=768
 window/stretch/mode="canvas_items"
 window/stretch/scale_mode="integer"
 
+[gui]
+
+theme/custom_font="res://assets/fonts/Jersey20-Regular.ttf"
+
 [input]
 
 move_left={
