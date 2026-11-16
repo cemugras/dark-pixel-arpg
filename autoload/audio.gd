@@ -41,6 +41,11 @@ const SFX_VOLUME_DB: Dictionary = {
 	"beelzebub_death": 0.0,
 	"beelzebub_hit": -6.0,      # yarı ses: 1.1 sn uzun, sık çalıyor ve sinek sesini bastırıyordu
 	"beelzebub_summon": 3.0,   # dosyadaki tek tık bastırılıp vızıltı +12 dB yapıldı; üstüne +3
+	"lilith_spawn": 0.0,
+	"lilith_hit": 0.0,
+	"lilith_death": 0.0,
+	"lilith_cast": 0.0,
+	"lilith_rune_blast": 0.0,
 	"belphegor_charge": 0.0,
 }
 
@@ -51,6 +56,8 @@ const SFX_MAX_INSTANCES: Dictionary = {
 	"belphegor_hit": 1,
 	"mammon_hit": 1,
 	"beelzebub_hit": 1,
+	"lilith_hit": 1,
+	"lilith_rune_blast": 1,  # 3 rün aynı anda patlar: tek ses yeter, üst üste binip patlamasın
 }
 
 # --- Müzik ---
@@ -75,6 +82,8 @@ var _sounds: Dictionary = {}          # ses adı -> Array[AudioStream] (varyasyo
 var _players: Array[AudioStreamPlayer] = []
 var _player_sound: Dictionary = {}    # AudioStreamPlayer -> çaldığı ses adı
 var _exclusive_player: AudioStreamPlayer = null  # çalarken başka efekt çalmaz (boss giriş sesi)
+var _focus_player: AudioStreamPlayer = null      # çalarken yaratık vuruş/ölüm sesleri çalmaz (play_sfx_focus)
+const FOCUS_SHOT_DB: float = -6.0                # play_sfx_focus sesi çalarken silah ateş sesleri bu kadar kısılır (-6 dB = yarı)
 
 # İki müzik çalar: biri kısılırken diğeri açılır (crossfade)
 var _music_players: Array[AudioStreamPlayer] = []
@@ -163,22 +172,48 @@ func play_sfx(sound_name: String, volume_db: float = 0.0, exclusive: bool = fals
 		return null
 	if _playing_count(sound_name) >= SFX_MAX_INSTANCES.get(sound_name, MAX_PER_SOUND):
 		return null
+	if is_instance_valid(_focus_player) and _focus_player.playing and _is_creature_sound(sound_name):
+		return null
 	var player := _free_player()
 	if player == null:
 		return null
 	var variants: Array = _sounds[sound_name]
 	player.stream = variants.pick_random()
 	player.volume_db = SFX_VOLUME_DB.get(sound_name, 0.0) + volume_db
+	if is_instance_valid(_focus_player) and _focus_player.playing and sound_name.ends_with("_shoot"):
+		player.volume_db += FOCUS_SHOT_DB  # büyü/patlama sesi çalarken ateş sesleri yarıya iner
 	player.pitch_scale = randf_range(1.0 - PITCH_JITTER, 1.0 + PITCH_JITTER)
 	_player_sound[player] = sound_name
 	# Havuzdaki oynatıcı tekrar kullanılıyor: tek başına çalan ses bitmiş demektir, artık başka sesleri susturmasın
 	# (eskiden kahkaha biten oynatıcı ateş sesi çalarken tüm efektler susuyordu)
 	if player == _exclusive_player:
 		_exclusive_player = null
+	if player == _focus_player:
+		_focus_player = null
 	if exclusive:
 		_exclusive_player = player
 	player.play()
 	return player
+
+# Önemli boss sesi (ör. Lilith'in büyüsü ve rün patlaması): çalan yaratık vuruş/ölüm sesleri kesilir ve bu ses
+# bitene kadar yenileri çalmaz, böylece kalabalıkta duyulur. Silah ateş sesleri (*_shoot) bu sürede yarı seste
+# çalar (FOCUS_SHOT_DB). Müzik ve oyuncu sesleri etkilenmez (rün oyuncuya çarparsa player_hurt yine çalar).
+func play_sfx_focus(sound_name: String) -> AudioStreamPlayer:
+	if sound_name == "" or not _sounds.has(sound_name):
+		return null
+	for p in _players:
+		if p.playing and _is_creature_sound(_player_sound.get(p, "")):
+			p.stop()
+	var player := play_sfx(sound_name)
+	if player:
+		_focus_player = player
+	return player
+
+# Yaratık ve boss vuruş/ölüm sesleri (oyuncunun kendi sesleri hariç)
+func _is_creature_sound(sound_name: String) -> bool:
+	if sound_name.begins_with("player_"):
+		return false
+	return sound_name.ends_with("_hit") or sound_name.ends_with("_death")
 
 # Çalan tüm kopyalarını hemen susturur (ör. Beelzebub sinek çağırırken uzun hit sesi vızıltıyı bastırmasın)
 func stop_sfx(sound_name: String) -> void:

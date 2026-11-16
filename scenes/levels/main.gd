@@ -16,6 +16,11 @@ func _ready() -> void:
 	add_child(_coins)
 	var floor_layer := get_node_or_null("TileMapLayer")
 	move_child(_coins, floor_layer.get_index() + 1 if floor_layer else 0)
+	# Yere çizilen efektler (Lilith'in rünleri): sikkelerin üstünde, oyuncu ve yaratıkların altında
+	var floor_fx := Node2D.new()
+	floor_fx.name = "FloorFx"
+	add_child(floor_fx)
+	move_child(floor_fx, _coins.get_index() + 1)
 
 	# Kanatlı tüccar: oyuncunun hemen arkasında (oyuncunun üstünde çizilir); dalga sonu akışını o yürütür
 	var merchant: Node2D = MERCHANT_SCRIPT.new()

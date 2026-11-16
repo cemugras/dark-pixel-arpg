@@ -32,6 +32,11 @@ Kurallar:
 | beelzebub_hit.wav | Surge Leech 2 | scorpion67890 | https://freesound.org/s/205754/ | CC0 | Cut from raw/beelzebub_hit_raw.wav (8 bit), 16 bit mono |
 | beelzebub_death.wav | Fly Insect Smash Dead | EminYILDIRIM | https://freesound.org/s/592220/ | CC0 | Cut from raw/beelzebub_death_raw.wav (24 bit stereo), 16 bit mono |
 | beelzebub_summon.wav | Fly_buzzing_1.wav | cribbler | https://freesound.org/s/440422/ | CC0 | Cut from raw/beelzebub_summon_raw.wav (32 bit float stereo), 16 bit mono |
+| lilith_spawn.wav | rpg - wicked witch battle sounds.wav | mvVoiceActing | https://freesound.org/s/347346/ | CC0 | Cut from raw/lilith_spawn_hit_death_raw.wav, 16 bit mono, normalized |
+| lilith_hit.wav | rpg - wicked witch battle sounds.wav | mvVoiceActing | https://freesound.org/s/347346/ | CC0 | Cut from raw/lilith_spawn_hit_death_raw.wav, 16 bit mono, normalized |
+| lilith_death.wav | rpg - wicked witch battle sounds.wav | mvVoiceActing | https://freesound.org/s/347346/ | CC0 | Cut from raw/lilith_spawn_hit_death_raw.wav, 16 bit mono, normalized |
+| lilith_cast.wav | Magic Spell - Whir, and Boom | CVLTIV8R | https://freesound.org/s/847621/ | CC0 | Cut from raw/lilith_cast_blast_raw.wav, 16 bit mono, normalized |
+| lilith_rune_blast.wav | Magic Spell - Whir, and Boom | CVLTIV8R | https://freesound.org/s/847621/ | CC0 | Cut from raw/lilith_cast_blast_raw.wav, 16 bit mono, normalized |
 | ui_click.wav | Click.wav | budek | https://freesound.org/s/513481/ | CC0 | - |
 
 ## Music (music/)

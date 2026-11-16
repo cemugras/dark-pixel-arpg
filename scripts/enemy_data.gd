@@ -73,6 +73,22 @@ extends Resource
 @export var summon_radius: float = 40.0          # çağıranın etrafında bu uzaklıkta çıkarlar (px)
 @export var summon_sound: String = ""            # Audio sfx adı: yaratıklar çıkarken (boşsa ses yok)
 
+# --- Büyü: yere rün çemberleri (ör. Lilith'in kan rünleri) ---
+# cast_count 0 ise ya da sprite'ta cast_<yön> animasyonu yoksa büyü yok. Akış: kovalarken cast_interval dolunca ve
+# oyuncu cast_max_range içindeyse durur, oyuncuya döner, cast_<yön> animasyonu (döngüsüz) oynar; cast_release_frame
+# karesinde yere cast_count rün çizilir: ilki oyuncunun tam altına, diğerleri çevresine (cast_spread içinde rastgele).
+# Rünler cast_delay sn yanıp söner (uyarı), sonra patlar; o an çemberin içinde kalan oyuncu cast_damage alır.
+@export var cast_count: int = 0                  # bir büyüdeki rün sayısı (0 = büyü yok)
+@export var cast_interval: float = 4.0           # iki büyü arası bekleme (sn, büyü bitince sayılır)
+@export var cast_max_range: float = 300.0        # oyuncu bundan uzaksa büyü yapmaz, yürür
+@export var cast_release_frame: int = 5          # rünlerin çizildiği animasyon karesi (0'dan sayılır)
+@export var cast_radius: float = 26.0            # rün çemberinin yarıçapı (px, hasar alanı)
+@export var cast_spread: float = 70.0            # ek rünler oyuncunun bu kadar çevresine düşer (px)
+@export var cast_delay: float = 1.0              # rün çizildikten patlamaya kadar uyarı süresi (sn)
+@export var cast_damage: int = 0                 # patlama hasarı (dalgayla temas hasarı gibi artar)
+@export var cast_sound: String = ""              # Audio sfx adı: rünler çizilirken (boşsa ses yok)
+@export var cast_blast_sound: String = ""        # Audio sfx adı: rün patlarken (boşsa ses yok)
+
 # --- Vurdukça sikke saçma (Mammon) ---
 # spill_health_step 0 ise yok. Canın her spill_health_step kadarı (ör. 0.1 = %10) gidince yere spill_value
 # değerinde sikke saçılır (oyuncu yaklaşınca toplanır, kalanlar dalga sonunda otomatik toplanır).

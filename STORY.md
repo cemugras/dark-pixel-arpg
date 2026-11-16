@@ -77,7 +77,7 @@ Boss'lar zayıftan güçlüye sıralanır; her biri oyuna bir yeni mekanik getir
 | 20 | Belphegor | Kediyi kucağında uyutmaya çalışmış, kedi tırmalamış. | Uyuşuk yürür, aniden uyanıp hamle yapar, sonra yorulup esner | Yanağındaki pençe izi |
 | 30 | Mammon | Kediyi satmaya kalkmış. | Vurdukça altın saçar | "PRICELESS" fiyat etiketi |
 | 40 | Beelzebub | Kedi sineklerini avlamış, kızmış. | Sinek sürüsü çağırır | Oyuncak fare |
-| 50 | Lilith | Oyunun ortası, dönüm noktası: Walt'a Biscuit'in sırrını anlatır. | Hızlı, yaratık çağırır, büyü yapar | Biscuit'in eski cehennem fotoğrafı |
+| 50 | Lilith | Oyunun ortası, dönüm noktası: Walt'a Biscuit'in sırrını anlatır. | Hızlı; kan rünü büyüsü: oyuncunun altına ve çevresine yere rünler çizer, kısa uyarıdan sonra patlarlar | Biscuit'in eski cehennem fotoğrafı |
 | 60 | Leviathan | Kediyi lav denizinin karşısına taşımış. | Yere dalıp çıkar, alan saldırısı | Islak tüy yumağı |
 | 70 | Asmodeus | Üç başı kedinin kime ait olduğu konusunda kavga eder. | Her başın ayrı saldırısı (üç saldırı) | Kırık mama kabı |
 | 80 | Abaddon | Yıkım meleği; Walt'ı "geri dön" diye uyarır. | Çekirge sürüleri, geniş alan | Kedinin çan sesi |

@@ -48,7 +48,7 @@ var _dying: bool = false
 # --- Saldırı durumu (bkz. EnemyData attack_*) ---
 const ATTACK_HIT_RANGE_MULT: float = 1.4  # attack_hit_range boşsa: başlatma menzilinin bu katı (kılpayı ıska olmasın)
 const ATTACK_LUNGE_FRAMES: int = 2        # vuruş karesinden önceki kaç karede ileri atılır
-enum State { CHASE, ATTACK, WINDUP, CHARGE, TIRED, THROW, SUMMON }
+enum State { CHASE, ATTACK, WINDUP, CHARGE, TIRED, THROW, SUMMON, CAST }
 var _state: State = State.CHASE
 
 # --- Hamle durumu (bkz. EnemyData charge_*) ---
@@ -87,6 +87,14 @@ var _minions: Array = []  # bu yaratığın çağırdıkları (sayı sınırı i
 var _summon_sound_until: int = 0  # ms; çağırma sesi bu ana kadar çalar, o sürede hit sesi çalmaz (vızıltı duyulsun)
 var _wave: int = 1
 
+# --- Büyü durumu (bkz. EnemyData cast_*) ---
+const FLOOR_FX_PATH: String = "FloorFx"   # Main altındaki zemin efektleri düğümü (main.gd kurar)
+const SPECIAL_GAP: float = 1.2            # çağırma ile büyü arka arkaya gelmesin: biri bitince diğeri en az bu kadar bekler
+var _has_cast: bool = false
+var cast_damage: int = 0
+var _cast_timer: float = 0.0
+var _cast_released: bool = false
+
 # --- Sikke saçma (bkz. EnemyData spill_*) ---
 var _spill_next: int = 0  # can bu değerin altına inince sikke saçılır
 
@@ -102,6 +110,7 @@ func setup(enemy_data: EnemyData, wave: int) -> void:
 	attack_damage = int(data.attack_damage * (1.0 + 0.1 * w))
 	charge_damage = int(data.charge_damage * (1.0 + 0.1 * w))
 	throw_damage = int(data.throw_damage * (1.0 + 0.1 * w))
+	cast_damage = int(data.cast_damage * (1.0 + 0.1 * w))
 	move_speed = data.move_speed * minf(1.0 + 0.01 * w, 1.5)
 	coin_value = data.coin_value
 	scale = Vector2.ONE * data.body_scale
@@ -150,7 +159,13 @@ func _ready() -> void:
 	if _has_summon:
 		_summon_timer = data.summon_interval * 0.4  # boss belirince ilk sürü biraz erken gelsin
 
-	if _has_attack or _has_throw or _has_summon:
+	# Büyü: veri + 8 yönlü cast animasyonu varsa açılır
+	_has_cast = data != null and data.cast_count > 0 and _mode == SpriteMode.EIGHT_DIR \
+		and frames.has_animation("cast_east")
+	if _has_cast:
+		_cast_timer = data.cast_interval * 0.5  # boss belirince ilk büyü biraz erken gelsin
+
+	if _has_attack or _has_throw or _has_summon or _has_cast:
 		sprite.frame_changed.connect(_on_sprite_frame_changed)
 		sprite.animation_finished.connect(_on_sprite_animation_finished)
 
@@ -180,7 +195,7 @@ func _physics_process(delta: float) -> void:
 			return
 
 	var separation := _separation() * maxf(move_speed, SEPARATION_MIN_SPEED) * SEPARATION_STRENGTH
-	if _state == State.THROW or _state == State.SUMMON:
+	if _state == State.THROW or _state == State.SUMMON or _state == State.CAST:
 		# Atarken / çağırırken durur (itme devam eder)
 		velocity = separation
 		move_and_slide()
@@ -219,6 +234,12 @@ func _physics_process(delta: float) -> void:
 		_summon_timer -= delta
 		if _can_start_summon():
 			_start_summon(dir)
+			return
+
+	if _has_cast:
+		_cast_timer -= delta
+		if _can_start_cast(to_target.length()):
+			_start_cast(dir)
 			return
 
 	match _mode:
@@ -332,8 +353,50 @@ func _release_summon() -> void:
 	if player and player.stream:
 		_summon_sound_until = Time.get_ticks_msec() + int(player.stream.get_length() / player.pitch_scale * 1000.0)
 
+# --- Büyü: dur, dön, animasyon; bırakma karesinde yere rünler ---
+func _can_start_cast(distance: float) -> bool:
+	if _cast_timer > 0.0 or _dying:
+		return false
+	if "is_dead" in target and target.is_dead:
+		return false
+	return distance <= data.cast_max_range
+
+func _start_cast(dir: Vector2) -> void:
+	_state = State.CAST
+	_cast_released = false
+	_face_exact(dir)
+	sprite.play("cast_" + DIR8_NAMES[_dir8_idx])
+	sprite.frame = 0
+
+# İlk rün oyuncunun tam altına, diğerleri çevresine eşit açılarla (rastgele uzaklıkta) düşer:
+# yerinde duran vurulur, kaçan çoğunlukla kurtulur ama rastgele bir rünün içine de koşabilir.
+func _release_cast() -> void:
+	_cast_released = true
+	if not is_instance_valid(target) or _dying:
+		return
+	var fx_parent: Node = get_tree().current_scene.get_node_or_null(FLOOR_FX_PATH)
+	if fx_parent == null:
+		fx_parent = get_parent()
+	var center := target.global_position
+	var start := randf() * TAU
+	var extra := data.cast_count - 1
+	for i in data.cast_count:
+		var pos := center
+		if i > 0:
+			var angle := start + TAU * (i - 1) / extra + randf_range(-0.3, 0.3)
+			pos += Vector2.RIGHT.rotated(angle) * randf_range(data.cast_radius * 1.4, data.cast_spread)
+		var rune := RuneBlast.new()
+		rune.setup(cast_damage, data.cast_radius, data.cast_delay, data.cast_blast_sound)
+		rune.global_position = pos
+		fx_parent.add_child(rune)
+	Audio.play_sfx_focus(data.cast_sound)  # yaratık vuruş sesleri susar, büyü duyulsun
+
 # Vuruş karesi: oyuncu hâlâ menzildeyse hasar (kaçtıysa ıska)
 func _on_sprite_frame_changed() -> void:
+	if _state == State.CAST:
+		if not _cast_released and sprite.frame >= data.cast_release_frame:
+			_release_cast()
+		return
 	if _state == State.SUMMON:
 		if not _summon_released and sprite.frame >= data.summon_release_frame:
 			_release_summon()
@@ -352,11 +415,22 @@ func _on_sprite_frame_changed() -> void:
 		target.try_hit(attack_damage)
 
 func _on_sprite_animation_finished() -> void:
+	if _state == State.CAST:
+		if not _cast_released:
+			_release_cast()
+		_state = State.CHASE
+		_cast_timer = data.cast_interval
+		if _has_summon:
+			_summon_timer = maxf(_summon_timer, SPECIAL_GAP)
+		sprite.play("run_" + DIR8_NAMES[_dir8_idx])
+		return
 	if _state == State.SUMMON:
 		if not _summon_released:
 			_release_summon()
 		_state = State.CHASE
 		_summon_timer = data.summon_interval
+		if _has_cast:
+			_cast_timer = maxf(_cast_timer, SPECIAL_GAP)
 		sprite.play("run_" + DIR8_NAMES[_dir8_idx])
 		return
 	if _state == State.THROW:

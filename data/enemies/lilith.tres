@@ -1,0 +1,31 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" uid="uid://cqlw7x1k6q18i" path="res://scripts/enemy_data.gd" id="1_lilith"]
+[ext_resource type="SpriteFrames" path="res://data/enemies/lilith_frames.tres" id="2_lilith"]
+
+[resource]
+script = ExtResource("1_lilith")
+id = "lilith"
+display_name = "Lilith"
+sprite_frames = ExtResource("2_lilith")
+body_scale = 1.0
+hitbox_scale = 1.6
+max_health = 700
+move_speed = 40.0
+contact_damage = 5
+cast_count = 3
+cast_interval = 4.0
+cast_max_range = 300.0
+cast_release_frame = 6
+cast_radius = 26.0
+cast_spread = 70.0
+cast_delay = 1.0
+cast_damage = 6
+cast_sound = "lilith_cast"
+cast_blast_sound = "lilith_rune_blast"
+coin_value = 300
+is_boss = true
+boss_wave = 50
+hit_sound = "lilith_hit"
+death_sound = "lilith_death"
+spawn_sound = "lilith_spawn"
