@@ -42,6 +42,10 @@ Kurallar:
 | leviathan_death.wav | Monster 6 | jesssican | https://freesound.org/s/855089/ | CC0 | Cut from raw/leviathan_hit_death_dive_emerge_raw.m4a, 16 bit mono, normalized |
 | leviathan_dive.wav | Monster 6 | jesssican | https://freesound.org/s/855089/ | CC0 | Cut from raw/leviathan_hit_death_dive_emerge_raw.m4a, 16 bit mono, normalized |
 | leviathan_emerge.wav | Monster 6 | jesssican | https://freesound.org/s/855089/ | CC0 | Cut from raw/leviathan_hit_death_dive_emerge_raw.m4a, 16 bit mono, normalized |
+| asmodeus_spawn.wav | Deep Monster Growl | uagadugu | https://freesound.org/s/222523/ | CC0 | Cut from raw/asmodeus_spawn_raw.wav (16 bit stereo), 16 bit mono, normalized |
+| asmodeus_hit_01.wav, asmodeus_hit_02.wav, asmodeus_hit_03.wav | Devil Demon_Grunts Moans Dying.mp3 | SnowFightStudios | https://freesound.org/s/643684/ | CC0 | Cut from raw/asmodeus_hit_death_breath_raw.mp3, 16 bit mono, normalized |
+| asmodeus_death.wav | Devil Demon_Grunts Moans Dying.mp3 | SnowFightStudios | https://freesound.org/s/643684/ | CC0 | Cut from raw/asmodeus_hit_death_breath_raw.mp3, 16 bit mono, normalized |
+| asmodeus_breath.wav | Devil Demon_Grunts Moans Dying.mp3 | SnowFightStudios | https://freesound.org/s/643684/ | CC0 | Cut from raw/asmodeus_hit_death_breath_raw.mp3, 16 bit mono, normalized |
 | ui_click.wav | Click.wav | budek | https://freesound.org/s/513481/ | CC0 | - |
 
 ## Music (music/)

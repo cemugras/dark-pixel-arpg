@@ -109,6 +109,27 @@ extends Resource
 @export var dive_sound: String = ""              # Audio sfx adı: lava dalarken (boşsa ses yok)
 @export var emerge_sound: String = ""            # Audio sfx adı: fırlarken (boşsa ses yok)
 
+# --- Nefes: etrafında dönen koniler (ör. Asmodeus'un üç başı) ---
+# breath_count 0 ise ya da sprite'ta breath_<yön> animasyonu yoksa nefes yok. Akış: kovalarken breath_interval dolunca
+# ve oyuncu breath_max_range içindeyse durur, oyuncuya döner, breath_<yön> animasyonu oynar (breath_hold_frame karesinde
+# ağızlar açık kalır). Etrafına eşit aralıklı breath_count koni çizilir (ilki oyuncuya bakar): breath_windup sn soluk
+# uyarı, sonra breath_duration sn nefes; koniler bu sürede breath_spin_degrees/sn ile (her seferinde rastgele yöne)
+# döner. Koninin içinde kalan oyuncu breath_damage alır (oyuncunun dokunulmazlığı vuruş sıklığını sınırlar).
+# Bitince animasyon kalanını oynar, breath_recover sn yerinde durur.
+@export var breath_count: int = 0                # koni sayısı (0 = nefes yok)
+@export var breath_interval: float = 5.0         # iki nefes arası bekleme (sn, toparlanma bitince sayılır)
+@export var breath_max_range: float = 170.0      # oyuncu bundan uzaksa nefes yapmaz, yürür
+@export var breath_range: float = 110.0          # koninin uzunluğu (px, merkezden)
+@export var breath_width_degrees: float = 50.0   # bir koninin açısı
+@export var breath_windup: float = 0.8           # uyarı süresi (sn, koniler soluk ve dönmez)
+@export var breath_duration: float = 2.0         # nefes süresi (sn, koniler döner)
+@export var breath_spin_degrees: float = 60.0    # dönme hızı (derece/sn)
+@export var breath_hold_frame: int = 4           # animasyonun ağızların açık kaldığı karesi (0'dan sayılır)
+@export var breath_damage: int = 0               # konideki hasar (dalgayla temas hasarı gibi artar)
+@export var breath_recover: float = 0.8          # nefesten sonra yerinde durma süresi (sn)
+@export var breath_colors: Array[Color] = []     # koni renkleri sırayla (boşsa kızıl, mor, yeşil)
+@export var breath_sound: String = ""            # Audio sfx adı: nefes başlarken (uyarı bitince; boşsa ses yok)
+
 # --- Vurdukça sikke saçma (Mammon) ---
 # spill_health_step 0 ise yok. Canın her spill_health_step kadarı (ör. 0.1 = %10) gidince yere spill_value
 # değerinde sikke saçılır (oyuncu yaklaşınca toplanır, kalanlar dalga sonunda otomatik toplanır).

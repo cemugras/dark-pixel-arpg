@@ -22,6 +22,7 @@
 [ext_resource type="Resource" path="res://data/enemies/hell_fly.tres" id="20_hell_fly"]
 [ext_resource type="Resource" path="res://data/enemies/lilith.tres" id="21_lilith"]
 [ext_resource type="Resource" path="res://data/enemies/leviathan.tres" id="22_leviathan"]
+[ext_resource type="Resource" path="res://data/enemies/asmodeus.tres" id="23_asmodeus"]
 
 [sub_resource type="TileSetAtlasSource" id="TileSetAtlasSource_y0acb"]
 texture = ExtResource("1_2vj2h")
@@ -261,7 +262,7 @@ y_sort_enabled = true
 script = ExtResource("6_b6bv0")
 enemy_scene = ExtResource("3_y0acb")
 enemy_pool = Array[ExtResource("8_rssyh")]([ExtResource("16_damned_soul"), ExtResource("15_hell_harpy"), ExtResource("17_hellhound"), ExtResource("20_hell_fly")])
-boss_pool = Array[ExtResource("8_rssyh")]([ExtResource("10_hwp66"), ExtResource("11_belph"), ExtResource("18_mammon"), ExtResource("19_beelzebub"), ExtResource("21_lilith"), ExtResource("22_leviathan")])
+boss_pool = Array[ExtResource("8_rssyh")]([ExtResource("10_hwp66"), ExtResource("11_belph"), ExtResource("18_mammon"), ExtResource("19_beelzebub"), ExtResource("21_lilith"), ExtResource("22_leviathan"), ExtResource("23_asmodeus")])
 
 [node name="Shop" parent="." unique_id=1465708622 instance=ExtResource("8_vkq25")]
 

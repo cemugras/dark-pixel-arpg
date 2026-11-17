@@ -79,7 +79,7 @@ Boss'lar zayıftan güçlüye sıralanır; her biri oyuna bir yeni mekanik getir
 | 40 | Beelzebub | Kedi sineklerini avlamış, kızmış. | Sinek sürüsü çağırır | Oyuncak fare |
 | 50 | Lilith | Oyunun ortası, dönüm noktası: Walt'a Biscuit'in sırrını anlatır. | Hızlı; kan rünü büyüsü: oyuncunun altına ve çevresine yere rünler çizer, kısa uyarıdan sonra patlarlar | Biscuit'in eski cehennem fotoğrafı |
 | 60 | Leviathan | Kediyi lav denizinin karşısına taşımış. | Yere dalıp çıkar, alan saldırısı | Islak tüy yumağı |
-| 70 | Asmodeus | Üç başı kedinin kime ait olduğu konusunda kavga eder. | Her başın ayrı saldırısı (üç saldırı) | Kırık mama kabı |
+| 70 | Asmodeus | Üç başı kedinin kime ait olduğu konusunda kavga eder. | Üç başın dönen nefesi (kızıl, mor, yeşil; tek hamle) | Kırık mama kabı |
 | 80 | Abaddon | Yıkım meleği; Walt'ı "geri dön" diye uyarır. | Çekirge sürüleri, geniş alan | Kedinin çan sesi |
 | 90 | Azazel | Walt'a benzer silahlar kullanan düşmüş melek; Lucifer'in son kapısı. | Oyuncu gibi silah kullanır | Kapı anahtarı |
 | 100 | Lucifer | Tahtında, kucağında Biscuit. | Önceki mekaniklerin karışımı | — |

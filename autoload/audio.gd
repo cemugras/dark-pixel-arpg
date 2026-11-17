@@ -51,6 +51,10 @@ const SFX_VOLUME_DB: Dictionary = {
 	"leviathan_death": 0.0,
 	"leviathan_dive": 0.0,
 	"leviathan_emerge": 0.0,
+	"asmodeus_spawn": 0.0,
+	"asmodeus_hit": 0.0,       # 3 varyasyon (_01, _02, _03)
+	"asmodeus_death": 0.0,
+	"asmodeus_breath": 0.0,
 	"belphegor_charge": 0.0,
 }
 
@@ -64,6 +68,7 @@ const SFX_MAX_INSTANCES: Dictionary = {
 	"lilith_hit": 1,
 	"lilith_rune_blast": 1,  # 3 rün aynı anda patlar: tek ses yeter, üst üste binip patlamasın
 	"leviathan_hit": 1,
+	"asmodeus_hit": 1,
 }
 
 # --- Müzik ---

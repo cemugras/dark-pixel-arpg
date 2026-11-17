@@ -48,7 +48,7 @@ var _dying: bool = false
 # --- Saldırı durumu (bkz. EnemyData attack_*) ---
 const ATTACK_HIT_RANGE_MULT: float = 1.4  # attack_hit_range boşsa: başlatma menzilinin bu katı (kılpayı ıska olmasın)
 const ATTACK_LUNGE_FRAMES: int = 2        # vuruş karesinden önceki kaç karede ileri atılır
-enum State { CHASE, ATTACK, WINDUP, CHARGE, TIRED, THROW, SUMMON, CAST, DIVE, BURROW, SURFACING, EMERGE }
+enum State { CHASE, ATTACK, WINDUP, CHARGE, TIRED, THROW, SUMMON, CAST, DIVE, BURROW, SURFACING, EMERGE, BREATH }
 var _state: State = State.CHASE
 
 # --- Hamle durumu (bkz. EnemyData charge_*) ---
@@ -113,6 +113,13 @@ var _sink: float = 0.0                 # 0 = yerde tam boy, 1 = tamamen gömül�
 var _burrow_fx: LavaBurrow = null
 var _collision_layer_saved: int = 0
 
+# --- Nefes durumu (bkz. EnemyData breath_*) ---
+# BREATH: dur, dön, animasyon (ağız açık karede bekler); koniler uyarı + dönen nefes -> animasyon biter -> toparlanma
+var _has_breath: bool = false
+var breath_damage: int = 0
+var _breath_timer: float = 0.0
+var _breath_phase: int = 0            # 0 = uyarı + nefes, 1 = animasyonun kalanı, 2 = toparlanma
+
 # --- Sikke saçma (bkz. EnemyData spill_*) ---
 var _spill_next: int = 0  # can bu değerin altına inince sikke saçılır
 
@@ -130,6 +137,7 @@ func setup(enemy_data: EnemyData, wave: int) -> void:
 	throw_damage = int(data.throw_damage * (1.0 + 0.1 * w))
 	cast_damage = int(data.cast_damage * (1.0 + 0.1 * w))
 	emerge_damage = int(data.emerge_damage * (1.0 + 0.1 * w))
+	breath_damage = int(data.breath_damage * (1.0 + 0.1 * w))
 	move_speed = data.move_speed * minf(1.0 + 0.01 * w, 1.5)
 	coin_value = data.coin_value
 	scale = Vector2.ONE * data.body_scale
@@ -195,7 +203,13 @@ func _ready() -> void:
 		mat.shader = shader
 		sprite.material = mat
 
-	if _has_attack or _has_throw or _has_summon or _has_cast or _has_dive:
+	# Nefes: veri + 8 yönlü breath animasyonu varsa açılır
+	_has_breath = data != null and data.breath_count > 0 and _mode == SpriteMode.EIGHT_DIR \
+		and frames.has_animation("breath_east")
+	if _has_breath:
+		_breath_timer = data.breath_interval * 0.5  # boss belirince ilk nefes biraz erken gelsin
+
+	if _has_attack or _has_throw or _has_summon or _has_cast or _has_dive or _has_breath:
 		sprite.frame_changed.connect(_on_sprite_frame_changed)
 		sprite.animation_finished.connect(_on_sprite_animation_finished)
 
@@ -234,6 +248,9 @@ func _physics_process(delta: float) -> void:
 			return
 		State.EMERGE:
 			_process_emerge(delta)
+			return
+		State.BREATH:
+			_process_breath(delta)
 			return
 
 	var separation := _separation() * maxf(move_speed, SEPARATION_MIN_SPEED) * SEPARATION_STRENGTH
@@ -288,6 +305,12 @@ func _physics_process(delta: float) -> void:
 		_dive_timer -= delta
 		if _can_start_dive(to_target.length()):
 			_start_dive(dir)
+			return
+
+	if _has_breath:
+		_breath_timer -= delta
+		if _can_start_breath(to_target.length()):
+			_start_breath(dir)
 			return
 
 	match _mode:
@@ -567,12 +590,58 @@ func _end_dive() -> void:
 	_dive_timer = data.dive_interval
 	sprite.play("run_" + DIR8_NAMES[_dir8_idx])
 
+# --- Nefes: dur, dön, ağızlar açılır; etrafında dönen koniler; bitince toparlanma ---
+func _can_start_breath(distance: float) -> bool:
+	if _breath_timer > 0.0 or _dying:
+		return false
+	if "is_dead" in target and target.is_dead:
+		return false
+	return distance <= data.breath_max_range
+
+func _start_breath(dir: Vector2) -> void:
+	_state = State.BREATH
+	_breath_phase = 0
+	_state_timer = data.breath_windup + data.breath_duration
+	_face_exact(dir)
+	sprite.play("breath_" + DIR8_NAMES[_dir8_idx])
+	sprite.frame = 0
+	var cones := BreathCones.new()
+	cones.setup(breath_damage, data.breath_count, data.breath_range, data.breath_width_degrees, dir.angle(),
+		data.breath_spin_degrees, data.breath_windup, data.breath_duration, data.breath_colors)
+	_floor_fx_parent().add_child(cones)
+	cones.global_position = global_position
+
+func _process_breath(delta: float) -> void:
+	velocity = _separation() * SEPARATION_MIN_SPEED * SEPARATION_STRENGTH
+	move_and_slide()
+	match _breath_phase:
+		0:
+			var before := _state_timer
+			_state_timer -= delta
+			# Uyarı biterken (nefes başlarken) ses
+			if before > data.breath_duration and _state_timer <= data.breath_duration:
+				Audio.play_sfx_focus(data.breath_sound)  # yaratık vuruş sesleri susar, nefes duyulsun
+			if _state_timer <= 0.0:
+				_breath_phase = 1
+				sprite.play()  # ağızlar kapanır, animasyonun kalanı (bitince _on_sprite_animation_finished)
+		2:
+			_state_timer -= delta
+			if _state_timer <= 0.0:
+				_state = State.CHASE
+				_breath_timer = data.breath_interval
+				sprite.play("run_" + DIR8_NAMES[_dir8_idx])
+
 func _floor_fx_parent() -> Node:
 	var fx_parent: Node = get_tree().current_scene.get_node_or_null(FLOOR_FX_PATH)
 	return fx_parent if fx_parent else get_parent()
 
 # Vuruş karesi: oyuncu hâlâ menzildeyse hasar (kaçtıysa ıska)
 func _on_sprite_frame_changed() -> void:
+	if _state == State.BREATH:
+		# Ağızlar açık karede nefes bitene kadar bekler
+		if _breath_phase == 0 and sprite.frame >= data.breath_hold_frame:
+			sprite.pause()
+		return
 	if _state == State.EMERGE:
 		if not _emerge_released and sprite.frame >= data.emerge_release_frame:
 			_release_emerge()
@@ -599,6 +668,10 @@ func _on_sprite_frame_changed() -> void:
 		target.try_hit(attack_damage)
 
 func _on_sprite_animation_finished() -> void:
+	if _state == State.BREATH:
+		_breath_phase = 2
+		_state_timer = data.breath_recover
+		return
 	if _state == State.EMERGE:
 		if not _emerge_released:
 			_release_emerge()

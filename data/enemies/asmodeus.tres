@@ -1,0 +1,33 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" uid="uid://cqlw7x1k6q18i" path="res://scripts/enemy_data.gd" id="1_asmo"]
+[ext_resource type="SpriteFrames" path="res://data/enemies/asmodeus_frames.tres" id="2_asmo"]
+
+[resource]
+script = ExtResource("1_asmo")
+id = "asmodeus"
+display_name = "Asmodeus"
+sprite_frames = ExtResource("2_asmo")
+body_scale = 1.0
+hitbox_scale = 1.8
+max_health = 820
+move_speed = 32.0
+contact_damage = 5
+breath_count = 3
+breath_interval = 5.0
+breath_max_range = 170.0
+breath_range = 110.0
+breath_width_degrees = 50.0
+breath_windup = 0.8
+breath_duration = 2.0
+breath_spin_degrees = 60.0
+breath_hold_frame = 4
+breath_damage = 6
+breath_recover = 0.8
+coin_value = 400
+is_boss = true
+boss_wave = 70
+breath_sound = "asmodeus_breath"
+hit_sound = "asmodeus_hit"
+death_sound = "asmodeus_death"
+spawn_sound = "asmodeus_spawn"
