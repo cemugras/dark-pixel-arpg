@@ -48,7 +48,7 @@ var _dying: bool = false
 # --- Saldırı durumu (bkz. EnemyData attack_*) ---
 const ATTACK_HIT_RANGE_MULT: float = 1.4  # attack_hit_range boşsa: başlatma menzilinin bu katı (kılpayı ıska olmasın)
 const ATTACK_LUNGE_FRAMES: int = 2        # vuruş karesinden önceki kaç karede ileri atılır
-enum State { CHASE, ATTACK, WINDUP, CHARGE, TIRED, THROW, SUMMON, CAST }
+enum State { CHASE, ATTACK, WINDUP, CHARGE, TIRED, THROW, SUMMON, CAST, DIVE, BURROW, SURFACING, EMERGE }
 var _state: State = State.CHASE
 
 # --- Hamle durumu (bkz. EnemyData charge_*) ---
@@ -95,6 +95,24 @@ var cast_damage: int = 0
 var _cast_timer: float = 0.0
 var _cast_released: bool = false
 
+# --- Dalış durumu (bkz. EnemyData dive_* / burrow_* / emerge_*) ---
+# DIVE: yürürken zemine batar (shader zemin çizgisinin altını gizler) -> BURROW: görünmez, vurulamaz, dalgacık oyuncuyu
+# kovalar -> SURFACING: dalgacık durur, uyarı -> EMERGE: yerden yükselirken emerge animasyonu oynar, bırakma karesinde
+# patlama; bitince emerge_recover sn yerinde durur -> CHASE
+const DIVE_SINK_TIME: float = 0.45     # zemine batma süresi (sn)
+const EMERGE_RISE_TIME: float = 0.25   # yerden yükselme süresi (sn; patlama karesinden önce bitsin)
+const DIVE_GROUND_RATIO: float = 0.86  # karede zemin çizgisi (kare yüksekliğine oran, gövdenin alt kenarı)
+const DIVE_DEPTH: float = 110.0        # tamamen gömülünce sprite bu kadar aşağı kayar (sprite pikseli)
+const SINK_SHADER: String = "shader_type canvas_item;\nuniform float cut = 2.0;\nvoid fragment() {\n\tif (UV.y > cut) { COLOR.a = 0.0; }\n}\n"
+var _has_dive: bool = false
+var emerge_damage: int = 0
+var _dive_timer: float = 0.0
+var _emerge_released: bool = false
+var _recovering: bool = false
+var _sink: float = 0.0                 # 0 = yerde tam boy, 1 = tamamen gömülü
+var _burrow_fx: LavaBurrow = null
+var _collision_layer_saved: int = 0
+
 # --- Sikke saçma (bkz. EnemyData spill_*) ---
 var _spill_next: int = 0  # can bu değerin altına inince sikke saçılır
 
@@ -111,6 +129,7 @@ func setup(enemy_data: EnemyData, wave: int) -> void:
 	charge_damage = int(data.charge_damage * (1.0 + 0.1 * w))
 	throw_damage = int(data.throw_damage * (1.0 + 0.1 * w))
 	cast_damage = int(data.cast_damage * (1.0 + 0.1 * w))
+	emerge_damage = int(data.emerge_damage * (1.0 + 0.1 * w))
 	move_speed = data.move_speed * minf(1.0 + 0.01 * w, 1.5)
 	coin_value = data.coin_value
 	scale = Vector2.ONE * data.body_scale
@@ -165,7 +184,18 @@ func _ready() -> void:
 	if _has_cast:
 		_cast_timer = data.cast_interval * 0.5  # boss belirince ilk büyü biraz erken gelsin
 
-	if _has_attack or _has_throw or _has_summon or _has_cast:
+	# Dalış: veri + 8 yönlü emerge animasyonu varsa açılır
+	_has_dive = data != null and data.dive_interval > 0.0 and _mode == SpriteMode.EIGHT_DIR \
+		and frames.has_animation("emerge_east")
+	if _has_dive:
+		_dive_timer = data.dive_interval * 0.5  # boss belirince ilk dalış biraz erken gelsin
+		var shader := Shader.new()
+		shader.code = SINK_SHADER
+		var mat := ShaderMaterial.new()
+		mat.shader = shader
+		sprite.material = mat
+
+	if _has_attack or _has_throw or _has_summon or _has_cast or _has_dive:
 		sprite.frame_changed.connect(_on_sprite_frame_changed)
 		sprite.animation_finished.connect(_on_sprite_animation_finished)
 
@@ -192,6 +222,18 @@ func _physics_process(delta: float) -> void:
 			return
 		State.TIRED:
 			_process_tired(delta)
+			return
+		State.DIVE:
+			_process_dive(delta)
+			return
+		State.BURROW:
+			_process_burrow(delta)
+			return
+		State.SURFACING:
+			_process_surfacing(delta)
+			return
+		State.EMERGE:
+			_process_emerge(delta)
 			return
 
 	var separation := _separation() * maxf(move_speed, SEPARATION_MIN_SPEED) * SEPARATION_STRENGTH
@@ -240,6 +282,12 @@ func _physics_process(delta: float) -> void:
 		_cast_timer -= delta
 		if _can_start_cast(to_target.length()):
 			_start_cast(dir)
+			return
+
+	if _has_dive:
+		_dive_timer -= delta
+		if _can_start_dive(to_target.length()):
+			_start_dive(dir)
 			return
 
 	match _mode:
@@ -391,8 +439,144 @@ func _release_cast() -> void:
 		fx_parent.add_child(rune)
 	Audio.play_sfx_focus(data.cast_sound)  # yaratık vuruş sesleri susar, büyü duyulsun
 
+# --- Dalış: zemine batma -> yer altında kovalama -> uyarı -> yükselip patlama -> toparlanma ---
+func _can_start_dive(distance: float) -> bool:
+	if _dive_timer > 0.0 or _dying:
+		return false
+	if "is_dead" in target and target.is_dead:
+		return false
+	return distance <= data.dive_max_range
+
+# Yerinde kıvrılmaya devam ederken zemine batar; kaynayan lav hemen altında belirir
+func _start_dive(dir: Vector2) -> void:
+	_state = State.DIVE
+	_state_timer = DIVE_SINK_TIME
+	_face_exact(dir)
+	sprite.play("run_" + DIR8_NAMES[_dir8_idx])
+	_burrow_fx = LavaBurrow.new()
+	_burrow_fx.setup(data.emerge_radius)
+	_floor_fx_parent().add_child(_burrow_fx)
+	_burrow_fx.global_position = _ground_point()
+	Audio.play_sfx(data.dive_sound)
+
+func _process_dive(delta: float) -> void:
+	velocity = Vector2.ZERO
+	_state_timer -= delta
+	_set_sink(1.0 - _state_timer / DIVE_SINK_TIME)
+	if _state_timer <= 0.0:
+		_start_burrow()
+
+# Tamamen gömüldü: görünmez ve vurulamaz olur
+func _start_burrow() -> void:
+	_state = State.BURROW
+	_state_timer = data.burrow_time
+	sprite.visible = false
+	# Katman 0: mermi, kılıç ve oyuncunun temas alanı onu görmez (maske kalır, duvarlardan geçmez).
+	# "enemy" grubundan çıkınca silahlar nişan almaz, ayrışma ızgarasına da girmez.
+	_collision_layer_saved = collision_layer
+	collision_layer = 0
+	remove_from_group("enemy")
+
+# Dalgacık (gövdenin zemin noktası) oyuncuya doğru gider
+func _process_burrow(delta: float) -> void:
+	var dir := (target.global_position - _ground_point()).normalized()
+	velocity = dir * data.burrow_speed
+	move_and_slide()
+	if is_instance_valid(_burrow_fx):
+		_burrow_fx.global_position = _ground_point()
+	_state_timer -= delta
+	if _state_timer <= 0.0:
+		_start_surfacing()
+
+# Sprite'ın zemine değdiği nokta (dünya konumu): dalgacık ve patlama burada
+func _ground_point() -> Vector2:
+	var tex := sprite.sprite_frames.get_frame_texture(sprite.animation, sprite.frame)
+	var h := float(tex.get_height()) if tex else 132.0
+	return global_position + Vector2(0.0, (DIVE_GROUND_RATIO - 0.5) * h * scale.y)
+
+# 0 = tam boy, 1 = tamamen gömülü: sprite aşağı kayar, zemin çizgisinin altı shader ile gizlenir
+func _set_sink(value: float) -> void:
+	_sink = clampf(value, 0.0, 1.0)
+	var tex := sprite.sprite_frames.get_frame_texture(sprite.animation, sprite.frame)
+	var h := float(tex.get_height()) if tex else 132.0
+	var shift := _sink * DIVE_DEPTH
+	sprite.offset.y = shift
+	var mat := sprite.material as ShaderMaterial
+	if mat:
+		mat.set_shader_parameter("cut", 2.0 if _sink <= 0.0 else (h * DIVE_GROUND_RATIO - shift) / h)
+
+# Dalgacık durur ve uyarır; uyarı süresi + emerge'in bırakma karesine kadarki süre boyunca daire dolar
+func _start_surfacing() -> void:
+	_state = State.SURFACING
+	_state_timer = data.emerge_warning
+	if is_instance_valid(_burrow_fx):
+		var fps := sprite.sprite_frames.get_animation_speed("emerge_east")
+		_burrow_fx.start_warning(data.emerge_warning + data.emerge_release_frame / maxf(fps, 1.0))
+
+func _process_surfacing(delta: float) -> void:
+	velocity = Vector2.ZERO
+	_state_timer -= delta
+	if _state_timer <= 0.0:
+		_start_emerge()
+
+func _start_emerge() -> void:
+	_state = State.EMERGE
+	_state_timer = 0.0
+	_emerge_released = false
+	_recovering = false
+	collision_layer = _collision_layer_saved
+	add_to_group("enemy")
+	_face_exact(target.global_position - _ground_point())
+	sprite.play("emerge_" + DIR8_NAMES[_dir8_idx])
+	sprite.frame = 0
+	_set_sink(1.0)
+	sprite.visible = true
+
+func _process_emerge(delta: float) -> void:
+	velocity = Vector2.ZERO
+	if _recovering:
+		# Son karede (ağız açık) emerge_recover sn durur: oyuncunun vurma penceresi
+		velocity = _separation() * SEPARATION_MIN_SPEED * SEPARATION_STRENGTH
+		move_and_slide()
+		_state_timer -= delta
+		if _state_timer <= 0.0:
+			_end_dive()
+		return
+	_state_timer += delta
+	_set_sink(1.0 - _state_timer / EMERGE_RISE_TIME)
+
+func _release_emerge() -> void:
+	_emerge_released = true
+	var center := _ground_point()
+	if is_instance_valid(_burrow_fx):
+		center = _burrow_fx.global_position
+		_burrow_fx.blast()
+	_burrow_fx = null
+	_set_sink(0.0)
+	Audio.play_sfx_focus(data.emerge_sound)  # yaratık vuruş sesleri susar, çıkış duyulsun
+	if not is_instance_valid(target) or _dying or not target.has_method("try_hit"):
+		return
+	if "is_dead" in target and target.is_dead:
+		return
+	if center.distance_to(target.global_position) <= data.emerge_radius:
+		target.try_hit(emerge_damage)
+
+func _end_dive() -> void:
+	_state = State.CHASE
+	_recovering = false
+	_dive_timer = data.dive_interval
+	sprite.play("run_" + DIR8_NAMES[_dir8_idx])
+
+func _floor_fx_parent() -> Node:
+	var fx_parent: Node = get_tree().current_scene.get_node_or_null(FLOOR_FX_PATH)
+	return fx_parent if fx_parent else get_parent()
+
 # Vuruş karesi: oyuncu hâlâ menzildeyse hasar (kaçtıysa ıska)
 func _on_sprite_frame_changed() -> void:
+	if _state == State.EMERGE:
+		if not _emerge_released and sprite.frame >= data.emerge_release_frame:
+			_release_emerge()
+		return
 	if _state == State.CAST:
 		if not _cast_released and sprite.frame >= data.cast_release_frame:
 			_release_cast()
@@ -415,6 +599,12 @@ func _on_sprite_frame_changed() -> void:
 		target.try_hit(attack_damage)
 
 func _on_sprite_animation_finished() -> void:
+	if _state == State.EMERGE:
+		if not _emerge_released:
+			_release_emerge()
+		_recovering = true
+		_state_timer = data.emerge_recover
+		return
 	if _state == State.CAST:
 		if not _cast_released:
 			_release_cast()

@@ -89,6 +89,26 @@ extends Resource
 @export var cast_sound: String = ""              # Audio sfx adı: rünler çizilirken (boşsa ses yok)
 @export var cast_blast_sound: String = ""        # Audio sfx adı: rün patlarken (boşsa ses yok)
 
+# --- Dalış: yerin altından gelip patlayarak çıkma (ör. Leviathan) ---
+# dive_interval 0 ise ya da sprite'ta emerge_<yön> animasyonu yoksa dalış yok. Akış: kovalarken dive_interval dolunca
+# ve oyuncu dive_max_range içindeyse durur, kıvrılarak zemine batar (kodla: sprite aşağı kayar, zemin çizgisinin altı
+# gizlenir). Yerin altında görünmez ve vurulamaz (mermi, kılıç, temas, nişan yok); yerde bir lav dalgacığı burrow_time
+# sn boyunca burrow_speed ile oyuncuyu kovalar. Sonra dalgacık durur, emerge_warning sn uyarı verir (kaçma payı), boss
+# yerden yükselirken emerge animasyonu (kükreyip dikilme) oynar:
+# emerge_release_frame karesinde emerge_radius içindeki oyuncu emerge_damage alır. Ardından emerge_recover sn
+# yerinde durur (vurma penceresi).
+@export var dive_interval: float = 0.0           # iki dalış arası bekleme (sn, toparlanma bitince sayılır; 0 = dalış yok)
+@export var dive_max_range: float = 320.0        # oyuncu bundan uzaksa dalmaz, yürür
+@export var burrow_time: float = 2.0             # yerin altında oyuncuyu kovalama süresi (sn)
+@export var burrow_speed: float = 80.0           # yer altındaki hız (px/sn; oyuncunun 90'ından biraz yavaş)
+@export var emerge_warning: float = 0.6          # dalgacık durduktan sonra fırlamadan önceki uyarı (sn)
+@export var emerge_release_frame: int = 3        # patlamanın olduğu emerge karesi (0'dan sayılır)
+@export var emerge_radius: float = 50.0          # patlama yarıçapı (px, hasar alanı)
+@export var emerge_damage: int = 0               # patlama hasarı (dalgayla temas hasarı gibi artar)
+@export var emerge_recover: float = 1.0          # çıktıktan sonra yerinde durma süresi (sn)
+@export var dive_sound: String = ""              # Audio sfx adı: lava dalarken (boşsa ses yok)
+@export var emerge_sound: String = ""            # Audio sfx adı: fırlarken (boşsa ses yok)
+
 # --- Vurdukça sikke saçma (Mammon) ---
 # spill_health_step 0 ise yok. Canın her spill_health_step kadarı (ör. 0.1 = %10) gidince yere spill_value
 # değerinde sikke saçılır (oyuncu yaklaşınca toplanır, kalanlar dalga sonunda otomatik toplanır).

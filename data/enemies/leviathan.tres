@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" uid="uid://cqlw7x1k6q18i" path="res://scripts/enemy_data.gd" id="1_levi"]
+[ext_resource type="SpriteFrames" path="res://data/enemies/leviathan_frames.tres" id="2_levi"]
+
+[resource]
+script = ExtResource("1_levi")
+id = "leviathan"
+display_name = "Leviathan"
+sprite_frames = ExtResource("2_levi")
+body_scale = 1.0
+hitbox_scale = 1.8
+max_health = 760
+move_speed = 30.0
+contact_damage = 5
+dive_interval = 5.0
+dive_max_range = 320.0
+burrow_time = 2.0
+burrow_speed = 80.0
+emerge_warning = 0.6
+emerge_release_frame = 3
+emerge_radius = 50.0
+emerge_damage = 6
+emerge_recover = 1.0
+coin_value = 350
+is_boss = true
+boss_wave = 60
+dive_sound = "leviathan_dive"
+emerge_sound = "leviathan_emerge"
+hit_sound = "leviathan_hit"
+death_sound = "leviathan_death"
+spawn_sound = "leviathan_spawn"

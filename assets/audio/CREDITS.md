@@ -37,6 +37,11 @@ Kurallar:
 | lilith_death.wav | rpg - wicked witch battle sounds.wav | mvVoiceActing | https://freesound.org/s/347346/ | CC0 | Cut from raw/lilith_spawn_hit_death_raw.wav, 16 bit mono, normalized |
 | lilith_cast.wav | Magic Spell - Whir, and Boom | CVLTIV8R | https://freesound.org/s/847621/ | CC0 | Cut from raw/lilith_cast_blast_raw.wav, 16 bit mono, normalized |
 | lilith_rune_blast.wav | Magic Spell - Whir, and Boom | CVLTIV8R | https://freesound.org/s/847621/ | CC0 | Cut from raw/lilith_cast_blast_raw.wav, 16 bit mono, normalized |
+| leviathan_spawn.wav | Sea monster scream | Contant_aghony | https://freesound.org/s/478180/ | CC0 | Cut from raw/leviathan_spawn_raw.wav (16 bit stereo), 16 bit mono, normalized |
+| leviathan_hit.wav | Monster 6 | jesssican | https://freesound.org/s/855089/ | CC0 | Cut from raw/leviathan_hit_death_dive_emerge_raw.m4a, 16 bit mono, normalized |
+| leviathan_death.wav | Monster 6 | jesssican | https://freesound.org/s/855089/ | CC0 | Cut from raw/leviathan_hit_death_dive_emerge_raw.m4a, 16 bit mono, normalized |
+| leviathan_dive.wav | Monster 6 | jesssican | https://freesound.org/s/855089/ | CC0 | Cut from raw/leviathan_hit_death_dive_emerge_raw.m4a, 16 bit mono, normalized |
+| leviathan_emerge.wav | Monster 6 | jesssican | https://freesound.org/s/855089/ | CC0 | Cut from raw/leviathan_hit_death_dive_emerge_raw.m4a, 16 bit mono, normalized |
 | ui_click.wav | Click.wav | budek | https://freesound.org/s/513481/ | CC0 | - |
 
 ## Music (music/)
