@@ -7,6 +7,7 @@ extends Resource
 @export var is_melee: bool = false            # true = dönen kılıç, false = menzilli silah (silah yuvası kullanır)
 @export var cost: int = 30                    # mağaza fiyatı
 @export var sort_order: int = 0               # mağazadaki sıra
+@export var unlock_wave: int = 0              # mağazada bu dalga bitince alınabilir (0 = baştan); öncesinde buton pasif, "(after wave X)" yazar
 @export var icon: Texture2D                   # mağaza / seçim ekranı görüntüsü (sağa bakan); sprite boşsa oyunda da bu kullanılır
 @export var shoot_sound: String = ""            # Audio sfx adı (assets/audio/sfx/ içindeki dosya adı, uzantısız). Boşsa ses yok
 

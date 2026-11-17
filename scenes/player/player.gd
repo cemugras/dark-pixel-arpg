@@ -33,6 +33,7 @@ var facing_idx: int = 2  # gövdenin baktığı yön (silahlıyken nişan yönü
 var _move_facing_idx: int = 2  # klavyeyle son hareket yönü
 var invulnerable_timer: float = 0.0
 var is_dead: bool = false
+var debug_god: bool = false  # test: F1 (DebugTools) ile açılır, hiç hasar almaz
 var _regen_accumulator: float = 0.0
 
 func _ready() -> void:
@@ -112,7 +113,7 @@ func try_hit(amount: int) -> bool:
 	return true
 
 func take_damage(amount: int) -> void:
-	if is_dead:
+	if is_dead or debug_god:
 		return
 	var final_damage := GameState.stats.reduce_damage(amount)
 	health = maxi(health - final_damage, 0)

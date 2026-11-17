@@ -27,6 +27,9 @@ var _player: Node2D
 var _boss: Node = null
 var _wave_audio_pending: bool = false  # dalga müziği/boss giriş sesi, oyun duraklatılmamışken ilk karede başlar
 
+const SPAWN_RATE_PER_WAVE: float = 0.04       # her dalgada saniyedeki doğma sayısına eklenir (_spawn_interval)
+const BOSS_SPAWN_INTERVAL_MULT: float = 3.0  # boss dalgasında normal yaratıklar bu kat seyrek doğar (oyuncu boss'a odaklansın)
+const SWARM_SPREAD: float = 14.0              # sürü halinde doğanlar ilk yaratığın en fazla bu kadar uzağına konur
 const WAVE_END_MUSIC_FADE: float = 0.8  # dalga bitince müzik bu sürede kısılır; shop müziği mağaza açılınca (tüccar indikten sonra) başlar
 
 func _ready() -> void:
@@ -92,7 +95,7 @@ func _physics_process(delta: float) -> void:
 	if _spawn_timer <= 0.0 and _can_spawn():
 		_spawn_enemy()
 		var interval := _spawn_interval(wave)
-		_spawn_timer = interval * (2.0 if is_boss_wave else 1.0)  # boss dalgasında daha seyrek
+		_spawn_timer = interval * (BOSS_SPAWN_INTERVAL_MULT if is_boss_wave else 1.0)  # boss dalgasında daha seyrek
 
 	if is_boss_wave:
 		if not _is_boss_alive():
@@ -115,10 +118,14 @@ func _spawn_enemy() -> void:
 	if mode == Mode.CLEAR_ALL and not is_boss_wave:
 		enemies_left_to_spawn -= 1
 
-	var enemy := enemy_scene.instantiate()
-	enemy.setup(data, wave)
-	enemy.position = _random_spawn_position()
-	add_child(enemy)
+	# Sürü (EnemyData.swarm_size, ör. Hell Fly 3): hepsi aynı noktanın etrafında küçük bir kümede doğar
+	var center := _random_spawn_position()
+	for i in maxi(data.swarm_size, 1):
+		var enemy := enemy_scene.instantiate()
+		enemy.setup(data, wave)
+		var offset := Vector2.ZERO if i == 0 else Vector2.from_angle(randf() * TAU) * randf_range(6.0, SWARM_SPREAD)
+		enemy.position = (center + offset).clamp(spawn_area.position, spawn_area.end)  # duvarın içine düşmesin
+		add_child(enemy)
 
 func _spawn_boss() -> void:
 	var data := _pick_boss_data()
@@ -234,4 +241,7 @@ func _enemy_count(w: int) -> int:
 
 # Brotato tarzı: kalabalık hızlı artar (can artışı yavaş, bkz. enemy.gd HEALTH_PER_WAVE)
 func _spawn_interval(w: int) -> float:
-	return maxf(0.25, 1.0 - 0.04 * (w - 1))   # 1. dalga 1 sn, 9. dalga 0.68 sn, 20. dalgadan sonra 0.25 sn
+	# Doğma HIZI doğrusal artar: saniyede 1 + 0.04 x (dalga-1) yaratık (1. dalga 1/sn, 26. dalga 2/sn, 51. dalga 3/sn,
+	# 76. dalgadan sonra en fazla 4/sn). Eskiden ARALIK doğrusal azalıyordu (1.0 - 0.02 x dalga): hız 1/aralık olduğu için
+	# tavana yaklaşırken birden fırlıyor, 33-38. dalgalarda ani bir duvar oluşturuyordu (Adım 43 testi, bkz. tools/balance_sim.ps1)
+	return maxf(0.25, 1.0 / (1.0 + SPAWN_RATE_PER_WAVE * (w - 1)))

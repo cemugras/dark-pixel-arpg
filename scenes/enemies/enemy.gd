@@ -10,7 +10,8 @@ var _base_color: Color = Color.WHITE
 const DIRECTION_BIAS: float = 1.2  # 4 yön: eksen değiştirme eşiği (titreme önleme)
 const SECTOR_MARGIN: float = 0.12  # 8 yön: dilim değiştirme payı (radyan, titreme önleme)
 const BOSS_DEATH_MUSIC_FADE: float = 0.1  # boss ölünce müzik bu sürede kesilir (ani kesilme tıkırtısı olmasın)
-const HEALTH_PER_WAVE: float = 0.12  # her dalgada can tabanın %12si kadar artar (Brotato tarzı: kalabalık hızlı, can yavaş artar)
+const DAMAGE_PER_WAVE: float = 0.07  # her dalgada tüm hasarlar tabanın %7si kadar artar (eskiden %10; bkz. tools/balance_sim.ps1)
+const HEALTH_PER_WAVE: float = 0.13  # (Adım 43: 0.12 -> 0.13) her dalgada can tabanın %13'ü kadar artar (Brotato tarzı: kalabalık hızlı, can yavaş artar)
 
 # --- Ayrışma (yaratıklar iç içe girmesin) ---
 # Fiziksel çarpışma yerine yumuşak itme: birbirine çok yaklaşan yaratıklar hafifçe ayrılır, kalabalık akıcı kalır.
@@ -90,6 +91,7 @@ var _wave: int = 1
 # --- Büyü durumu (bkz. EnemyData cast_*) ---
 const FLOOR_FX_PATH: String = "FloorFx"   # Main altındaki zemin efektleri düğümü (main.gd kurar)
 const SPECIAL_GAP: float = 1.2            # çağırma ile büyü arka arkaya gelmesin: biri bitince diğeri en az bu kadar bekler
+const KEEP_DISTANCE_BAND: float = 25.0     # keep_distance'ın bu kadar altı/üstü arasında yaratık yerinde durur (ileri geri titremesin)
 var _has_cast: bool = false
 var cast_damage: int = 0
 var _cast_timer: float = 0.0
@@ -131,13 +133,14 @@ func setup(enemy_data: EnemyData, wave: int) -> void:
 	_wave = wave
 	var w := wave - 1
 	max_health = roundi(data.max_health * (1.0 + HEALTH_PER_WAVE * w))
-	contact_damage = int(data.contact_damage * (1.0 + 0.1 * w))
-	attack_damage = int(data.attack_damage * (1.0 + 0.1 * w))
-	charge_damage = int(data.charge_damage * (1.0 + 0.1 * w))
-	throw_damage = int(data.throw_damage * (1.0 + 0.1 * w))
-	cast_damage = int(data.cast_damage * (1.0 + 0.1 * w))
-	emerge_damage = int(data.emerge_damage * (1.0 + 0.1 * w))
-	breath_damage = int(data.breath_damage * (1.0 + 0.1 * w))
+	var dmg_mult := 1.0 + DAMAGE_PER_WAVE * w
+	contact_damage = int(data.contact_damage * dmg_mult)
+	attack_damage = int(data.attack_damage * dmg_mult)
+	charge_damage = int(data.charge_damage * dmg_mult)
+	throw_damage = int(data.throw_damage * dmg_mult)
+	cast_damage = int(data.cast_damage * dmg_mult)
+	emerge_damage = int(data.emerge_damage * dmg_mult)
+	breath_damage = int(data.breath_damage * dmg_mult)
 	move_speed = data.move_speed * minf(1.0 + 0.01 * w, 1.5)
 	coin_value = data.coin_value
 	scale = Vector2.ONE * data.body_scale
@@ -190,7 +193,8 @@ func _ready() -> void:
 	_has_cast = data != null and data.cast_count > 0 and _mode == SpriteMode.EIGHT_DIR \
 		and frames.has_animation("cast_east")
 	if _has_cast:
-		_cast_timer = data.cast_interval * 0.5  # boss belirince ilk büyü biraz erken gelsin
+		# boss belirince ilk büyü biraz erken gelsin; normal yaratıkta (Lilim) rastgele, aynı anda doğanlar birlikte atmasın
+		_cast_timer = data.cast_interval * (0.5 if data.is_boss else randf_range(0.4, 1.0))
 
 	# Dalış: veri + 8 yönlü emerge animasyonu varsa açılır
 	_has_dive = data != null and data.dive_interval > 0.0 and _mode == SpriteMode.EIGHT_DIR \
@@ -270,7 +274,7 @@ func _physics_process(delta: float) -> void:
 	var to_target := target.global_position - global_position
 	var dir := to_target.normalized()
 	# Yön (bakış) oyuncuya göre kalır; itme sadece hareketi etkiler, böylece sprite titremez
-	velocity = dir * move_speed + separation
+	velocity = _chase_dir(dir, to_target.length()) * move_speed + separation
 	move_and_slide()
 
 	if _has_charge:
@@ -323,6 +327,17 @@ func _physics_process(delta: float) -> void:
 				# Tek yönlü sprite: sadece yatay çevir
 				var faces_right := data.sprite_faces_right if data else true
 				sprite.flip_h = (dir.x < 0.0) == faces_right
+
+# Kovalama yönü. keep_distance > 0 olan yaratık (Lilim) mesafesini korur: uzaksa yaklaşır, çok yakınsa geri çekilir,
+# arada (KEEP_DISTANCE_BAND) durur. Bakış her durumda oyuncuya döner.
+func _chase_dir(dir: Vector2, distance: float) -> Vector2:
+	if data == null or data.keep_distance <= 0.0:
+		return dir
+	if distance > data.keep_distance + KEEP_DISTANCE_BAND:
+		return dir
+	if distance < data.keep_distance - KEEP_DISTANCE_BAND:
+		return -dir
+	return Vector2.ZERO
 
 func _can_start_attack(distance: float) -> bool:
 	if not _has_attack or _attack_cooldown_left > 0.0 or _dying:
@@ -457,10 +472,13 @@ func _release_cast() -> void:
 			var angle := start + TAU * (i - 1) / extra + randf_range(-0.3, 0.3)
 			pos += Vector2.RIGHT.rotated(angle) * randf_range(data.cast_radius * 1.4, data.cast_spread)
 		var rune := RuneBlast.new()
-		rune.setup(cast_damage, data.cast_radius, data.cast_delay, data.cast_blast_sound)
+		rune.setup(cast_damage, data.cast_radius, data.cast_delay, data.cast_blast_sound, data.cast_focus)
 		rune.global_position = pos
 		fx_parent.add_child(rune)
-	Audio.play_sfx_focus(data.cast_sound)  # yaratık vuruş sesleri susar, büyü duyulsun
+	if data.cast_focus:
+		Audio.play_sfx_focus(data.cast_sound)  # yaratık vuruş sesleri susar, büyü duyulsun
+	else:
+		Audio.play_sfx(data.cast_sound)
 
 # --- Dalış: zemine batma -> yer altında kovalama -> uyarı -> yükselip patlama -> toparlanma ---
 func _can_start_dive(distance: float) -> bool:

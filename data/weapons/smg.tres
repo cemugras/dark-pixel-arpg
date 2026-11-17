@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapon_data.gd" id="1_wdata"]
+[ext_resource type="Texture2D" path="res://assets/sprites/gun/smg_icon.png" id="2_icon"]
+[ext_resource type="Texture2D" path="res://assets/sprites/gun/smg_sprite.png" id="3_sprite"]
+[ext_resource type="Texture2D" path="res://assets/sprites/gun/muzzle_flash.png" id="4_flash"]
+
+[resource]
+script = ExtResource("1_wdata")
+id = "smg"
+display_name = "SMG"
+description = "4 dmg, 4.5 shots/s, auto, short range"
+cost = 45
+sort_order = 3
+unlock_wave = 10
+icon = ExtResource("2_icon")
+sprite = ExtResource("3_sprite")
+grip_point = Vector2(11, 10)
+muzzle_point = Vector2(29, 4)
+muzzle_flash = ExtResource("4_flash")
+muzzle_flash_frames = 2
+recoil_distance = 1.0
+recoil_degrees = 5.0
+sprite_scale = 0.5
+damage = 4
+fire_rate = 4.5
+attack_range = 140.0
+bullet_speed = 360.0
+spread_degrees = 10.0
+shoot_sound = "smg_shoot"

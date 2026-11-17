@@ -30,6 +30,12 @@ func _ready() -> void:
 	if player:
 		move_child(merchant, player.get_index() + 1)
 
+	# Test kısayolları (F1-F5): sadece editörden / debug derlemede, release'de yok
+	if OS.is_debug_build():
+		var debug_tools: CanvasLayer = load("res://scenes/levels/debug_tools.gd").new()
+		debug_tools.name = "DebugTools"
+		add_child(debug_tools)
+
 # Vuruldukça saçılan sikkeler (Mammon): 2'şer değerlik parçalar, yaratığın etrafına küçük bir sıçramayla savrulur
 const SPILL_PIECE_VALUE: int = 2
 const SPILL_MIN_DIST: float = 22.0

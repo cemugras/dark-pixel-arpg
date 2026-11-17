@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" uid="uid://cqlw7x1k6q18i" path="res://scripts/enemy_data.gd" id="1_lilim"]
+[ext_resource type="SpriteFrames" path="res://data/enemies/lilim_frames.tres" id="2_lilim"]
+
+[resource]
+script = ExtResource("1_lilim")
+id = "lilim"
+display_name = "Lilim"
+sprite_frames = ExtResource("2_lilim")
+body_scale = 0.5
+max_health = 25
+move_speed = 45.0
+keep_distance = 130.0
+contact_damage = 2
+cast_count = 1
+cast_interval = 4.5
+cast_max_range = 200.0
+cast_release_frame = 5
+cast_radius = 20.0
+cast_spread = 0.0
+cast_delay = 1.3
+cast_damage = 4
+cast_sound = "lilim_cast"
+cast_blast_sound = "lilim_rune_blast"
+cast_focus = false
+coin_value = 2
+spawn_weight = 0.4
+spawn_weight_per_wave = 0.04
+min_wave = 51
+hit_sound = "lilim_hit"
+death_sound = "lilim_death"

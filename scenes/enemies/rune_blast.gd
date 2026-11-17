@@ -22,11 +22,13 @@ var damage: int = 10
 var radius: float = 26.0
 var delay: float = 1.0
 var blast_sound: String = ""
+var focus_sound: bool = true   # patlama sesi play_sfx_focus ile mi (boss rünü evet, Lilim rünü hayır)
 
 var _t: float = 0.0
 var _blasted: bool = false
 
-func setup(dmg: int, r: float, warn: float, sound: String) -> void:
+func setup(dmg: int, r: float, warn: float, sound: String, focus: bool = true) -> void:
+	focus_sound = focus
 	damage = dmg
 	radius = r
 	delay = warn
@@ -48,7 +50,10 @@ func _process(delta: float) -> void:
 
 func _blast() -> void:
 	_blasted = true
-	Audio.play_sfx_focus(blast_sound)  # yaratık vuruş sesleri susar, patlama duyulsun
+	if focus_sound:
+		Audio.play_sfx_focus(blast_sound)  # yaratık vuruş sesleri susar, patlama duyulsun
+	else:
+		Audio.play_sfx(blast_sound)
 	var player := get_tree().get_first_node_in_group("player") as Node2D
 	if player == null or not player.has_method("try_hit"):
 		return

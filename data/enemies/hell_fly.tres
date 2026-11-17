@@ -16,3 +16,4 @@ coin_value = 1
 spawn_weight = 0.6
 spawn_weight_per_wave = 0.05
 min_wave = 41
+swarm_size = 3

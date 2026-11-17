@@ -12,6 +12,7 @@ display_name = "Revolver"
 description = "20 dmg, 1.05 shots/s, long range"
 cost = 50
 sort_order = 2
+unlock_wave = 5
 icon = ExtResource("2_icon")
 sprite = ExtResource("3_sprite")
 grip_point = Vector2(4, 9)

@@ -11,6 +11,7 @@ extends Resource
 @export var hitbox_scale: float = 1.0            # çarpışma çemberi ve kişisel alan, body_scale'e ek olarak bu kadar büyür (iri gövdeli boss'lar için)
 @export var max_health: int = 30
 @export var move_speed: float = 40.0
+@export var keep_distance: float = 0.0           # >0: oyuncuya bundan fazla yaklaşmaz, yakına gelirse geri çekilir (uzaktan büyücü Lilim); 0 = kovalar
 @export var contact_damage: int = 5             # içine girince verilen hasar (saldırısı olan yaratıkta düşük tutulur)
 
 # --- Saldırı (yakın dövüş) ---
@@ -88,6 +89,7 @@ extends Resource
 @export var cast_damage: int = 0                 # patlama hasarı (dalgayla temas hasarı gibi artar)
 @export var cast_sound: String = ""              # Audio sfx adı: rünler çizilirken (boşsa ses yok)
 @export var cast_blast_sound: String = ""        # Audio sfx adı: rün patlarken (boşsa ses yok)
+@export var cast_focus: bool = true               # büyü/patlama sesi play_sfx_focus ile mi (boss: evet; kalabalık yaratık: hayır, yoksa diğer sesler sürekli susar)
 
 # --- Dalış: yerin altından gelip patlayarak çıkma (ör. Leviathan) ---
 # dive_interval 0 ise ya da sprite'ta emerge_<yön> animasyonu yoksa dalış yok. Akış: kovalarken dive_interval dolunca
@@ -142,6 +144,7 @@ extends Resource
 @export var spawn_weight_per_wave: float = 0.0   # min_wave'den sonraki her dalgada ağırlığa eklenir (yeni türler giderek sıklaşır)
 @export var min_wave: int = 1
 @export var max_wave: int = 100
+@export var swarm_size: int = 1                  # bir doğmada aynı noktadan kaç tane çıkar (Hell Fly sürüsü); ağırlık sürü başınadır
 @export var is_boss: bool = false                # boss'lar normal havuzdan doğmaz
 @export var boss_wave: int = 0                   # boss ise hangi dalgada çıkar (10, 20, 30...)
 @export var tint: Color = Color.WHITE            # sprite rengi, aynı sprite'tan farklı görünüm için

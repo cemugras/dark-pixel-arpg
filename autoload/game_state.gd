@@ -12,6 +12,7 @@ var gold: int = START_GOLD
 var stats: PlayerStats = PlayerStats.new()
 var upgrade_levels: Dictionary = {}  # geliştirme id -> kaç kez alındı
 var guns: Array[WeaponData] = []     # takılı menzilli silahlar (yuva sırasıyla)
+var cleared_wave: int = 0            # son biten dalga (mağaza silah kilidi WeaponData.unlock_wave buna bakar)
 
 # Satış iadesi için harcama takibi
 var gun_spent: Array[int] = []       # guns ile paralel: her yuvadaki silaha ödenen para (gümüş mermi dahil)
@@ -20,7 +21,7 @@ var gun_upgrades: Array[Dictionary] = []  # guns ile paralel: yuvadaki silahın 
 
 # Gümüş mermi: yuva başına tek seferlik yükseltme. Hasar Damage geliştirmesiyle çarpılır.
 # Harcama yuvanın gun_spent'ine eklenir, satışta/değiştirmede %50'si iade edilir; değiştirince gümüş gider.
-const SILVER_COST: int = 100
+const SILVER_COST: int = 150  # Adım 43: 100 -> 200 -> 150 (100 çok çabuk güçlendiriyordu, 200 ile 13. dalgada ölündü)
 const SILVER_DAMAGE_MULT: float = 2.0
 var sword_spent: int = 0             # kılıç fiyatı + kılıca bağlı geliştirmeler (requires = "sword")
 var gun_upgrade_spent: int = 0       # menzilli silahlara bağlı ORTAK geliştirmeler (requires = "gun"); şu an yok (Damage/Fire Rate silah başına, gun_upgrades), ileride ortak bir geliştirme eklenirse son silah satılınca iade edilir
@@ -28,6 +29,10 @@ var gun_upgrade_spent: int = 0       # menzilli silahlara bağlı ORTAK gelişti
 func _ready() -> void:
 	EventBus.coin_collected.connect(_on_coin_collected)
 	EventBus.player_died.connect(reset)
+	EventBus.wave_ended.connect(_on_wave_ended)
+
+func _on_wave_ended(wave: int) -> void:
+	cleared_wave = maxi(cleared_wave, wave)
 
 func _on_coin_collected(value: int) -> void:
 	add_gold(value)
@@ -134,8 +139,12 @@ func give_weapon(weapon: WeaponData, paid: int = 0) -> void:
 		gun_upgrades.append({})
 	weapons_changed.emit()
 
+# Mağaza kilidi: silah unlock_wave. dalga bitince alınabilir (give_weapon bedava verir, kilide bakmaz)
+func is_weapon_unlocked(weapon: WeaponData) -> bool:
+	return cleared_wave >= weapon.unlock_wave
+
 func buy_weapon(weapon: WeaponData) -> bool:
-	if not can_take_weapon(weapon) or not spend_gold(weapon.cost):
+	if not can_take_weapon(weapon) or not is_weapon_unlocked(weapon) or not spend_gold(weapon.cost):
 		return false
 	give_weapon(weapon, weapon.cost)
 	return true
@@ -199,7 +208,7 @@ func get_swap_cost(slot: int, weapon: WeaponData) -> int:
 func can_swap_gun(slot: int, weapon: WeaponData) -> bool:
 	if weapon.is_melee or slot < 0 or slot >= guns.size():
 		return false
-	if guns[slot].id == weapon.id:
+	if guns[slot].id == weapon.id or not is_weapon_unlocked(weapon):
 		return false
 	return gold >= get_swap_cost(slot, weapon)
 
@@ -264,6 +273,7 @@ func reset() -> void:
 	gun_upgrades.clear()
 	sword_spent = 0
 	gun_upgrade_spent = 0
+	cleared_wave = 0
 	gold_changed.emit(gold)
 	stats_changed.emit()
 	weapons_changed.emit()

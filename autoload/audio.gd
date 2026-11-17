@@ -17,6 +17,7 @@ const PITCH_JITTER: float = 0.06      # her çalışta perde +/- bu kadar oynar,
 const SFX_VOLUME_DB: Dictionary = {
 	"glock_shoot": -4.0,
 	"ak47_shoot": -12.0,
+	"smg_shoot": -7.0,          # Glock sesi; Glock (-4) ile aynı ama 3 kat sık ateş ettiği için biraz kısık
 	"revolver_shoot": -5.0,
 	"coin_pickup": -7.0,
 	"hell_harpy_hit": -6.0,
@@ -56,6 +57,10 @@ const SFX_VOLUME_DB: Dictionary = {
 	"asmodeus_death": 0.0,
 	"asmodeus_breath": 0.0,
 	"belphegor_charge": 0.0,
+	"lilim_hit": -10.0,         # Lilith seslerinin ince ve kısık kopyası (SFX_ALIASES)
+	"lilim_death": -8.0,
+	"lilim_cast": -8.0,
+	"lilim_rune_blast": -8.0,
 }
 
 # Aynı anda en fazla kaç kopya çalabileceği sese özel ayar (listede yoksa MAX_PER_SOUND).
@@ -69,6 +74,29 @@ const SFX_MAX_INSTANCES: Dictionary = {
 	"lilith_rune_blast": 1,  # 3 rün aynı anda patlar: tek ses yeter, üst üste binip patlamasın
 	"leviathan_hit": 1,
 	"asmodeus_hit": 1,
+	"lilim_hit": 1,        # kalabalık yaratık: Lilith sesi üst üste binmesin
+	"lilim_death": 2,
+	"lilim_cast": 1,
+	"lilim_rune_blast": 1,
+}
+
+# Başka sesin dosyasını kullanan sesler (ayrı dosya yok): ad -> kaynak ses. Seviye (SFX_VOLUME_DB), üst üste çalma
+# (SFX_MAX_INSTANCES) ve perde (SFX_PITCH) yine bu adla ayarlanır. Lilim, Lilith'in seslerini ince ve kısık kullanır.
+# SMG, Glock sesini kullanır.
+const SFX_ALIASES: Dictionary = {
+	"lilim_hit": "lilith_hit",
+	"lilim_death": "lilith_death",
+	"lilim_cast": "lilith_cast",
+	"lilim_rune_blast": "lilith_rune_blast",
+	"smg_shoot": "glock_shoot",  # SMG Glock ile aynı mermiyi atar, sadece daha hızlı ve otomatik: aynı ses
+}
+
+# Sese özel perde çarpanı (listede yoksa 1.0; PITCH_JITTER bunun üstüne uygulanır). >1 = daha ince/küçük.
+const SFX_PITCH: Dictionary = {
+	"lilim_hit": 1.3,
+	"lilim_death": 1.3,
+	"lilim_cast": 1.25,
+	"lilim_rune_blast": 1.25,
 }
 
 # --- Müzik ---
@@ -161,6 +189,10 @@ func _load_sfx() -> void:
 		if not _sounds.has(sound_name):
 			_sounds[sound_name] = []
 		_sounds[sound_name].append(stream)
+	# Takma adlar kaynak sesin dosyalarını paylaşır (bkz. SFX_ALIASES)
+	for alias in SFX_ALIASES:
+		if _sounds.has(SFX_ALIASES[alias]) and not _sounds.has(alias):  # kendi dosyası varsa (ör. smg_shoot.wav) o çalar
+			_sounds[alias] = _sounds[SFX_ALIASES[alias]]
 
 # "glock_shoot_02" -> "glock_shoot" (sondaki _sayı varyasyon numarasıdır)
 func _base_name(file_base: String) -> String:
@@ -193,7 +225,7 @@ func play_sfx(sound_name: String, volume_db: float = 0.0, exclusive: bool = fals
 	player.volume_db = SFX_VOLUME_DB.get(sound_name, 0.0) + volume_db
 	if is_instance_valid(_focus_player) and _focus_player.playing and sound_name.ends_with("_shoot"):
 		player.volume_db += FOCUS_SHOT_DB  # büyü/patlama sesi çalarken ateş sesleri yarıya iner
-	player.pitch_scale = randf_range(1.0 - PITCH_JITTER, 1.0 + PITCH_JITTER)
+	player.pitch_scale = SFX_PITCH.get(sound_name, 1.0) * randf_range(1.0 - PITCH_JITTER, 1.0 + PITCH_JITTER)
 	_player_sound[player] = sound_name
 	# Havuzdaki oynatıcı tekrar kullanılıyor: tek başına çalan ses bitmiş demektir, artık başka sesleri susturmasın
 	# (eskiden kahkaha biten oynatıcı ateş sesi çalarken tüm efektler susuyordu)

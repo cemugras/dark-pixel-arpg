@@ -225,7 +225,7 @@ func _make_button(parent: Node, text: String, disabled: bool, on_pressed: Callab
 	_set_button_text(button, text)
 	return button
 
-# Sahip olunan silah butonunun solunda silahın görseli (hangi yuvada ne var karışmasın)
+# Silah butonlarının (Sell, Buy, Replace with) solunda silahın görseli (hangi yuvada ne var / ne gelecek karışmasın)
 func _set_weapon_icon(button: Button, weapon: WeaponData) -> void:
 	if weapon == null or weapon.icon == null:
 		return
@@ -273,8 +273,8 @@ func _refresh_slots() -> void:
 			for weapon in _weapons:
 				if weapon.is_melee:
 					continue
-				var text := "Buy %s - %s\n%s" % [weapon.display_name, _price(weapon.cost), weapon.description]
-				_set_weapon_icon(_make_button(column, text, GameState.gold < weapon.cost, _on_weapon_pressed.bind(weapon)), weapon)
+				var text := "Buy %s - %s%s\n%s" % [weapon.display_name, _price(weapon.cost), _lock_note(weapon), weapon.description]
+				_set_weapon_icon(_make_button(column, text, GameState.gold < weapon.cost or not GameState.is_weapon_unlocked(weapon), _on_weapon_pressed.bind(weapon)), weapon)
 		else:
 			_add_column_note(column, "Empty")
 
@@ -303,8 +303,13 @@ func _fill_gun_column(column: VBoxContainer, slot: int, can_sell: bool, last_tex
 			continue
 		var net := GameState.get_swap_cost(slot, weapon)
 		var price := _price(net) if net >= 0 else _price(-net, true)
-		var swap_text := "Replace with %s - %s\n%s" % [weapon.display_name, price, weapon.description]
-		_make_button(column, swap_text, not GameState.can_swap_gun(slot, weapon), _on_swap_pressed.bind(slot, weapon))
+		var swap_text := "Replace with %s - %s%s\n%s" % [weapon.display_name, price, _lock_note(weapon), weapon.description]
+		# Yeni silahın görseli: hangi silahla değiştirileceği bir bakışta anlaşılsın
+		_set_weapon_icon(_make_button(column, swap_text, not GameState.can_swap_gun(slot, weapon), _on_swap_pressed.bind(slot, weapon)), weapon)
+
+# Kilitli silah (WeaponData.unlock_wave dalgası henüz bitmedi): butona "(after wave X)" eklenir, buton pasif
+func _lock_note(weapon: WeaponData) -> String:
+	return "" if GameState.is_weapon_unlocked(weapon) else " (after wave %d)" % weapon.unlock_wave
 
 func _scoped_upgrades(scope: String) -> Array[UpgradeData]:
 	var result: Array[UpgradeData] = []
