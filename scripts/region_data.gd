@@ -35,3 +35,6 @@ extends Resource
 @export var ember_amount: int = 220            # dış alandan yükselen kor sayısı (toplam)
 @export var smoke_color: Color = Color(0.22, 0.16, 0.16, 0.35)
 @export var smoke_amount: int = 40
+# true: kül bölgesi (ör. Belphegor'un Uyku Salonları): korlar yerine yukarıdan yavaşça düşen kül pulları (ember_color,
+# parlamaz), duman yerine yatay sürünen sis (smoke_color), kenar boyunca kıvılcım yok
+@export var ash_fall: bool = false

@@ -1,0 +1,84 @@
+[gd_resource type="Resource" script_class="RegionData" format=3]
+
+[ext_resource type="Script" path="res://scripts/region_data.gd" id="1_region"]
+[ext_resource type="Texture2D" path="res://assets/tiles/slumber_halls/floor.png" id="2_floor"]
+[ext_resource type="Texture2D" path="res://assets/tiles/slumber_halls/edge.png" id="3_edge"]
+[ext_resource type="Texture2D" path="res://assets/tiles/slumber_halls/decor/throne.png" id="4_throne"]
+[ext_resource type="Texture2D" path="res://assets/tiles/slumber_halls/decor/bed.png" id="5_bed"]
+[ext_resource type="Texture2D" path="res://assets/tiles/slumber_halls/decor/column.png" id="6_column"]
+[ext_resource type="Texture2D" path="res://assets/tiles/slumber_halls/decor/candles.png" id="7_candles"]
+[ext_resource type="Texture2D" path="res://assets/tiles/slumber_halls/decor/hourglass.png" id="8_hourglass"]
+[ext_resource type="Texture2D" path="res://assets/tiles/slumber_halls/decor/mound.png" id="9_mound"]
+
+[resource]
+script = ExtResource("1_region")
+id = "slumber_halls"
+display_name = "Belphegor's Slumber Halls"
+first_wave = 11
+last_wave = 20
+floor_texture = ExtResource("2_floor")
+floor_tiles = {
+"0000": Vector2i(2, 1),
+"0001": Vector2i(3, 1),
+"0010": Vector2i(2, 2),
+"0011": Vector2i(1, 2),
+"0100": Vector2i(2, 0),
+"0101": Vector2i(3, 2),
+"0110": Vector2i(0, 1),
+"0111": Vector2i(3, 3),
+"1000": Vector2i(1, 1),
+"1001": Vector2i(2, 3),
+"1010": Vector2i(1, 0),
+"1011": Vector2i(0, 2),
+"1100": Vector2i(3, 0),
+"1101": Vector2i(0, 0),
+"1110": Vector2i(1, 3),
+"1111": Vector2i(0, 3)
+}
+floor_patches = 10
+edge_texture = ExtResource("3_edge")
+edge_tiles = {
+"0000": Vector2i(2, 2),
+"0001": Vector2i(3, 2),
+"0010": Vector2i(2, 4),
+"0011": Vector2i(1, 4),
+"0101": Vector2i(3, 3),
+"0102": Vector2i(2, 0),
+"0111": Vector2i(3, 6),
+"0112": Vector2i(0, 2),
+"0200": Vector2i(2, 1),
+"1010": Vector2i(1, 0),
+"1011": Vector2i(0, 4),
+"1020": Vector2i(1, 2),
+"1021": Vector2i(2, 6),
+"1111": Vector2i(0, 6),
+"1112": Vector2i(1, 6),
+"1121": Vector2i(0, 0),
+"1122": Vector2i(3, 0),
+"1210": Vector2i(1, 7),
+"2000": Vector2i(1, 3),
+"2101": Vector2i(0, 1),
+"2200": Vector2i(3, 1)
+}
+edge_tall = true
+decor = Array[Dictionary]([{
+"flip": false,
+"position": Vector2(0, -395),
+"texture": ExtResource("4_throne")
+}, {
+"flip": false,
+"position": Vector2(-530, -420),
+"texture": ExtResource("5_bed")
+}, {
+"flip": true,
+"position": Vector2(560, 380),
+"texture": ExtResource("5_bed")
+}])
+scatter_textures = Array[Texture2D]([ExtResource("6_column"), ExtResource("7_candles"), ExtResource("8_hourglass"), ExtResource("9_mound")])
+scatter_count = 24
+animate_outside = false
+ember_color = Color(0.72, 0.68, 0.76, 0.7)
+ember_amount = 160
+smoke_color = Color(0.42, 0.3, 0.55, 0.18)
+smoke_amount = 30
+ash_fall = true

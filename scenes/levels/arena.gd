@@ -242,8 +242,14 @@ func _build_effects() -> void:
 		total_area += band.get_area()
 	for band in bands:
 		var share := band.get_area() / total_area
-		_add_embers(band, maxi(4, roundi(region.ember_amount * share)))
-		_add_smoke(band, maxi(1, roundi(region.smoke_amount * share)))
+		if region.ash_fall:
+			_add_ash(band, maxi(4, roundi(region.ember_amount * share)))
+			_add_mist(band, maxi(1, roundi(region.smoke_amount * share)))
+		else:
+			_add_embers(band, maxi(4, roundi(region.ember_amount * share)))
+			_add_smoke(band, maxi(1, roundi(region.smoke_amount * share)))
+	if region.ash_fall:
+		return  # kül bölgesinde kenar parıltısı yok
 	# Kenar boyunca, uçurumun dibinden kıvılcım: arena kenarında parıltı hissi
 	var r := play_rect()
 	for edge_band in [Rect2(r.position.x, r.position.y - 10, r.size.x, 8), Rect2(r.position.x, r.end.y + 6, r.size.x, 10),
@@ -315,6 +321,68 @@ func _add_smoke(rect: Rect2, amount: int) -> void:
 	ramp.set_color(0, Color(c.r, c.g, c.b, 0.0))
 	ramp.set_color(1, Color(c.r, c.g, c.b, 0.0))
 	ramp.add_point(0.3, c)
+	p.color_ramp = ramp
+	_fx.add_child(p)
+
+# Kül bölgesi: yukarıdan sallanarak yavaşça düşen sönük kül pulları (parlamaz, belirip kaybolur)
+func _add_ash(rect: Rect2, amount: int) -> void:
+	var p := CPUParticles2D.new()
+	p.amount = amount
+	p.lifetime = 6.0
+	p.preprocess = p.lifetime
+	p.randomness = 0.6
+	p.local_coords = false
+	p.position = rect.get_center()
+	p.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
+	p.emission_rect_extents = rect.size / 2.0
+	p.direction = Vector2(0.3, 1.0)
+	p.spread = 25.0
+	p.gravity = Vector2(1.5, 2.5)  # çok hafif yerçekimi + rüzgâr
+	p.initial_velocity_min = 3.0
+	p.initial_velocity_max = 8.0
+	p.tangential_accel_min = -3.0  # sağa sola salınım
+	p.tangential_accel_max = 3.0
+	p.scale_amount_min = 1.0
+	p.scale_amount_max = 2.0
+	var ramp := Gradient.new()
+	var c := region.ember_color
+	ramp.set_color(0, Color(c.r, c.g, c.b, 0.0))
+	ramp.set_color(1, Color(c.r, c.g, c.b, 0.0))
+	ramp.add_point(0.2, Color(c.r, c.g, c.b, c.a))
+	ramp.add_point(0.75, Color(c.r, c.g, c.b, c.a * 0.8))
+	p.color_ramp = ramp
+	_fx.add_child(p)
+
+# Kül bölgesi: yere yakın, yana doğru yavaşça sürünen iri ve soluk sis lekeleri
+func _add_mist(rect: Rect2, amount: int) -> void:
+	var p := CPUParticles2D.new()
+	p.texture = _smoke_texture()
+	p.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	p.amount = amount
+	p.lifetime = 12.0
+	p.preprocess = p.lifetime
+	p.randomness = 0.5
+	p.local_coords = false
+	p.position = rect.get_center()
+	p.emission_shape = CPUParticles2D.EMISSION_SHAPE_RECTANGLE
+	p.emission_rect_extents = rect.size / 2.0
+	p.direction = Vector2.RIGHT
+	p.spread = 15.0
+	p.gravity = Vector2.ZERO
+	p.initial_velocity_min = 2.0
+	p.initial_velocity_max = 6.0
+	p.scale_amount_min = 2.5
+	p.scale_amount_max = 4.5
+	var curve := Curve.new()
+	curve.add_point(Vector2(0.0, 0.7))
+	curve.add_point(Vector2(1.0, 1.3))
+	p.scale_amount_curve = curve
+	var ramp := Gradient.new()
+	var c := region.smoke_color
+	ramp.set_color(0, Color(c.r, c.g, c.b, 0.0))
+	ramp.set_color(1, Color(c.r, c.g, c.b, 0.0))
+	ramp.add_point(0.35, c)
+	ramp.add_point(0.65, c)
 	p.color_ramp = ramp
 	_fx.add_child(p)
 
