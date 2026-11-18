@@ -2,16 +2,16 @@
 
 importer="texture"
 type="CompressedTexture2D"
-uid="uid://b8o2guahbriqu"
-path="res://.godot/imported/TilesTest.png-7e09d18fb61639c80c3663ebfd71d1fa.ctex"
+uid="uid://d066c6polglrv"
+path="res://.godot/imported/edge.png-5c8a60f20b3f56dc4fe8105190f24a6d.ctex"
 metadata={
 "vram_texture": false
 }
 
 [deps]
 
-source_file="res://assets/tiles/TilesTest.png"
-dest_files=["res://.godot/imported/TilesTest.png-7e09d18fb61639c80c3663ebfd71d1fa.ctex"]
+source_file="res://assets/tiles/moloch_gate/edge.png"
+dest_files=["res://.godot/imported/edge.png-5c8a60f20b3f56dc4fe8105190f24a6d.ctex"]
 
 [params]
 

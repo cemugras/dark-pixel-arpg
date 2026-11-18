@@ -5,7 +5,29 @@ extends Node2D
 const MERCHANT_SCRIPT: Script = preload("res://scenes/npc/merchant.gd")
 const START_WEAPON: WeaponData = preload("res://data/weapons/glock.tres")
 
-# Sikkeler bu düğümün altına eklenir. Zeminin (TileMapLayer) hemen arkasına yerleşir, böylece
+# Harita (zemin, kenar, dış alan efektleri) bölgeye göre koddan kurulur: ilk çocuk, en altta çizilir.
+# Kamera sınırı tüm harita, yaratık doğma alanı yürünebilir arena (biraz içeride).
+const SPAWN_INSET: float = 12.0
+
+func _build_arena() -> void:
+	var arena := Arena.new()
+	arena.name = "Arena"
+	add_child(arena)
+	move_child(arena, 0)
+	var wave_manager := get_node_or_null("WaveManager")
+	var first_wave: int = wave_manager.start_wave if wave_manager else 1
+	arena.build(RegionPool.for_wave(first_wave))
+	if wave_manager:
+		wave_manager.spawn_area = Arena.play_rect().grow(-SPAWN_INSET)
+	var camera := get_node_or_null("Player/Camera2D") as Camera2D
+	if camera:
+		var world := Arena.world_rect()
+		camera.limit_left = int(world.position.x)
+		camera.limit_top = int(world.position.y)
+		camera.limit_right = int(world.end.x)
+		camera.limit_bottom = int(world.end.y)
+
+# Sikkeler bu düğümün altına eklenir. Zeminin (Arena) hemen arkasına yerleşir, böylece
 # zeminin üstünde ama oyuncu ve yaratıkların altında çizilir (yaratık üstünden geçince sikke altta kalır).
 var _coins: Node2D
 
@@ -16,11 +38,11 @@ func _ready() -> void:
 		GameState.give_weapon(START_WEAPON)
 	EventBus.enemy_died.connect(_on_enemy_died)
 	EventBus.coins_spilled.connect(_on_coins_spilled)
+	_build_arena()
 	_coins = Node2D.new()
 	_coins.name = "Coins"
 	add_child(_coins)
-	var floor_layer := get_node_or_null("TileMapLayer")
-	move_child(_coins, floor_layer.get_index() + 1 if floor_layer else 0)
+	move_child(_coins, $Arena.get_index() + 1)
 	# Yere çizilen efektler (Lilith'in rünleri): sikkelerin üstünde, oyuncu ve yaratıkların altında
 	var floor_fx := Node2D.new()
 	floor_fx.name = "FloorFx"
