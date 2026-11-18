@@ -4,7 +4,9 @@
 # Kullanım: tools/balance_sim.ps1 [-HealthPerWave 0.12] [-DamagePerWave 0.1] [-IntervalMin 0.25] ... (aşağıdaki param'lar)
 # Değerler oyundakiyle aynı varsayılanlarla başlar; denemek için parametre verilir, oyun dosyaları değişmez.
 param(
-    [double]$HealthPerWave = 0.13,     # enemy.gd HEALTH_PER_WAVE (normal yaratık)
+    [double]$HealthPerWave = 0.10,     # enemy.gd HEALTH_PER_WAVE (HealthLateFrom dalgasına kadar)
+    [double]$HealthLate = 0.18,        # enemy.gd HEALTH_PER_WAVE_LATE: HealthLateFrom dalgasından sonra can artışı (-1 = HealthPerWave ile aynı, tek eğri)
+    [int]$HealthLateFrom = 20,         # enemy.gd HEALTH_LATE_FROM
     [double]$BossHealthPerWave = -1,   # boss için ayrı eğri (-1 = HealthPerWave ile aynı, şu anki durum)
     [double]$DamagePerWave = 0.07,     # enemy.gd setup: hasar çarpanı 1 + bu x (dalga-1)
     [double]$IntervalStart = 1.0,      # wave_manager _spawn_interval
@@ -18,13 +20,16 @@ param(
     [int]$SilverCost = 150,            # game_state.gd SILVER_COST
     [switch]$KeepUpgradesOnSwap,       # değiştirmede Damage/Fire Rate/gümüş yuvada kalır, sadece eski silahın fiyatının yarısı düşer (açık değilse silahla gider)
     [int]$SmgUnlockWave = 10,          # smg.tres unlock_wave (101 = SMG yokmuş gibi)
-    [double]$SmgDps = 18, [int]$SmgPrice = 45,   # smg.tres: 4 x 4.5
-    [double]$AkDps = 20.4,             # AK47 taban hasar/sn (6 x 3.4)
+    [double]$SmgDps = 22.5, [int]$SmgPrice = 45,   # smg.tres: 5 x 4.5
+    [double]$AkDps = 23.8,             # AK47 taban hasar/sn (7 x 3.4)
     [double]$OffenseShare = 0.7,       # altının saldırıya giden payı (kalanı can/zırh/yenilenme)
     [double]$Efficiency = 0.7,         # isabet/boşa giden hasar payı (kaçan mermi, fazla vuruş)
     [int[]]$Waves = @(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100)
 )
-if ($BossHealthPerWave -lt 0) { $BossHealthPerWave = $HealthPerWave }
+if ($HealthLate -lt 0) { $HealthLate = $HealthPerWave }
+$useBossCurve = ($BossHealthPerWave -ge 0)
+# İki parçalı can eğrisi: HealthLateFrom dalgasına kadar HealthPerWave, sonrası HealthLate (enemy.gd ile aynı tutulmalı)
+function HpMult($w) { $e = [math]::Min($w, $HealthLateFrom) - 1; $l = [math]::Max(0, $w - $HealthLateFrom); 1 + $HealthPerWave * $e + $HealthLate * $l }
 
 # Normal yaratıklar: can, sikke, ağırlık (min_wave, taban, dalga başına), pençe hasarı
 $enemies = @(
@@ -52,7 +57,7 @@ for ($wave = 1; $wave -le 100; $wave++) {
     $isBoss = ($wave % 10 -eq 0)
     $interval = if ($RateGrowth -gt 0) { [math]::Max($IntervalMin, 1 / (1 + $RateGrowth * ($wave - 1))) } else { [math]::Max($IntervalMin, $IntervalStart - $IntervalStep * ($wave - 1)) }
     $duration = [math]::Min(20 + 2 * ($wave - 1), 60)
-    $hpMult = 1 + $HealthPerWave * ($wave - 1)
+    $hpMult = HpMult $wave
     $dmgMult = 1 + $DamagePerWave * ($wave - 1)
     $coinBonus = if ($CoinStepWaves -gt 0) { [math]::Floor(($wave - 1) / $CoinStepWaves) } else { 0 }
 
@@ -88,7 +93,7 @@ for ($wave = 1; $wave -le 100; $wave++) {
     $bossTtk = ''
     $earn = 0.0
     if ($isBoss) {
-        $bossHp = $bosses[$wave] * $BossHpMult * (1 + $BossHealthPerWave * ($wave - 1))
+        $bossHp = $bosses[$wave] * $BossHpMult * $(if ($useBossCurve) { 1 + $BossHealthPerWave * ($wave - 1) } else { HpMult $wave })
         $surplus = $effDps - $incoming
         if ($surplus -gt 0) {
             $t = $bossHp / $surplus
@@ -157,7 +162,7 @@ for ($wave = 1; $wave -le 100; $wave++) {
     }
 }
 
-"Ayarlar: can/dalga $HealthPerWave, boss can/dalga $BossHealthPerWave, hasar/dalga $DamagePerWave, aralık $IntervalStart-$IntervalStep/dalga (en az $IntervalMin), boss aralık x$BossSpawnMult, sikke +1/$CoinStepWaves dalga, saldırı payı $OffenseShare, verim $Efficiency"
+"Ayarlar: can/dalga $HealthPerWave ($HealthLateFrom. dalgadan sonra $HealthLate), boss can/dalga $(if ($useBossCurve) { $BossHealthPerWave } else { 'normal eğri' }), hasar/dalga $DamagePerWave, aralık $IntervalStart-$IntervalStep/dalga (en az $IntervalMin), boss aralık x$BossSpawnMult, sikke +1/$CoinStepWaves dalga, saldırı payı $OffenseShare, verim $Efficiency"
 "{0,5} {1,7} {2,-9} {3,-7} {4,-7} {5,7} {6,8} {7,5} {8,6} {9,4} {10,4} {11,5} {12,8}" -f 'Wave','Gold','Guns','DmgLv','FrLv','DPS','HPin/s','Ratio','BossT','HP','Arm','Claw','ClawsToDie'
 foreach ($r in $rows) { "{0,5} {1,7} {2,-9} {3,-7} {4,-7} {5,7} {6,8} {7,5} {8,6} {9,4} {10,4} {11,5} {12,8}" -f $r.Dalga,$r.ToplamAltin,$r.Silah,$r.DmgLv,$r.FrLv,$r.Hasar_sn,$r.GelenCan_sn,$r.Oran,$r.BossSure_sn,$r.Can,$r.Zirh,$r.Pence,$r.KacPence }
 "Oran = oyuncunun etkili hasarı / saniyede gelen yaratık canı (1'in altı: kalabalık birikir). BossSure: boss'a kalan hasarla öldürme süresi ('yok' = kalabalığa bile yetmiyor). KacPence: Damned Soul pençesinden ölmeden kaç tane yenir."

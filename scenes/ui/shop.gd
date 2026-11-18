@@ -282,7 +282,8 @@ func _fill_gun_column(column: VBoxContainer, slot: int, can_sell: bool, last_tex
 	var gun := GameState.guns[slot]
 	var silver := GameState.has_silver(slot)
 	var gun_name := gun.display_name + (" (Silver)" if silver else "")
-	var text := "%s\nSell (%s)%s" % [gun_name, _price(GameState.get_gun_sell_price(slot), true), last_text]
+	var current := _gun_damage(slot)
+	var text := "%s\nDamage: base %d, now %d\nSell (%s)%s" % [gun_name, gun.damage, current, _price(GameState.get_gun_sell_price(slot), true), last_text]
 	_set_weapon_icon(_make_button(column, text, not can_sell, _on_sell_gun_pressed.bind(slot)), gun)
 
 	# Bu silahın geliştirmeleri (yarı fiyat, sadece bu silaha)
@@ -303,9 +304,15 @@ func _fill_gun_column(column: VBoxContainer, slot: int, can_sell: bool, last_tex
 			continue
 		var net := GameState.get_swap_cost(slot, weapon)
 		var price := _price(net) if net >= 0 else _price(-net, true)
-		var swap_text := "Replace with %s - %s%s\n%s" % [weapon.display_name, price, _lock_note(weapon), weapon.description]
+		# Geliştirmeler ve gümüş eski silahla gider: yeni silah taban hasarıyla gelir
+		var swap_text := "Replace with %s - %s%s\nDamage: %d -> %d\n%s" % [weapon.display_name, price, _lock_note(weapon), current, weapon.damage, weapon.description]
 		# Yeni silahın görseli: hangi silahla değiştirileceği bir bakışta anlaşılsın
 		_set_weapon_icon(_make_button(column, swap_text, not GameState.can_swap_gun(slot, weapon), _on_swap_pressed.bind(slot, weapon)), weapon)
+
+# Yuvadaki silahın şu anki mermi hasarı: taban x Damage geliştirmesi x gümüş (gun.gd _damage ile aynı hesap)
+func _gun_damage(slot: int) -> int:
+	var mult := GameState.get_gun_multiplier(slot, "damage_multiplier") * (GameState.SILVER_DAMAGE_MULT if GameState.has_silver(slot) else 1.0)
+	return maxi(1, roundi(GameState.guns[slot].damage * mult))
 
 # Kilitli silah (WeaponData.unlock_wave dalgası henüz bitmedi): butona "(after wave X)" eklenir, buton pasif
 func _lock_note(weapon: WeaponData) -> String:

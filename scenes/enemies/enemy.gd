@@ -11,7 +11,11 @@ const DIRECTION_BIAS: float = 1.2  # 4 yön: eksen değiştirme eşiği (titreme
 const SECTOR_MARGIN: float = 0.12  # 8 yön: dilim değiştirme payı (radyan, titreme önleme)
 const BOSS_DEATH_MUSIC_FADE: float = 0.1  # boss ölünce müzik bu sürede kesilir (ani kesilme tıkırtısı olmasın)
 const DAMAGE_PER_WAVE: float = 0.07  # her dalgada tüm hasarlar tabanın %7si kadar artar (eskiden %10; bkz. tools/balance_sim.ps1)
-const HEALTH_PER_WAVE: float = 0.13  # (Adım 43: 0.12 -> 0.13) her dalgada can tabanın %13'ü kadar artar (Brotato tarzı: kalabalık hızlı, can yavaş artar)
+# İki parçalı can eğrisi (Adım 43, beşinci ayar): HEALTH_LATE_FROM dalgasına kadar her dalgada tabanın %10'u,
+# sonrası %18'i kadar artar. Erken dalgalar (11-18) yumuşadı, geç oyun eski zorluğunda kaldı (bkz. tools/balance_sim.ps1)
+const HEALTH_PER_WAVE: float = 0.10
+const HEALTH_PER_WAVE_LATE: float = 0.18
+const HEALTH_LATE_FROM: int = 20
 
 # --- Ayrışma (yaratıklar iç içe girmesin) ---
 # Fiziksel çarpışma yerine yumuşak itme: birbirine çok yaklaşan yaratıklar hafifçe ayrılır, kalabalık akıcı kalır.
@@ -132,7 +136,8 @@ func setup(enemy_data: EnemyData, wave: int) -> void:
 	data = enemy_data
 	_wave = wave
 	var w := wave - 1
-	max_health = roundi(data.max_health * (1.0 + HEALTH_PER_WAVE * w))
+	var health_mult := 1.0 + HEALTH_PER_WAVE * (mini(wave, HEALTH_LATE_FROM) - 1) + HEALTH_PER_WAVE_LATE * maxi(0, wave - HEALTH_LATE_FROM)
+	max_health = roundi(data.max_health * health_mult)
 	var dmg_mult := 1.0 + DAMAGE_PER_WAVE * w
 	contact_damage = int(data.contact_damage * dmg_mult)
 	attack_damage = int(data.attack_damage * dmg_mult)
