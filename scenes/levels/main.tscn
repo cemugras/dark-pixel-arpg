@@ -16,7 +16,6 @@
 [ext_resource type="Resource" path="res://data/enemies/mammon.tres" id="18_mammon"]
 [ext_resource type="PackedScene" uid="uid://bjf3dljmdhkl7" path="res://scenes/ui/game_over.tscn" id="12_2xkjh"]
 [ext_resource type="PackedScene" uid="uid://b4aj6k3rhanhd" path="res://scenes/ui/pause_menu.tscn" id="13_dj21o"]
-[ext_resource type="Script" path="res://scenes/ui/start_choice.gd" id="14_start"]
 [ext_resource type="Resource" path="res://data/enemies/hell_harpy.tres" id="15_hell_harpy"]
 [ext_resource type="Resource" path="res://data/enemies/beelzebub.tres" id="19_beelzebub"]
 [ext_resource type="Resource" path="res://data/enemies/hell_fly.tres" id="20_hell_fly"]
@@ -271,5 +270,3 @@ boss_pool = Array[ExtResource("8_rssyh")]([ExtResource("10_hwp66"), ExtResource(
 
 [node name="PauseMenu" parent="." unique_id=1241027718 instance=ExtResource("13_dj21o")]
 
-[node name="StartChoice" type="CanvasLayer" parent="." unique_id=2068431195]
-script = ExtResource("14_start")

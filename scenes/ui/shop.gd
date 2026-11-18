@@ -11,7 +11,7 @@ var _upgrades: Array[UpgradeData] = []
 
 var _weapons: Array[WeaponData] = []
 var _weapons_label: Label
-var _slot_row: HBoxContainer      # silah sütunları: Melee, Slot 1, Slot 2 (her yenilemede yeniden kurulur)
+var _slot_row: HBoxContainer      # silah sütunları: Slot 1, Slot 2 (her yenilemede yeniden kurulur)
 
 # Fiyatlarda "gold" yazısı yerine sabit sikke ikonu. Button resim gösteremediği için metin,
 # butonun içine yerleştirilen RichTextLabel'a ([img] etiketiyle) yazılır.
@@ -239,7 +239,7 @@ func _set_weapon_icon(button: Button, weapon: WeaponData) -> void:
 		rich.offset_left = WEAPON_ICON_WIDTH + 4  # yazı silah görselinin üstüne binmesin
 		_fit_button(button)
 
-# Silah sütunları her zaman üç tane: Melee, Slot 1, Slot 2. Başlığın altında:
+# Silah sütunları her zaman iki tane: Slot 1, Slot 2. Başlığın altında:
 # - dolu sütun: silah (Sell), o silahın geliştirmeleri ve (menzilli ise) gümüş mermi + başka silahla değiştirme
 # - boş sütun: o yuvaya alınabilecek silahlar. Menzilli silah her zaman ilk boş yuvaya girdiği için
 #   satın alma listesi sadece ilk boş menzilli yuvada görünür, sonraki boş yuvada "Empty" yazar.
@@ -249,30 +249,12 @@ func _refresh_slots() -> void:
 	var can_sell := GameState.can_sell_weapon()
 	var last_text := "\nLast weapon, can't sell" if not can_sell else ""
 
-	# Melee
-	var melee := _add_slot_column("Melee")
-	var sword := _sword_data()
-	if GameState.has_sword():
-		var text := "Sword x%d\nSell (%s)%s" % [GameState.stats.sword_count, _price(GameState.get_sword_sell_price(), true), last_text]
-		_set_weapon_icon(_make_button(melee, text, not can_sell, _on_sell_sword_pressed), sword)
-		for upgrade in _scoped_upgrades("melee"):
-			var cost := GameState.get_upgrade_cost(upgrade)
-			var level: int = GameState.upgrade_levels.get(upgrade.id, 0)
-			var up_text := "%s (Lv %d) - %s\n%s" % [upgrade.display_name, level, _price(cost), upgrade.description]
-			_make_button(melee, up_text, GameState.gold < cost, _on_upgrade_pressed.bind(upgrade))
-	elif sword:
-		var text := "Buy %s - %s\n%s" % [sword.display_name, _price(sword.cost), sword.description]
-		_set_weapon_icon(_make_button(melee, text, GameState.gold < sword.cost, _on_weapon_pressed.bind(sword)), sword)
-
-	# Menzilli silah yuvaları
 	for slot in GameState.MAX_GUNS:
 		var column := _add_slot_column("Slot %d" % (slot + 1))
 		if slot < GameState.guns.size():
 			_fill_gun_column(column, slot, can_sell, last_text)
 		elif slot == GameState.guns.size():
 			for weapon in _weapons:
-				if weapon.is_melee:
-					continue
 				var text := "Buy %s - %s%s\n%s" % [weapon.display_name, _price(weapon.cost), _lock_note(weapon), weapon.description]
 				_set_weapon_icon(_make_button(column, text, GameState.gold < weapon.cost or not GameState.is_weapon_unlocked(weapon), _on_weapon_pressed.bind(weapon)), weapon)
 		else:
@@ -300,7 +282,7 @@ func _fill_gun_column(column: VBoxContainer, slot: int, can_sell: bool, last_tex
 
 	# Başka silahla değiştirme (eski silahın harcamasının yarısı fiyattan düşer, geliştirmeler silahla gider)
 	for weapon in _weapons:
-		if weapon.is_melee or weapon.id == gun.id:
+		if weapon.id == gun.id:
 			continue
 		var net := GameState.get_swap_cost(slot, weapon)
 		var price := _price(net) if net >= 0 else _price(-net, true)
@@ -325,7 +307,7 @@ func _scoped_upgrades(scope: String) -> Array[UpgradeData]:
 			result.append(upgrade)
 	return result
 
-# Bir silah sütunu: üstte başlık (Melee / Slot 1 / Slot 2), altında o yuvanın butonları
+# Bir silah sütunu: üstte başlık (Slot 1 / Slot 2), altında o yuvanın butonları
 func _add_slot_column(title: String) -> VBoxContainer:
 	var column := VBoxContainer.new()
 	column.size_flags_horizontal = Control.SIZE_EXPAND_FILL
@@ -346,12 +328,6 @@ func _add_column_note(column: VBoxContainer, text: String) -> void:
 	label.add_theme_font_size_override("font_size", 8)
 	column.add_child(label)
 
-func _sword_data() -> WeaponData:
-	for weapon in _weapons:
-		if weapon.is_melee:
-			return weapon
-	return null
-
 # Alım/satım sesi sadece işlem başarılı olunca çalar (para yetmezse ses yok)
 func _on_upgrade_pressed(upgrade: UpgradeData) -> void:
 	if GameState.buy_upgrade(upgrade):
@@ -371,10 +347,6 @@ func _on_gun_upgrade_pressed(slot: int, upgrade: UpgradeData) -> void:
 
 func _on_silver_pressed(slot: int) -> void:
 	if GameState.buy_silver(slot):
-		Audio.play_sfx("ui_click")
-
-func _on_sell_sword_pressed() -> void:
-	if GameState.sell_sword():
 		Audio.play_sfx("ui_click")
 
 func _on_swap_pressed(slot: int, weapon: WeaponData) -> void:

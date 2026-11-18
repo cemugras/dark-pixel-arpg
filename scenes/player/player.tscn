@@ -3,8 +3,6 @@
 [ext_resource type="Script" uid="uid://clvyhjaodhxf7" path="res://scenes/player/player.gd" id="1_wr5hl"]
 [ext_resource type="Texture2D" uid="uid://blpfu4pm3ajbf" path="res://assets/sprites/player/IdleSheet 16x16.png" id="2_4kuee"]
 [ext_resource type="Texture2D" uid="uid://bvw7s4tafnqix" path="res://assets/sprites/player/RunSheet 16x16.png" id="3_524rm"]
-[ext_resource type="Script" uid="uid://84acnjl3617a" path="res://scenes/weapons/weapon_pivot.gd" id="4_lvxji"]
-[ext_resource type="PackedScene" uid="uid://nyqcqpu8yr1j" path="res://scenes/weapons/sword.tscn" id="5_p47bc"]
 [ext_resource type="Script" path="res://scenes/weapons/gun_slots.gd" id="6_gslots"]
 [ext_resource type="PackedScene" path="res://scenes/weapons/gun.tscn" id="7_gun"]
 
@@ -429,10 +427,6 @@ animation = &"idle_up_right"
 [node name="CollisionShape2D" type="CollisionShape2D" parent="." unique_id=705874401]
 position = Vector2(0, 4)
 shape = SubResource("CapsuleShape2D_rn7t0")
-
-[node name="WeaponPivot" type="Node2D" parent="." unique_id=1796254593]
-script = ExtResource("4_lvxji")
-sword_scene = ExtResource("5_p47bc")
 
 [node name="GunSlots" type="Node2D" parent="." unique_id=1482093617]
 script = ExtResource("6_gslots")

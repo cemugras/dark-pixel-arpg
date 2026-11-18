@@ -4,7 +4,6 @@ extends Resource
 @export var id: String = ""
 @export var display_name: String = ""
 @export var description: String = ""
-@export var is_melee: bool = false            # true = dönen kılıç, false = menzilli silah (silah yuvası kullanır)
 @export var cost: int = 30                    # mağaza fiyatı
 @export var sort_order: int = 0               # mağazadaki sıra
 @export var unlock_wave: int = 0              # mağazada bu dalga bitince alınabilir (0 = baştan); öncesinde buton pasif, "(after wave X)" yazar

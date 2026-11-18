@@ -21,7 +21,6 @@ const DIR_FLIP: Array[bool] = [
 ]
 
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
-@onready var weapon_pivot: Node2D = $WeaponPivot
 @onready var hurtbox: Area2D = $Hurtbox
 @onready var gun_slots: Node2D = $GunSlots
 
@@ -146,7 +145,6 @@ func _on_stats_changed() -> void:
 func _apply_stats() -> void:
 	var s := GameState.stats
 	move_speed = s.move_speed
-	weapon_pivot.apply_stats(s.sword_count, s.rotation_speed, s.sword_damage())
 
 func _on_wave_started(_wave: int) -> void:
 	if is_dead:

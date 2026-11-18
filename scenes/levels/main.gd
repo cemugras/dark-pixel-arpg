@@ -3,12 +3,17 @@ extends Node2D
 @export var coin_scene: PackedScene
 
 const MERCHANT_SCRIPT: Script = preload("res://scenes/npc/merchant.gd")
+const START_WEAPON: WeaponData = preload("res://data/weapons/glock.tres")
 
 # Sikkeler bu düğümün altına eklenir. Zeminin (TileMapLayer) hemen arkasına yerleşir, böylece
 # zeminin üstünde ama oyuncu ve yaratıkların altında çizilir (yaratık üstünden geçince sikke altta kalır).
 var _coins: Node2D
 
 func _ready() -> void:
+	# Herkes Glock ile başlar (Adım 45: kılıç ve oyun başı seçim ekranı kaldırıldı).
+	# Game Over'dan yeniden başlayınca GameState sıfırlanmaz; silah zaten varsa tekrar verilmez.
+	if GameState.guns.is_empty():
+		GameState.give_weapon(START_WEAPON)
 	EventBus.enemy_died.connect(_on_enemy_died)
 	EventBus.coins_spilled.connect(_on_coins_spilled)
 	_coins = Node2D.new()

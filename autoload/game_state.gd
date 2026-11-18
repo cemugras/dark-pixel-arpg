@@ -23,7 +23,6 @@ var gun_upgrades: Array[Dictionary] = []  # guns ile paralel: yuvadaki silahın 
 # Harcama yuvanın gun_spent'ine eklenir, satışta/değiştirmede %50'si iade edilir; değiştirince gümüş gider.
 const SILVER_COST: int = 150  # Adım 43: 100 -> 200 -> 150 (100 çok çabuk güçlendiriyordu, 200 ile 13. dalgada ölündü)
 const SILVER_DAMAGE_MULT: float = 2.0
-var sword_spent: int = 0             # kılıç fiyatı + kılıca bağlı geliştirmeler (requires = "sword")
 var gun_upgrade_spent: int = 0       # menzilli silahlara bağlı ORTAK geliştirmeler (requires = "gun"); şu an yok (Damage/Fire Rate silah başına, gun_upgrades), ileride ortak bir geliştirme eklenirse son silah satılınca iade edilir
 
 func _ready() -> void:
@@ -95,8 +94,6 @@ func buy_upgrade(upgrade: UpgradeData) -> bool:
 		return false
 
 	match upgrade.requires:
-		"sword":
-			sword_spent += cost
 		"gun":
 			gun_upgrade_spent += cost
 
@@ -112,31 +109,21 @@ func _add_stat(stat: String, amount: float) -> void:
 	else:
 		stats.set(stat, current + amount)
 
-func has_sword() -> bool:
-	return stats.sword_count > 0
-
 func gun_slots_full() -> bool:
 	return guns.size() >= MAX_GUNS
 
-# Kılıç bir kez alınır; menzilli silah boş yuva varsa alınır
-func can_take_weapon(weapon: WeaponData) -> bool:
-	if weapon.is_melee:
-		return not has_sword()
+# Silah boş yuva varsa alınır
+func can_take_weapon(_weapon: WeaponData) -> bool:
 	return not gun_slots_full()
 
-# Ücretsiz verir (başlangıç seçimi); mağaza buy_weapon kullanır. paid = iade hesabı için ödenen para
+# Ücretsiz verir (başlangıç Glock'u, F5); mağaza buy_weapon kullanır. paid = iade hesabı için ödenen para
 func give_weapon(weapon: WeaponData, paid: int = 0) -> void:
 	if not can_take_weapon(weapon):
 		return
-	if weapon.is_melee:
-		stats.sword_count = 1
-		sword_spent = paid
-		stats_changed.emit()
-	else:
-		guns.append(weapon)
-		gun_spent.append(paid)
-		gun_silver.append(false)
-		gun_upgrades.append({})
+	guns.append(weapon)
+	gun_spent.append(paid)
+	gun_silver.append(false)
+	gun_upgrades.append({})
 	weapons_changed.emit()
 
 # Mağaza kilidi: silah unlock_wave. dalga bitince alınabilir (give_weapon bedava verir, kilide bakmaz)
@@ -152,7 +139,7 @@ func buy_weapon(weapon: WeaponData) -> bool:
 # --- Satma / değiştirme ---
 
 func weapon_count() -> int:
-	return guns.size() + (1 if has_sword() else 0)
+	return guns.size()
 
 # Son silah satılamaz (oyuncu silahsız kalmasın)
 func can_sell_weapon() -> bool:
@@ -160,10 +147,6 @@ func can_sell_weapon() -> bool:
 
 func _refund(spent: int) -> int:
 	return int(spent * SELL_RATIO)
-
-# Kılıç iadesi: kılıç + kılıç geliştirmeleri (Extra Sword, Spin Speed) harcamasının yarısı
-func get_sword_sell_price() -> int:
-	return _refund(sword_spent)
 
 # Yuvadaki silahın iadesi; son menzilli silahsa ortak silah geliştirmeleri (Fire Rate) de dahil
 func get_gun_sell_price(slot: int) -> int:
@@ -173,17 +156,6 @@ func get_gun_sell_price(slot: int) -> int:
 	if guns.size() == 1:
 		spent += gun_upgrade_spent
 	return _refund(spent)
-
-func sell_sword() -> bool:
-	if not has_sword() or not can_sell_weapon():
-		return false
-	add_gold(get_sword_sell_price())
-	_reset_upgrades_requiring("sword")
-	stats.sword_count = 0
-	sword_spent = 0
-	stats_changed.emit()
-	weapons_changed.emit()
-	return true
 
 func sell_gun(slot: int) -> bool:
 	if slot < 0 or slot >= guns.size() or not can_sell_weapon():
@@ -206,7 +178,7 @@ func get_swap_cost(slot: int, weapon: WeaponData) -> int:
 	return weapon.cost - _refund(gun_spent[slot])
 
 func can_swap_gun(slot: int, weapon: WeaponData) -> bool:
-	if weapon.is_melee or slot < 0 or slot >= guns.size():
+	if slot < 0 or slot >= guns.size():
 		return false
 	if guns[slot].id == weapon.id or not is_weapon_unlocked(weapon):
 		return false
@@ -253,11 +225,9 @@ func _reset_upgrades_requiring(requirement: String) -> void:
 			_add_stat(upgrade.stat, -upgrade.amount * level)
 		upgrade_levels.erase(upgrade.id)
 
-# Geliştirmenin ön koşulu: "sword" = kılıç gerekli, "gun" = en az bir menzilli silah gerekli
+# Geliştirmenin ön koşulu: "gun" = en az bir menzilli silah gerekli
 func meets_requirement(requirement: String) -> bool:
 	match requirement:
-		"sword":
-			return has_sword()
 		"gun":
 			return not guns.is_empty()
 	return true
@@ -271,7 +241,6 @@ func reset() -> void:
 	gun_spent.clear()
 	gun_silver.clear()
 	gun_upgrades.clear()
-	sword_spent = 0
 	gun_upgrade_spent = 0
 	cleared_wave = 0
 	gold_changed.emit(gold)

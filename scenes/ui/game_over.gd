@@ -21,4 +21,5 @@ func _on_player_died() -> void:
 func _on_retry_pressed() -> void:
 	Audio.play_sfx("ui_click")
 	get_tree().paused = false
+	GameState.reset()  # yeni oyun: önceki oyunun silah, geliştirme ve sikkesi taşınmasın (main.gd Glock'u yeniden verir)
 	get_tree().reload_current_scene()
