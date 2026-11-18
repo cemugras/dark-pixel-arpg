@@ -68,6 +68,7 @@ extends Resource
 # altın kasılmasın), çağıran ölünce hepsi ölür.
 @export var summon_data: EnemyData                # çağrılan yaratık (boşsa çağırma yok)
 @export var summon_count: int = 5                # bir çağırmada çıkan sayı
+@export var summon_count_max: int = 0            # > summon_count ise her çağırmada sayı summon_count..bu arasında rastgele
 @export var summon_max_alive: int = 12           # aynı anda en fazla bu kadar çağrılmış yaratık
 @export var summon_interval: float = 6.0         # iki çağırma arası bekleme (sn, çağırma bitince sayılır)
 @export var summon_release_frame: int = 6        # yaratıkların çıktığı animasyon karesi (0'dan sayılır)

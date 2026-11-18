@@ -449,7 +449,8 @@ func _release_summon() -> void:
 	_summon_released = true
 	if _dying:
 		return
-	var count := mini(data.summon_count, data.summon_max_alive - _alive_minions())
+	var wanted := randi_range(data.summon_count, maxi(data.summon_count, data.summon_count_max))
+	var count := mini(wanted, data.summon_max_alive - _alive_minions())
 	if count <= 0:
 		return
 	var scene := load(scene_file_path) as PackedScene

@@ -248,6 +248,7 @@ func _build_effects() -> void:
 		else:
 			_add_embers(band, maxi(4, roundi(region.ember_amount * share)))
 			_add_smoke(band, maxi(1, roundi(region.smoke_amount * share)))
+	_add_fly_swarms()
 	if region.ash_fall:
 		return  # kül bölgesinde kenar parıltısı yok
 	# Kenar boyunca, uçurumun dibinden kıvılcım: arena kenarında parıltı hissi
@@ -385,6 +386,45 @@ func _add_mist(rect: Rect2, amount: int) -> void:
 	ramp.add_point(0.65, c)
 	p.color_ramp = ramp
 	_fx.add_child(p)
+
+# Dış alanda, kamera kenardayken görünen kuşakta rastgele noktalara küçük sinek bulutları: her biri bir noktanın
+# etrafında dönüp duran birkaç koyu piksel (yaratık değil, sadece süs; arenaya girmez)
+const FLY_SWARM_RADIUS: float = 14.0
+
+func _add_fly_swarms() -> void:
+	if region.fly_swarms <= 0:
+		return
+	var play := play_rect()
+	var area := play.grow(region.scatter_reach).intersection(world_rect())
+	var keep_out := play.grow(SCATTER_EDGE_GAP + FLY_SWARM_RADIUS)
+	for i in region.fly_swarms:
+		var pos := Vector2.ZERO
+		for attempt in SCATTER_TRIES:
+			pos = Vector2(randf_range(area.position.x, area.end.x), randf_range(area.position.y, area.end.y))
+			if not keep_out.has_point(pos):
+				break
+		var p := CPUParticles2D.new()
+		p.amount = randi_range(6, 10)
+		p.lifetime = 1.4
+		p.preprocess = p.lifetime
+		p.randomness = 0.5
+		p.local_coords = true  # bulut yerinde kalır
+		p.position = pos
+		p.emission_shape = CPUParticles2D.EMISSION_SHAPE_SPHERE
+		p.emission_sphere_radius = FLY_SWARM_RADIUS * 0.5
+		p.direction = Vector2.RIGHT
+		p.spread = 180.0
+		p.gravity = Vector2.ZERO
+		p.initial_velocity_min = 8.0
+		p.initial_velocity_max = 22.0
+		p.orbit_velocity_min = -0.8  # merkezin etrafında zikzak döner
+		p.orbit_velocity_max = 0.8
+		p.radial_accel_min = -30.0   # merkeze geri çekilir, bulut dağılmaz
+		p.radial_accel_max = -18.0
+		p.scale_amount_min = 1.0
+		p.scale_amount_max = 1.5
+		p.color = region.fly_color
+		_fx.add_child(p)
 
 static var _smoke_tex: Texture2D
 
