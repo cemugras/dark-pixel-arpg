@@ -21,6 +21,14 @@ extends Resource
 @export var edge_tiles: Dictionary = {}
 @export var edge_tall: bool = true             # true: güney kenarda uçurum yüzü satırı var (transition köşeleri)
 
+@export_group("Decor")
+# Arena dışındaki sabit süsler (yürünemez alanda, çarpışmasız): {"texture": Texture2D, "position": Vector2 (dünya, sprite merkezi), "flip": bool}
+@export var decor: Array[Dictionary] = []
+# Dış alana rastgele serpiştirilen küçük süsler (ör. lav kayaları); sabit süslerle ve birbirleriyle çakışmaz
+@export var scatter_textures: Array[Texture2D] = []
+@export var scatter_count: int = 0
+@export var scatter_reach: float = 230.0       # arena kenarından en fazla bu kadar uzağa (kamera kenarda bunu görür)
+
 @export_group("Effects")
 @export var animate_outside: bool = true       # dıştaki doygun (kızgın) piksellere dalgalanan parlaklık shader'ı
 @export var ember_color: Color = Color(1.0, 0.55, 0.15)

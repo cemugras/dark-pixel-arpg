@@ -3,6 +3,11 @@
 [ext_resource type="Script" path="res://scripts/region_data.gd" id="1_region"]
 [ext_resource type="Texture2D" path="res://assets/tiles/moloch_gate/floor.png" id="2_floor"]
 [ext_resource type="Texture2D" path="res://assets/tiles/moloch_gate/edge.png" id="3_edge"]
+[ext_resource type="Texture2D" path="res://assets/tiles/moloch_gate/decor/gate.png" id="4_gate"]
+[ext_resource type="Texture2D" path="res://assets/tiles/moloch_gate/decor/volcano.png" id="5_volcano"]
+[ext_resource type="Texture2D" path="res://assets/tiles/moloch_gate/decor/rocks_a.png" id="6_rocks_a"]
+[ext_resource type="Texture2D" path="res://assets/tiles/moloch_gate/decor/rocks_b.png" id="7_rocks_b"]
+[ext_resource type="Texture2D" path="res://assets/tiles/moloch_gate/decor/rocks_c.png" id="8_rocks_c"]
 
 [resource]
 script = ExtResource("1_region")
@@ -55,4 +60,19 @@ edge_tiles = {
 "2200": Vector2i(3, 1)
 }
 edge_tall = true
+decor = Array[Dictionary]([{
+"flip": false,
+"position": Vector2(0, -383),
+"texture": ExtResource("4_gate")
+}, {
+"flip": false,
+"position": Vector2(-530, -420),
+"texture": ExtResource("5_volcano")
+}, {
+"flip": true,
+"position": Vector2(560, 380),
+"texture": ExtResource("5_volcano")
+}])
+scatter_textures = Array[Texture2D]([ExtResource("6_rocks_a"), ExtResource("7_rocks_b"), ExtResource("8_rocks_c")])
+scatter_count = 16
 animate_outside = true

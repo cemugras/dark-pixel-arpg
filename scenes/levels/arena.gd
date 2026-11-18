@@ -40,6 +40,7 @@ func build(new_region: RegionData) -> void:
 		return
 	_build_ground()
 	_build_walls()
+	_build_decor()
 	_build_effects()
 
 # Bölge değişince ekran kararır, harita yeniden kurulur, açılır
@@ -173,6 +174,61 @@ func _add_wall(rect: Rect2) -> void:
 	collision.shape = shape
 	collision.position = rect.get_center()
 	_walls.add_child(collision)
+
+# --- Süsler: arena dışında, zeminin üstünde, korların altında. Lav shader'ı kızgın piksellerini denizle birlikte dalgalandırır ---
+
+const SCATTER_EDGE_GAP: float = 28.0   # serpiştirilen süsler arena kenarına (parıltılı kıyı) bu kadar yaklaşmaz
+const SCATTER_TRIES: int = 40
+
+func _build_decor() -> void:
+	var decor := Node2D.new()
+	decor.name = "Decor"
+	add_child(decor)
+	var taken: Array[Rect2] = []  # çakışmayı önlemek için kaplanan alanlar
+	for item in region.decor:
+		var texture: Texture2D = item.get("texture")
+		if texture == null:
+			continue
+		var pos: Vector2 = item.get("position", Vector2.ZERO)
+		_add_decor_sprite(decor, texture, pos, item.get("flip", false))
+		taken.append(Rect2(pos - texture.get_size() / 2.0, texture.get_size()))
+	if region.scatter_textures.is_empty():
+		return
+	var play := play_rect()
+	var area := play.grow(region.scatter_reach).intersection(world_rect())
+	var g := SCATTER_EDGE_GAP
+	var keep_out := play.grow_individual(g, g, g, g + (TILE * 2 if region.edge_tall else 0))  # güneyde uçurum yüzü de
+	# Dört kenar şeridi; süsler sırayla dağıtılır ki dar şerit (güney, uçurum yüzü yüzünden) boş kalmasın
+	var sides: Array[Rect2] = [
+		Rect2(area.position.x, area.position.y, area.size.x, keep_out.position.y - area.position.y),
+		Rect2(area.position.x, keep_out.end.y, area.size.x, area.end.y - keep_out.end.y),
+		Rect2(area.position.x, keep_out.position.y, keep_out.position.x - area.position.x, keep_out.size.y),
+		Rect2(keep_out.end.x, keep_out.position.y, area.end.x - keep_out.end.x, keep_out.size.y),
+	]
+	for i in region.scatter_count:
+		var texture: Texture2D = region.scatter_textures.pick_random()
+		var size := texture.get_size()
+		var side := sides[i % sides.size()]
+		for attempt in SCATTER_TRIES:
+			var pos := Vector2(randf_range(side.position.x, side.end.x), randf_range(side.position.y, side.end.y))
+			var rect := Rect2(pos - size / 2.0, size)
+			if rect.intersects(keep_out) or not area.encloses(rect):
+				continue
+			if taken.any(func(r: Rect2) -> bool: return r.grow(8.0).intersects(rect)):
+				continue
+			_add_decor_sprite(decor, texture, pos, randf() < 0.5)
+			taken.append(rect)
+			break
+
+func _add_decor_sprite(parent: Node2D, texture: Texture2D, pos: Vector2, flip: bool) -> void:
+	var sprite := Sprite2D.new()
+	sprite.texture = texture
+	sprite.position = pos.round()
+	sprite.flip_h = flip
+	sprite.texture_filter = CanvasItem.TEXTURE_FILTER_NEAREST
+	if region.animate_outside:
+		sprite.material = _ground.material
+	parent.add_child(sprite)
 
 # --- Dış alan efektleri: yükselen korlar ve duman (sadece arena dışında doğar) ---
 
