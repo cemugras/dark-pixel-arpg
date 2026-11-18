@@ -58,7 +58,7 @@ func _build_ui() -> void:
 	var title := Label.new()
 	title.text = "OPTIONS"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 36)
+	title.add_theme_font_size_override("font_size", 33)
 	title.add_theme_color_override("font_color", Color(0.85, 0.12, 0.08))
 	vbox.add_child(title)
 
@@ -69,7 +69,7 @@ func _build_ui() -> void:
 	back.text = "Back"
 	back.custom_minimum_size = Vector2(220, 44)
 	back.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	back.add_theme_font_size_override("font_size", 20)
+	back.add_theme_font_size_override("font_size", 22)
 	back.pressed.connect(func() -> void:
 		Audio.play_sfx("ui_click")
 		close())
@@ -83,8 +83,8 @@ func _add_volume_row(parent: Node, label_text: String, bus_name: String) -> Cont
 
 	var label := Label.new()
 	label.text = label_text
-	label.custom_minimum_size = Vector2(160, 0)
-	label.add_theme_font_size_override("font_size", 20)
+	label.custom_minimum_size = Vector2(200, 0)  # en uzun ad ("Sound Effects", 22 px'de ~182 px) sığsın, kaydırıcılar eşit boyda kalsın
+	label.add_theme_font_size_override("font_size", 22)
 	row.add_child(label)
 
 	var minus := _small_button("-")
@@ -105,7 +105,7 @@ func _add_volume_row(parent: Node, label_text: String, bus_name: String) -> Cont
 	var value_label := Label.new()
 	value_label.custom_minimum_size = Vector2(60, 0)
 	value_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	value_label.add_theme_font_size_override("font_size", 20)
+	value_label.add_theme_font_size_override("font_size", 22)
 	value_label.text = _percent(slider.value)
 	row.add_child(value_label)
 
@@ -126,7 +126,7 @@ func _small_button(text: String) -> Button:
 	var button := Button.new()
 	button.text = text
 	button.custom_minimum_size = Vector2(40, 40)
-	button.add_theme_font_size_override("font_size", 20)
+	button.add_theme_font_size_override("font_size", 22)
 	return button
 
 func _percent(v: float) -> String:

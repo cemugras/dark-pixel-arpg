@@ -19,7 +19,7 @@ const COIN_ICON_PATH: String = "res://assets/sprites/gold/coin_icon.png"
 const COIN_ICON: Texture2D = preload("res://assets/sprites/gold/coin_icon.png")
 const PRICE_ICON_SIZE: int = 10       # buton içindeki sikke (ikon 20 px, yarısı: piksel bozulmaz)
 const HEADER_ICON_SIZE: int = 20      # üstteki altın satırındaki sikke
-const BUTTON_FONT_SIZE: int = 10   # 8 px'de "0" ile "8" karışıyordu (10 sikke 18 gibi okunuyordu)
+const BUTTON_FONT_SIZE: int = 11   # Departure Mono sadece 11 px katlarında keskin (11, 22, 33...)
 const BUTTON_MIN_HEIGHT: float = 30.0
 const WEAPON_ICON_WIDTH: int = 48     # silah görselli butonlarda yazı bu genişliğin sağından başlar
 
@@ -84,13 +84,13 @@ func _build_merchant_panel() -> void:
 	var name_label := Label.new()
 	name_label.text = MERCHANT_NAME
 	name_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	name_label.add_theme_font_size_override("font_size", 14)
+	name_label.add_theme_font_size_override("font_size", 22)
 	column.add_child(name_label)
 
 	_merchant_line = Label.new()
 	_merchant_line.autowrap_mode = TextServer.AUTOWRAP_WORD_SMART
 	_merchant_line.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	_merchant_line.add_theme_font_size_override("font_size", 10)
+	_merchant_line.add_theme_font_size_override("font_size", 11)
 	_merchant_line.modulate = Color(0.85, 0.8, 0.7)
 	column.add_child(_merchant_line)
 
@@ -169,7 +169,7 @@ func _add_label(text: String) -> Label:
 	var vbox := next_wave_button.get_parent()
 	var label := Label.new()
 	label.text = text
-	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_font_size_override("font_size", 11)
 	vbox.add_child(label)
 	vbox.move_child(label, next_wave_button.get_index())
 	return label
@@ -315,7 +315,7 @@ func _add_slot_column(title: String) -> VBoxContainer:
 	var label := Label.new()
 	label.text = title
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	label.add_theme_font_size_override("font_size", 10)
+	label.add_theme_font_size_override("font_size", 11)
 	column.add_child(label)
 	_slot_row.add_child(column)
 	return column
@@ -325,7 +325,7 @@ func _add_column_note(column: VBoxContainer, text: String) -> void:
 	label.text = text
 	label.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
 	label.modulate.a = 0.5
-	label.add_theme_font_size_override("font_size", 8)
+	label.add_theme_font_size_override("font_size", 11)
 	column.add_child(label)
 
 # Alım/satım sesi sadece işlem başarılı olunca çalar (para yetmezse ses yok)

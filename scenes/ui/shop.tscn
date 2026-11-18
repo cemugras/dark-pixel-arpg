@@ -26,11 +26,11 @@ layout_mode = 2
 
 [node name="TitleLabel" type="Label" parent="Background/MarginContainer/VBoxContainer" unique_id=1931998677]
 layout_mode = 2
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 11
 
 [node name="GoldLabel" type="Label" parent="Background/MarginContainer/VBoxContainer" unique_id=1770039170]
 layout_mode = 2
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 11
 
 [node name="UpgradeList" type="GridContainer" parent="Background/MarginContainer/VBoxContainer" unique_id=266232472]
 layout_mode = 2
@@ -38,5 +38,5 @@ columns = 2
 
 [node name="NextWaveButton" type="Button" parent="Background/MarginContainer/VBoxContainer" unique_id=1178518961]
 layout_mode = 2
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 11
 text = "Next Wave"

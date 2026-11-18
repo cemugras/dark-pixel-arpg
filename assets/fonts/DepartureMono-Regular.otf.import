@@ -2,13 +2,13 @@
 
 importer="font_data_dynamic"
 type="FontFile"
-uid="uid://bhdugp172pat"
-path="res://.godot/imported/Jersey20-Regular.ttf-c1066d31b52539bb77b2ea41ea527682.fontdata"
+uid="uid://clwvo6cc578ol"
+path="res://.godot/imported/DepartureMono-Regular.otf-244c415841734030154a5529dddbb944.fontdata"
 
 [deps]
 
-source_file="res://assets/fonts/Jersey20-Regular.ttf"
-dest_files=["res://.godot/imported/Jersey20-Regular.ttf-c1066d31b52539bb77b2ea41ea527682.fontdata"]
+source_file="res://assets/fonts/DepartureMono-Regular.otf"
+dest_files=["res://.godot/imported/DepartureMono-Regular.otf-244c415841734030154a5529dddbb944.fontdata"]
 
 [params]
 

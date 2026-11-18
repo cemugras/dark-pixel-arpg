@@ -27,7 +27,7 @@ layout_mode = 2
 
 [node name="TitleLabel" type="Label" parent="Background/CenterContainer/VBoxContainer" unique_id=1714488129]
 layout_mode = 2
-theme_override_font_sizes/font_size = 32
+theme_override_font_sizes/font_size = 33
 text = "YOU DIED"
 
 [node name="WaveLabel" type="Label" parent="Background/CenterContainer/VBoxContainer" unique_id=1063418431]
@@ -35,5 +35,5 @@ layout_mode = 2
 
 [node name="RetryButton" type="Button" parent="Background/CenterContainer/VBoxContainer" unique_id=1634837373]
 layout_mode = 2
-theme_override_font_sizes/font_size = 24
+theme_override_font_sizes/font_size = 22
 text = "Retry"

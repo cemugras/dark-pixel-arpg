@@ -30,7 +30,8 @@ window/stretch/scale_mode="integer"
 
 [gui]
 
-theme/custom_font="res://assets/fonts/Jersey20-Regular.ttf"
+theme/custom_font="res://assets/fonts/DepartureMono-Regular.otf"
+theme/default_font_size=22
 
 [input]
 

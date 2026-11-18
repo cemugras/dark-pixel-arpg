@@ -31,7 +31,7 @@ func _build_ui() -> void:
 	var title := Label.new()
 	title.text = "HELLSTAKE"
 	title.horizontal_alignment = HORIZONTAL_ALIGNMENT_CENTER
-	title.add_theme_font_size_override("font_size", 72)
+	title.add_theme_font_size_override("font_size", 66)
 	title.add_theme_color_override("font_color", Color(0.85, 0.12, 0.08))
 	vbox.add_child(title)
 
@@ -53,7 +53,7 @@ func _add_button(parent: Node, text: String, on_pressed: Callable) -> Button:
 	button.text = text
 	button.custom_minimum_size = Vector2(220, 44)
 	button.size_flags_horizontal = Control.SIZE_SHRINK_CENTER
-	button.add_theme_font_size_override("font_size", 20)
+	button.add_theme_font_size_override("font_size", 22)
 	if on_pressed.is_valid():
 		button.pressed.connect(on_pressed)
 	parent.add_child(button)

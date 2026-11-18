@@ -59,7 +59,7 @@ func _build_pause_button() -> void:
 	button.name = "PauseButton"
 	button.text = "II"
 	button.tooltip_text = "Pause (Esc)"
-	button.add_theme_font_size_override("font_size", 12)
+	button.add_theme_font_size_override("font_size", 11)
 	button.focus_mode = Control.FOCUS_NONE  # Space/Enter ile yanlışlıkla basılmasın
 	button.custom_minimum_size = Vector2(24, 24)
 	button.size_flags_horizontal = Control.SIZE_SHRINK_BEGIN  # VBox içinde tüm genişliğe yayılmasın

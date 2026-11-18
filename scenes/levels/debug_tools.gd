@@ -21,12 +21,14 @@ func _ready() -> void:
 	layer = 40
 	process_mode = Node.PROCESS_MODE_ALWAYS  # mağaza açıkken (oyun dururken) de altın verilebilsin
 	_label = Label.new()
-	_label.add_theme_font_size_override("font_size", 12)
+	_label.add_theme_font_size_override("font_size", 11)
 	_label.add_theme_color_override("font_color", Color(1, 1, 0.6, 0.85))
-	_label.set_anchors_preset(Control.PRESET_TOP_RIGHT)
+	# Sağ üst köşeye yaslı; kutu yazının boyuna göre sola doğru büyür (sabit genişlik yazıyı ekran dışına itiyordu)
+	_label.set_anchors_and_offsets_preset(Control.PRESET_TOP_RIGHT)
+	_label.grow_horizontal = Control.GROW_DIRECTION_BEGIN
+	_label.offset_right = -4
+	_label.offset_top = 4
 	_label.horizontal_alignment = HORIZONTAL_ALIGNMENT_RIGHT
-	_label.position = Vector2(-330, 4)
-	_label.size = Vector2(326, 20)
 	_label.mouse_filter = Control.MOUSE_FILTER_IGNORE
 	add_child(_label)
 	_update_label()
@@ -62,7 +64,8 @@ func _toggle_god() -> void:
 func _update_label() -> void:
 	var p := _player()
 	var god: bool = p != null and "debug_god" in p and p.debug_god
-	_label.text = "DEBUG  F1 god %s | F2 +1000 | F3 boss -25%% | F4 next boss | F5 kit (wave)" % ("ON" if god else "off")
+	# Tek satır ve kısa: ekranın ortasındaki boss çubuğunun (x 392-632) sağına sığsın (11 px'de karakter 7 px, ~350 px)
+	_label.text = "F1 god %s | F2 +1000 | F3 -25%% | F4 boss | F5 kit" % ("ON" if god else "off")
 
 func _hit_boss() -> void:
 	if get_tree().paused:

@@ -24,7 +24,7 @@ anchor_right = 1.0
 anchor_bottom = 1.0
 grow_horizontal = 2
 grow_vertical = 2
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 11
 text = "BOSS"
 horizontal_alignment = 1
 vertical_alignment = 1
@@ -46,7 +46,7 @@ layout_mode = 2
 
 [node name="HealthLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=1531324002]
 layout_mode = 2
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 11
 
 [node name="HealthBar" type="ProgressBar" parent="MarginContainer/VBoxContainer" unique_id=205795697]
 custom_minimum_size = Vector2(70, 6)
@@ -55,12 +55,12 @@ show_percentage = false
 
 [node name="GoldLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=564667591]
 layout_mode = 2
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 11
 
 [node name="WaveLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=904224141]
 layout_mode = 2
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 11
 
 [node name="TimerLabel" type="Label" parent="MarginContainer/VBoxContainer" unique_id=743122340]
 layout_mode = 2
-theme_override_font_sizes/font_size = 10
+theme_override_font_sizes/font_size = 11
