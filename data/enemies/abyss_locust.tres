@@ -1,0 +1,37 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" uid="uid://cqlw7x1k6q18i" path="res://scripts/enemy_data.gd" id="1_alocust"]
+[ext_resource type="SpriteFrames" path="res://data/enemies/abyss_locust_frames.tres" id="2_alocust"]
+
+[resource]
+script = ExtResource("1_alocust")
+id = "abyss_locust"
+display_name = "Abyss Locust"
+sprite_frames = ExtResource("2_alocust")
+body_scale = 0.5
+max_health = 30
+move_speed = 45.0
+keep_distance = 140.0
+contact_damage = 2
+locust_length = 160.0
+locust_thickness = 24.0
+locust_interval = 6.0
+locust_min_range = 80.0
+locust_max_range = 220.0
+locust_gap = 0.0
+locust_gap_min = 0.0
+locust_gap_max = 0.0
+locust_speed = 120.0
+locust_overshoot = 100.0
+locust_warning = 1.2
+locust_hold_frame = 5
+locust_damage = 4
+locust_recover = 0.4
+locust_sound = "abyss_locust_swarm"
+locust_focus = false
+coin_value = 2
+spawn_weight = 0.4
+spawn_weight_per_wave = 0.04
+min_wave = 81
+hit_sound = "abyss_locust_hit"
+death_sound = "abyss_locust_death"

@@ -132,6 +132,31 @@ extends Resource
 @export var breath_colors: Array[Color] = []     # koni renkleri sırayla (boşsa kızıl, mor, yeşil)
 @export var breath_sound: String = ""            # Audio sfx adı: nefes başlarken (uyarı bitince; boşsa ses yok)
 
+# --- Çekirge seli: oyuncunun yolunu kesen geniş çekirge duvarı (ör. Abaddon) ---
+# locust_length 0 ise ya da sprite'ta locust_<yön> animasyonu yoksa sel yok. Akış: kovalarken locust_interval dolunca
+# ve oyuncu locust_min_range..locust_max_range arasındaysa durur, oyuncuya döner, locust_<yön> animasyonu oynar
+# (locust_hold_frame karesinde bekler). Boss'tan oyuncuya doğru, bu yöne dik locust_length boyunda bir duvar
+# locust_warning sn uyarı verir (zeminde selin geçeceği alan, güvenli boşluğun şeridi açık), sonra locust_speed ile
+# oyuncunun konumunu locust_overshoot geçene kadar akar. Duvarda locust_gap genişliğinde bir boşluk var (ortası
+# oyuncunun hizasından locust_gap_min..locust_gap_max kadar yanda, yönü rastgele); duvarın uçları da güvenli.
+# Duvara değen oyuncu locust_damage alır. Uyarı bitince animasyon kalanını oynar, locust_recover sn yerinde durur.
+@export var locust_length: float = 0.0           # duvar boyu (px; 0 = sel yok)
+@export var locust_thickness: float = 36.0       # duvar kalınlığı (px)
+@export var locust_interval: float = 6.0         # iki sel arası bekleme (sn, toparlanma bitince sayılır)
+@export var locust_min_range: float = 110.0      # oyuncu bundan yakınsa sel yapmaz (kaçacak zaman kalmaz)
+@export var locust_max_range: float = 320.0      # oyuncu bundan uzaksa sel yapmaz, yürür
+@export var locust_gap: float = 80.0             # güvenli boşluğun genişliği (px; 0 = boşluk yok, sadece uçlardan dolaşılır)
+@export var locust_gap_min: float = 30.0         # boşluk ortasının oyuncu hizasına en az uzaklığı
+@export var locust_gap_max: float = 140.0        # ... en çok uzaklığı
+@export var locust_speed: float = 140.0          # duvarın akış hızı (px/sn)
+@export var locust_overshoot: float = 200.0      # duvar oyuncunun (uyarı başındaki) konumunu bu kadar geçince biter
+@export var locust_warning: float = 1.0          # uyarı süresi (sn)
+@export var locust_hold_frame: int = 4           # animasyonun uyarı boyunca beklediği kare (0'dan sayılır)
+@export var locust_damage: int = 0               # duvardaki hasar (dalgayla temas hasarı gibi artar)
+@export var locust_recover: float = 1.0          # selden sonra yerinde durma süresi (sn)
+@export var locust_sound: String = ""            # Audio sfx adı: sel akmaya başlarken (boşsa ses yok)
+@export var locust_focus: bool = true            # true: ses play_sfx_focus ile (boss); kalabalık yaratıkta false
+
 # --- Vurdukça sikke saçma (Mammon) ---
 # spill_health_step 0 ise yok. Canın her spill_health_step kadarı (ör. 0.1 = %10) gidince yere spill_value
 # değerinde sikke saçılır (oyuncu yaklaşınca toplanır, kalanlar dalga sonunda otomatik toplanır).

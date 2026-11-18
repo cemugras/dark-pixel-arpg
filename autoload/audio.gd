@@ -56,11 +56,18 @@ const SFX_VOLUME_DB: Dictionary = {
 	"asmodeus_hit": 0.0,       # 3 varyasyon (_01, _02, _03)
 	"asmodeus_death": 0.0,
 	"asmodeus_breath": 0.0,
+	"abaddon_spawn": 0.0,
+	"abaddon_hit": 0.0,
+	"abaddon_death": 0.0,
+	"abaddon_swarm": 0.0,
 	"belphegor_charge": 0.0,
 	"lilim_hit": -10.0,         # Lilith seslerinin ince ve kısık kopyası (SFX_ALIASES)
 	"lilim_death": -8.0,
 	"lilim_cast": -8.0,
 	"lilim_rune_blast": -8.0,
+	"abyss_locust_hit": -8.0,  # kalabalık yaratık, kısık
+	"abyss_locust_death": -6.0,
+	"abyss_locust_swarm": -10.0,  # Abaddon sel sesinin ince ve kısık kopyası (SFX_ALIASES)
 }
 
 # Aynı anda en fazla kaç kopya çalabileceği sese özel ayar (listede yoksa MAX_PER_SOUND).
@@ -74,10 +81,14 @@ const SFX_MAX_INSTANCES: Dictionary = {
 	"lilith_rune_blast": 1,  # 3 rün aynı anda patlar: tek ses yeter, üst üste binip patlamasın
 	"leviathan_hit": 1,
 	"asmodeus_hit": 1,
+	"abaddon_hit": 1,
 	"lilim_hit": 1,        # kalabalık yaratık: Lilith sesi üst üste binmesin
 	"lilim_death": 2,
 	"lilim_cast": 1,
 	"lilim_rune_blast": 1,
+	"abyss_locust_hit": 1,
+	"abyss_locust_death": 2,
+	"abyss_locust_swarm": 1,
 }
 
 # Başka sesin dosyasını kullanan sesler (ayrı dosya yok): ad -> kaynak ses. Seviye (SFX_VOLUME_DB), üst üste çalma
@@ -88,6 +99,7 @@ const SFX_ALIASES: Dictionary = {
 	"lilim_death": "lilith_death",
 	"lilim_cast": "lilith_cast",
 	"lilim_rune_blast": "lilith_rune_blast",
+	"abyss_locust_swarm": "abaddon_swarm",  # Abyss Locust, Abaddon sel sesini ince ve kısık kullanır
 	"smg_shoot": "glock_shoot",  # SMG Glock ile aynı mermiyi atar, sadece daha hızlı ve otomatik: aynı ses
 }
 
@@ -97,6 +109,7 @@ const SFX_PITCH: Dictionary = {
 	"lilim_death": 1.3,
 	"lilim_cast": 1.25,
 	"lilim_rune_blast": 1.25,
+	"abyss_locust_swarm": 1.3,
 }
 
 # --- Müzik ---

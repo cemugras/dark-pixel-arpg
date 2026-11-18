@@ -1,0 +1,36 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" uid="uid://cqlw7x1k6q18i" path="res://scripts/enemy_data.gd" id="1_abad"]
+[ext_resource type="SpriteFrames" path="res://data/enemies/abaddon_frames.tres" id="2_abad"]
+
+[resource]
+script = ExtResource("1_abad")
+id = "abaddon"
+display_name = "Abaddon"
+sprite_frames = ExtResource("2_abad")
+body_scale = 1.0
+hitbox_scale = 1.8
+max_health = 2640
+move_speed = 34.0
+contact_damage = 5
+locust_length = 600.0
+locust_thickness = 36.0
+locust_interval = 6.0
+locust_min_range = 110.0
+locust_max_range = 320.0
+locust_gap = 80.0
+locust_gap_min = 30.0
+locust_gap_max = 140.0
+locust_speed = 140.0
+locust_overshoot = 200.0
+locust_warning = 1.0
+locust_hold_frame = 6
+locust_damage = 6
+locust_recover = 1.0
+locust_sound = "abaddon_swarm"
+coin_value = 450
+is_boss = true
+boss_wave = 80
+hit_sound = "abaddon_hit"
+death_sound = "abaddon_death"
+spawn_sound = "abaddon_spawn"

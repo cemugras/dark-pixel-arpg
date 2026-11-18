@@ -53,7 +53,7 @@ var _dying: bool = false
 # --- Saldırı durumu (bkz. EnemyData attack_*) ---
 const ATTACK_HIT_RANGE_MULT: float = 1.4  # attack_hit_range boşsa: başlatma menzilinin bu katı (kılpayı ıska olmasın)
 const ATTACK_LUNGE_FRAMES: int = 2        # vuruş karesinden önceki kaç karede ileri atılır
-enum State { CHASE, ATTACK, WINDUP, CHARGE, TIRED, THROW, SUMMON, CAST, DIVE, BURROW, SURFACING, EMERGE, BREATH }
+enum State { CHASE, ATTACK, WINDUP, CHARGE, TIRED, THROW, SUMMON, CAST, DIVE, BURROW, SURFACING, EMERGE, BREATH, LOCUST }
 var _state: State = State.CHASE
 
 # --- Hamle durumu (bkz. EnemyData charge_*) ---
@@ -126,6 +126,14 @@ var breath_damage: int = 0
 var _breath_timer: float = 0.0
 var _breath_phase: int = 0            # 0 = uyarı + nefes, 1 = animasyonun kalanı, 2 = toparlanma
 
+# --- Çekirge seli (bkz. EnemyData locust_*) ---
+# LOCUST: dur, dön, animasyon (bekleme karesinde durur); boss'tan oyuncuya akan duvar uyarı verir -> uyarı bitince
+# animasyon kalanı -> toparlanma. Duvar kendi başına akar (LocustTide), boss toparlanırken de sürer.
+var _has_locust: bool = false
+var locust_damage: int = 0
+var _locust_timer: float = 0.0
+var _locust_phase: int = 0            # 0 = uyarı, 1 = animasyonun kalanı, 2 = toparlanma
+
 # --- Sikke saçma (bkz. EnemyData spill_*) ---
 var _spill_next: int = 0  # can bu değerin altına inince sikke saçılır
 
@@ -146,6 +154,7 @@ func setup(enemy_data: EnemyData, wave: int) -> void:
 	cast_damage = int(data.cast_damage * dmg_mult)
 	emerge_damage = int(data.emerge_damage * dmg_mult)
 	breath_damage = int(data.breath_damage * dmg_mult)
+	locust_damage = int(data.locust_damage * dmg_mult)
 	move_speed = data.move_speed * minf(1.0 + 0.01 * w, 1.5)
 	coin_value = data.coin_value
 	scale = Vector2.ONE * data.body_scale
@@ -218,7 +227,14 @@ func _ready() -> void:
 	if _has_breath:
 		_breath_timer = data.breath_interval * 0.5  # boss belirince ilk nefes biraz erken gelsin
 
-	if _has_attack or _has_throw or _has_summon or _has_cast or _has_dive or _has_breath:
+	# Çekirge seli: veri + 8 yönlü locust animasyonu varsa açılır
+	_has_locust = data != null and data.locust_length > 0.0 and _mode == SpriteMode.EIGHT_DIR \
+		and frames.has_animation("locust_east")
+	if _has_locust:
+		# boss belirince ilk sel biraz erken gelsin; normal yaratıkta rastgele, aynı anda doğanlar birlikte atmasın
+		_locust_timer = data.locust_interval * (0.5 if data.is_boss else randf_range(0.4, 1.0))
+
+	if _has_attack or _has_throw or _has_summon or _has_cast or _has_dive or _has_breath or _has_locust:
 		sprite.frame_changed.connect(_on_sprite_frame_changed)
 		sprite.animation_finished.connect(_on_sprite_animation_finished)
 
@@ -260,6 +276,9 @@ func _physics_process(delta: float) -> void:
 			return
 		State.BREATH:
 			_process_breath(delta)
+			return
+		State.LOCUST:
+			_process_locust(delta)
 			return
 
 	var separation := _separation() * maxf(move_speed, SEPARATION_MIN_SPEED) * SEPARATION_STRENGTH
@@ -320,6 +339,12 @@ func _physics_process(delta: float) -> void:
 		_breath_timer -= delta
 		if _can_start_breath(to_target.length()):
 			_start_breath(dir)
+			return
+
+	if _has_locust:
+		_locust_timer -= delta
+		if _can_start_locust(to_target.length()):
+			_start_locust(dir)
 			return
 
 	match _mode:
@@ -654,12 +679,62 @@ func _process_breath(delta: float) -> void:
 				_breath_timer = data.breath_interval
 				sprite.play("run_" + DIR8_NAMES[_dir8_idx])
 
+# --- Çekirge seli: dur, dön, anahtar kalkar; boss'tan oyuncuya akan duvar; bitince toparlanma ---
+func _can_start_locust(distance: float) -> bool:
+	if _locust_timer > 0.0 or _dying:
+		return false
+	if "is_dead" in target and target.is_dead:
+		return false
+	return distance >= data.locust_min_range and distance <= data.locust_max_range
+
+# Duvar boss'un önünden başlar, oyuncunun (şu anki) konumunu locust_overshoot geçince biter.
+# Boşluk oyuncunun hizasından rastgele bir yana kayık: yerinde duran vurulur, yana kaçan kurtulur.
+func _start_locust(dir: Vector2) -> void:
+	_state = State.LOCUST
+	_locust_phase = 0
+	_state_timer = data.locust_warning
+	_face_exact(dir)
+	sprite.play("locust_" + DIR8_NAMES[_dir8_idx])
+	sprite.frame = 0
+	var start := global_position + dir * (data.locust_thickness * 0.5 + 10.0)
+	var distance := (target.global_position - start).dot(dir) + data.locust_overshoot
+	var gap := 0.0
+	if data.locust_gap > 0.0:
+		gap = randf_range(data.locust_gap_min, data.locust_gap_max) * (1.0 if randf() < 0.5 else -1.0)
+		gap = clampf(gap, -data.locust_length * 0.5 + data.locust_gap, data.locust_length * 0.5 - data.locust_gap)
+	var tide := LocustTide.new()
+	tide.setup(locust_damage, data.locust_length, data.locust_thickness, gap, data.locust_gap, data.locust_speed,
+		distance, data.locust_warning, dir.angle(), data.locust_sound, data.locust_focus)
+	_floor_fx_parent().add_child(tide)
+	tide.global_position = start
+
+func _process_locust(delta: float) -> void:
+	velocity = _separation() * SEPARATION_MIN_SPEED * SEPARATION_STRENGTH
+	move_and_slide()
+	match _locust_phase:
+		0:
+			_state_timer -= delta
+			if _state_timer <= 0.0:
+				_locust_phase = 1
+				sprite.play()  # anahtar iner, animasyonun kalanı (bitince _on_sprite_animation_finished)
+		2:
+			_state_timer -= delta
+			if _state_timer <= 0.0:
+				_state = State.CHASE
+				_locust_timer = data.locust_interval
+				sprite.play("run_" + DIR8_NAMES[_dir8_idx])
+
 func _floor_fx_parent() -> Node:
 	var fx_parent: Node = get_tree().current_scene.get_node_or_null(FLOOR_FX_PATH)
 	return fx_parent if fx_parent else get_parent()
 
 # Vuruş karesi: oyuncu hâlâ menzildeyse hasar (kaçtıysa ıska)
 func _on_sprite_frame_changed() -> void:
+	if _state == State.LOCUST:
+		# Uyarı bitene kadar bekleme karesinde durur
+		if _locust_phase == 0 and sprite.frame >= data.locust_hold_frame:
+			sprite.pause()
+		return
 	if _state == State.BREATH:
 		# Ağızlar açık karede nefes bitene kadar bekler
 		if _breath_phase == 0 and sprite.frame >= data.breath_hold_frame:
@@ -691,6 +766,10 @@ func _on_sprite_frame_changed() -> void:
 		target.try_hit(attack_damage)
 
 func _on_sprite_animation_finished() -> void:
+	if _state == State.LOCUST:
+		_locust_phase = 2
+		_state_timer = data.locust_recover
+		return
 	if _state == State.BREATH:
 		_breath_phase = 2
 		_state_timer = data.breath_recover

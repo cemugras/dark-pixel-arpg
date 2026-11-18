@@ -37,9 +37,10 @@ $enemies = @(
     @{ name = 'harpy'; hp = 10; coin = 1; min = 3;  w = 1.0; wpw = 0.05 },
     @{ name = 'hound'; hp = 30; coin = 2; min = 5;  w = 0.5; wpw = 0.08 },
     @{ name = 'fly';   hp = 5;  coin = 1; min = 41; w = 0.6; wpw = 0.05; n = 3 },   # n = swarm_size (bir doğmada kaç tane)
-    @{ name = 'lilim'; hp = 25; coin = 2; min = 51; w = 0.4; wpw = 0.04 }
+    @{ name = 'lilim'; hp = 25; coin = 2; min = 51; w = 0.4; wpw = 0.04 },
+    @{ name = 'locust'; hp = 30; coin = 2; min = 81; w = 0.4; wpw = 0.04 }   # Abyss Locust
 )
-$bosses = @{ 10 = 540; 20 = 1950; 30 = 1800; 40 = 1860; 50 = 2100; 60 = 2280; 70 = 2460; 80 = 2640; 90 = 2820; 100 = 3000 }  # 80+ henüz yok: tahmini taban
+$bosses = @{ 10 = 540; 20 = 1950; 30 = 1800; 40 = 1860; 50 = 2100; 60 = 2280; 70 = 2460; 80 = 2640; 90 = 2820; 100 = 3000 }  # 90+ henüz yok: tahmini taban
 $bossCoin = @{ 10 = 100; 20 = 150; 30 = 200; 40 = 250; 50 = 300; 60 = 350; 70 = 400; 80 = 450; 90 = 500; 100 = 0 }
 
 function Cost($base, $step, $ratio, $level) { [math]::Ceiling(($base + $step * $level) * $ratio) }
