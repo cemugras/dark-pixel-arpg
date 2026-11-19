@@ -191,6 +191,39 @@ extends Resource
 @export var duel_shot_db: float = -3.0           # atış sesinin ek seviyesi (kalabalık yaratıkta kısık)
 @export var duel_focus: bool = true              # true: nişan sesi play_sfx_focus ile (boss); kalabalık yaratıkta false
 
+# --- Fazlar (Lucifer: önceki boss'ların yeteneklerinin karışımı) ---
+# phase_thresholds boşsa faz yok, yaratığın bütün yetenekleri hep açık (eski davranış). Doluysa can oranı her eşiğin
+# altına inince bir sonraki faza geçilir (ör. [0.7, 0.35] = 3 faz). Her fazda sadece phase_abilities[faz] içinde
+# virgülle yazılan yetenekler kullanılır: charge, throw, summon, cast, dive, breath, locust, duel (yakın saldırı hep açık).
+# phase_interval_mult < 1: yetenek bekleme süreleri o oranda kısalır; phase_speed_mult: yürüme hızı çarpanı;
+# phase_tints: fazın sprite rengi (boşsa tint). Faz değişince phase_sound çalar (play_sfx_focus).
+@export var phase_thresholds: PackedFloat32Array = PackedFloat32Array()
+@export var phase_abilities: PackedStringArray = PackedStringArray()
+@export var phase_interval_mult: PackedFloat32Array = PackedFloat32Array()
+@export var phase_speed_mult: PackedFloat32Array = PackedFloat32Array()
+@export var phase_tints: Array[Color] = []
+@export var phase_sound: String = ""
+# Bir yetenek bitince bir sonrakinin başlaması için en az bu kadar beklenir (iki yetenek arka arkaya binmesin; 0 = yok)
+@export var special_gap: float = 0.0
+# Animasyon eşleme: bir yeteneğin animasyonu yoksa başka animasyon kullanılır, ör. {"breath": "cast", "shoot": "cast"}
+# (anahtar ve değer animasyon adının yön öncesi kısmı: cast, breath, locust, shoot, summon, throw, emerge, attack)
+@export var anim_aliases: Dictionary = {}
+# Efekt rengi: alfa 0 ise her efekt kendi rengini kullanır. Doluysa rün, çekirge duvarı, nişan çizgisi, ok ve hamle
+# uyarısı bu renkten türetilir (Lucifer: buz mavisi; nefes konileri breath_colors ile ayrıca verilir)
+@export var fx_color: Color = Color(0, 0, 0, 0)
+
+# --- Taht (Lucifer'in ilk fazı) ---
+# throne_texture doluysa boss ilk fazda tahtında oturur: throne_position'da (dünya koordinatı, görselin merkezi) bu görsel
+# çizilir, boss yürümez, yetenekleri tahttan kullanır; gövdesi (vuruş çemberi) throne_seat_offset'te. İkinci faza
+# geçerken ayağa kalkar: tahtta throne_empty_texture kalır (Biscuit), boss rise_time sn içinde throne_stand_offset'e
+# iner (bu sürede vurulamaz), sonra savaşa katılır.
+@export var throne_texture: Texture2D
+@export var throne_empty_texture: Texture2D
+@export var throne_position: Vector2 = Vector2.ZERO
+@export var throne_seat_offset: Vector2 = Vector2.ZERO
+@export var throne_stand_offset: Vector2 = Vector2(0, 60)
+@export var rise_time: float = 1.5
+
 # --- Vurdukça sikke saçma (Mammon) ---
 # spill_health_step 0 ise yok. Canın her spill_health_step kadarı (ör. 0.1 = %10) gidince yere spill_value
 # değerinde sikke saçılır (oyuncu yaklaşınca toplanır, kalanlar dalga sonunda otomatik toplanır).

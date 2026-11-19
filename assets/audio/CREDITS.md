@@ -56,6 +56,10 @@ Kurallar:
 | azazel_hit.wav | Growl and Roar | Jofae | https://freesound.org/s/366837/ | CC0 | Cut from raw/azazel_hit_death_raw.mp3, 16 bit mono, normalized |
 | azazel_death.wav | Growl and Roar | Jofae | https://freesound.org/s/366837/ | CC0 | Cut from raw/azazel_hit_death_raw.mp3, 16 bit mono, normalized |
 | azazel_aim.wav | Clanks.wav | markgia | https://freesound.org/s/176226/ | CC0 | Cut from raw/azazel_aim_raw.wav, 16 bit mono, normalized |
+| lucifer_spawn.wav | Evil Laughs Demonic Echos.mp3 | teqstudios | https://freesound.org/s/118703/ | CC0 | Cut from raw/lucifer_spawn_hit_death_rise_raw.mp3, 16 bit mono, normalized |
+| lucifer_hit.wav | Evil Laughs Demonic Echos.mp3 | teqstudios | https://freesound.org/s/118703/ | CC0 | Cut from raw/lucifer_spawn_hit_death_rise_raw.mp3, 16 bit mono, normalized |
+| lucifer_death.wav | Evil Laughs Demonic Echos.mp3 | teqstudios | https://freesound.org/s/118703/ | CC0 | Cut from raw/lucifer_spawn_hit_death_rise_raw.mp3, 16 bit mono, normalized |
+| lucifer_rise.wav | Evil Laughs Demonic Echos.mp3 | teqstudios | https://freesound.org/s/118703/ | CC0 | Cut from raw/lucifer_spawn_hit_death_rise_raw.mp3, 16 bit mono, normalized |
 | ui_click.wav | Click.wav | budek | https://freesound.org/s/513481/ | CC0 | - |
 
 ## Music (music/)

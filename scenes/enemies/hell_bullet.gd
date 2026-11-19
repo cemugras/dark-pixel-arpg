@@ -19,12 +19,19 @@ var max_distance: float = 420.0
 
 var _travelled: float = 0.0
 var _hit: bool = false
+var _hot_color: Color = HOT_COLOR
+var _halo_color: Color = HALO_COLOR
 
 func setup(dmg: int, spd: float, distance: float, angle: float) -> void:
 	damage = dmg
 	speed = spd
 	max_distance = distance
 	rotation = angle
+
+# Kızgın turuncu yerine başka renk (Lucifer: buz oku, EnemyData.fx_color); _ready'den önce çağrılır
+func set_color(c: Color) -> void:
+	_hot_color = Color(c.r * 1.8, c.g * 1.8, c.b * 1.8)
+	_halo_color = Color(c, HALO_COLOR.a)
 
 func _ready() -> void:
 	add_to_group("enemy_projectile")  # boss ölünce havadakiler silinir (enemy.gd die)
@@ -39,7 +46,7 @@ func _ready() -> void:
 	var halo := Sprite2D.new()
 	halo.texture = TEXTURE
 	halo.scale = SPRITE_SCALE * HALO_SCALE
-	halo.modulate = HALO_COLOR
+	halo.modulate = _halo_color
 	var mat := CanvasItemMaterial.new()
 	mat.blend_mode = CanvasItemMaterial.BLEND_MODE_ADD
 	halo.material = mat
@@ -48,7 +55,7 @@ func _ready() -> void:
 	var sprite := Sprite2D.new()
 	sprite.texture = TEXTURE
 	sprite.scale = SPRITE_SCALE
-	sprite.modulate = HOT_COLOR
+	sprite.modulate = _hot_color
 	add_child(sprite)
 
 	body_entered.connect(_on_body_entered)

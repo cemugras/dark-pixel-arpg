@@ -100,6 +100,9 @@ const SFX_MAX_INSTANCES: Dictionary = {
 	"grigori_hit": 1,
 	"grigori_death": 2,
 	"grigori_aim": 2,
+	"lucifer_hit": 1,
+	"lucifer_rune_blast": 1,
+	"lucifer_frost": 1,
 }
 
 # Başka sesin dosyasını kullanan sesler (ayrı dosya yok): ad -> kaynak ses. Seviye (SFX_VOLUME_DB), üst üste çalma
@@ -114,6 +117,15 @@ const SFX_ALIASES: Dictionary = {
 	"grigori_hit": "azazel_hit",  # Grigori (Azazel'in çırağı), Azazel'in seslerini ince ve kısık kullanır
 	"grigori_death": "azazel_death",
 	"grigori_aim": "azazel_aim",
+	# Lucifer (100. dalga) önceki boss'ların yeteneklerini kullanır: o yeteneklerin seslerini kalın perdeyle çalar.
+	# Kendi dosyası eklenirse (ör. lucifer_breath.wav) o çalar.
+	"lucifer_cast": "lilith_cast",
+	"lucifer_rune_blast": "lilith_rune_blast",
+	"lucifer_aim": "azazel_aim",
+	"lucifer_breath": "asmodeus_breath",
+	"lucifer_frost": "abaddon_swarm",
+	"lucifer_charge": "belphegor_charge",
+	"lucifer_summon": "beelzebub_summon",
 	"smg_shoot": "glock_shoot",  # SMG Glock ile aynı mermiyi atar, sadece daha hızlı ve otomatik: aynı ses
 }
 
@@ -127,6 +139,13 @@ const SFX_PITCH: Dictionary = {
 	"grigori_hit": 1.3,
 	"grigori_death": 1.3,
 	"grigori_aim": 1.25,
+	"lucifer_cast": 0.8,
+	"lucifer_rune_blast": 0.8,
+	"lucifer_aim": 0.8,
+	"lucifer_breath": 0.8,
+	"lucifer_frost": 0.7,
+	"lucifer_charge": 0.8,
+	"lucifer_summon": 0.8,
 }
 
 # --- Müzik ---

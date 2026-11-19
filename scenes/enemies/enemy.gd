@@ -53,7 +53,7 @@ var _dying: bool = false
 # --- Saldırı durumu (bkz. EnemyData attack_*) ---
 const ATTACK_HIT_RANGE_MULT: float = 1.4  # attack_hit_range boşsa: başlatma menzilinin bu katı (kılpayı ıska olmasın)
 const ATTACK_LUNGE_FRAMES: int = 2        # vuruş karesinden önceki kaç karede ileri atılır
-enum State { CHASE, ATTACK, WINDUP, CHARGE, TIRED, THROW, SUMMON, CAST, DIVE, BURROW, SURFACING, EMERGE, BREATH, LOCUST, DUEL }
+enum State { CHASE, ATTACK, WINDUP, CHARGE, TIRED, THROW, SUMMON, CAST, DIVE, BURROW, SURFACING, EMERGE, BREATH, LOCUST, DUEL, RISE }
 var _state: State = State.CHASE
 
 # --- Hamle durumu (bkz. EnemyData charge_*) ---
@@ -150,6 +150,18 @@ var _strafe_timer: float = 0.0
 # --- Sikke saçma (bkz. EnemyData spill_*) ---
 var _spill_next: int = 0  # can bu değerin altına inince sikke saçılır
 
+# --- Fazlar ve taht (Lucifer, bkz. EnemyData phase_* / throne_*) ---
+const RISE_FLASH: Color = Color(4.0, 4.0, 4.5)  # ayağa kalkarken (ve faz değişince) parlama
+var _phase: int = 0
+var _phase_list: PackedStringArray = PackedStringArray()
+var _tick_mult: float = 1.0           # yetenek sayaçlarının akış hızı (phase_interval_mult < 1 ise daha hızlı)
+var _base_move_speed: float = 0.0
+var _gap_left: float = 0.0            # special_gap: bu süre bitmeden yeni yetenek başlamaz
+var _prev_state: State = State.CHASE
+var _seated: bool = false
+var _throne_sprite: Sprite2D = null
+var _rising: bool = false             # ayağa kalkarken vurulamaz
+
 @onready var sprite: AnimatedSprite2D = $AnimatedSprite2D
 
 # Dalga yöneticisi, düşmanı sahneye eklemeden önce bunu çağırır
@@ -170,6 +182,7 @@ func setup(enemy_data: EnemyData, wave: int) -> void:
 	locust_damage = int(data.locust_damage * dmg_mult)
 	duel_damage = int(data.duel_damage * dmg_mult)
 	move_speed = data.move_speed * minf(1.0 + 0.01 * w, 1.5)
+	_base_move_speed = move_speed
 	coin_value = data.coin_value
 	scale = Vector2.ONE * data.body_scale
 
@@ -207,26 +220,26 @@ func _ready() -> void:
 
 	# Fırlatma: veri + 8 yönlü throw animasyonu varsa açılır
 	_has_throw = data != null and data.throw_count > 0 and _mode == SpriteMode.EIGHT_DIR \
-		and frames.has_animation("throw_east")
+		and frames.has_animation(_anim_base("throw") + "_east")
 	if _has_throw:
 		_throw_timer = data.throw_interval * 0.5  # boss belirince ilk atış biraz erken gelsin
 
 	# Çağırma: veri + 8 yönlü summon animasyonu varsa açılır
 	_has_summon = data != null and data.summon_data != null and data.summon_count > 0 \
-		and _mode == SpriteMode.EIGHT_DIR and frames.has_animation("summon_east")
+		and _mode == SpriteMode.EIGHT_DIR and frames.has_animation(_anim_base("summon") + "_east")
 	if _has_summon:
 		_summon_timer = data.summon_interval * 0.4  # boss belirince ilk sürü biraz erken gelsin
 
 	# Büyü: veri + 8 yönlü cast animasyonu varsa açılır
 	_has_cast = data != null and data.cast_count > 0 and _mode == SpriteMode.EIGHT_DIR \
-		and frames.has_animation("cast_east")
+		and frames.has_animation(_anim_base("cast") + "_east")
 	if _has_cast:
 		# boss belirince ilk büyü biraz erken gelsin; normal yaratıkta (Lilim) rastgele, aynı anda doğanlar birlikte atmasın
 		_cast_timer = data.cast_interval * (0.5 if data.is_boss else randf_range(0.4, 1.0))
 
 	# Dalış: veri + 8 yönlü emerge animasyonu varsa açılır
 	_has_dive = data != null and data.dive_interval > 0.0 and _mode == SpriteMode.EIGHT_DIR \
-		and frames.has_animation("emerge_east")
+		and frames.has_animation(_anim_base("emerge") + "_east")
 	if _has_dive:
 		_dive_timer = data.dive_interval * 0.5  # boss belirince ilk dalış biraz erken gelsin
 		var shader := Shader.new()
@@ -237,20 +250,20 @@ func _ready() -> void:
 
 	# Nefes: veri + 8 yönlü breath animasyonu varsa açılır
 	_has_breath = data != null and data.breath_count > 0 and _mode == SpriteMode.EIGHT_DIR \
-		and frames.has_animation("breath_east")
+		and frames.has_animation(_anim_base("breath") + "_east")
 	if _has_breath:
 		_breath_timer = data.breath_interval * 0.5  # boss belirince ilk nefes biraz erken gelsin
 
 	# Çekirge seli: veri + 8 yönlü locust animasyonu varsa açılır
 	_has_locust = data != null and data.locust_length > 0.0 and _mode == SpriteMode.EIGHT_DIR \
-		and frames.has_animation("locust_east")
+		and frames.has_animation(_anim_base("locust") + "_east")
 	if _has_locust:
 		# boss belirince ilk sel biraz erken gelsin; normal yaratıkta rastgele, aynı anda doğanlar birlikte atmasın
 		_locust_timer = data.locust_interval * (0.5 if data.is_boss else randf_range(0.4, 1.0))
 
 	# Düello atışı: veri + 8 yönlü shoot animasyonu varsa açılır; silahlar baştan görünür
 	_has_duel = data != null and data.duel_interval > 0.0 and _mode == SpriteMode.EIGHT_DIR \
-		and frames.has_animation("shoot_east")
+		and frames.has_animation(_anim_base("shoot") + "_east")
 	if _has_duel:
 		# boss belirince ilk seri biraz erken gelsin; normal yaratıkta (Grigori) rastgele, aynı anda doğanlar birlikte atmasın
 		_duel_timer = data.duel_interval * (0.5 if data.is_boss else randf_range(0.4, 1.0))
@@ -272,13 +285,28 @@ func _ready() -> void:
 	if data and data.spill_health_step > 0.0 and data.spill_value > 0:
 		_spill_next = max_health - roundi(max_health * data.spill_health_step)
 
+	if data and not data.phase_thresholds.is_empty():
+		_apply_phase(0)
+	if data and data.throne_texture and _mode == SpriteMode.EIGHT_DIR:
+		_sit_on_throne()
+
 func _physics_process(delta: float) -> void:
 	if not is_instance_valid(target):
 		return
 	if _attack_cooldown_left > 0.0:
 		_attack_cooldown_left -= delta
+	# Bir yetenek bitip kovalamaya dönünce special_gap kadar yeni yetenek başlamaz (iki yetenek arka arkaya binmesin)
+	if _state != _prev_state:
+		if _state == State.CHASE and _prev_state != State.ATTACK and data:
+			_gap_left = data.special_gap
+		_prev_state = _state
+	if _gap_left > 0.0:
+		_gap_left -= delta
 
 	match _state:
+		State.RISE:
+			_process_rise(delta)
+			return
 		State.WINDUP:
 			_process_windup(delta)
 			return
@@ -310,6 +338,14 @@ func _physics_process(delta: float) -> void:
 			_process_duel(delta)
 			return
 
+	if _seated:
+		# Tahtta: yürümez, itilmez; sadece o fazın yeteneklerini tahttan kullanır
+		velocity = Vector2.ZERO
+		if _state == State.CHASE:
+			var to_player := target.global_position - global_position
+			_try_specials(delta, to_player.normalized(), to_player.length())
+		return
+
 	var separation := _separation() * maxf(move_speed, SEPARATION_MIN_SPEED) * SEPARATION_STRENGTH
 	if _state == State.THROW or _state == State.SUMMON or _state == State.CAST:
 		# Atarken / çağırırken durur (itme devam eder)
@@ -340,57 +376,8 @@ func _physics_process(delta: float) -> void:
 		_strafe_sign = -_strafe_sign
 		_strafe_timer = randf_range(STRAFE_FLIP_MIN, STRAFE_FLIP_MAX)
 
-	if _has_charge:
-		_charge_timer -= delta
-		if _can_start_charge(to_target.length()):
-			_start_windup(dir)
-			return
-
-	if _can_start_attack(to_target.length()):
-		_start_attack(dir)
+	if _try_specials(delta, dir, to_target.length()):
 		return
-
-	if _has_throw:
-		_throw_timer -= delta
-		if _can_start_throw(to_target.length()):
-			_start_throw(dir)
-			return
-
-	if _has_summon:
-		_summon_timer -= delta
-		if _can_start_summon():
-			_start_summon(dir)
-			return
-
-	if _has_cast:
-		_cast_timer -= delta
-		if _can_start_cast(to_target.length()):
-			_start_cast(dir)
-			return
-
-	if _has_dive:
-		_dive_timer -= delta
-		if _can_start_dive(to_target.length()):
-			_start_dive(dir)
-			return
-
-	if _has_breath:
-		_breath_timer -= delta
-		if _can_start_breath(to_target.length()):
-			_start_breath(dir)
-			return
-
-	if _has_locust:
-		_locust_timer -= delta
-		if _can_start_locust(to_target.length()):
-			_start_locust(dir)
-			return
-
-	if _has_duel:
-		_duel_timer -= delta
-		if _can_start_duel(to_target.length()):
-			_start_duel(dir)
-			return
 
 	match _mode:
 		SpriteMode.EIGHT_DIR:
@@ -416,6 +403,150 @@ func _chase_dir(dir: Vector2, distance: float) -> Vector2:
 	if data != null and data.duel_strafe > 0.0:
 		move = (move + dir.orthogonal() * _strafe_sign * data.duel_strafe).limit_length(1.0)
 	return move
+
+# Kovalarken yetenek başlatma (sıra: hamle, yakın saldırı, fırlatma, çağırma, büyü, dalış, nefes, sel, düello).
+# Fazlı yaratıkta sadece o fazın yetenekleri sayılır ve başlar; special_gap dolmadan yeni yetenek başlamaz
+# (sayaçlar yine akar). Yetenek başladıysa true.
+func _try_specials(delta: float, dir: Vector2, distance: float) -> bool:
+	var free := _gap_left <= 0.0
+	var tick := delta * _tick_mult
+	if _has_charge and _ability_on("charge"):
+		_charge_timer -= tick
+		if free and _can_start_charge(distance):
+			_start_windup(dir)
+			return true
+	if _can_start_attack(distance):
+		_start_attack(dir)
+		return true
+	if _has_throw and _ability_on("throw"):
+		_throw_timer -= tick
+		if free and _can_start_throw(distance):
+			_start_throw(dir)
+			return true
+	if _has_summon and _ability_on("summon"):
+		_summon_timer -= tick
+		if free and _can_start_summon():
+			_start_summon(dir)
+			return true
+	if _has_cast and _ability_on("cast"):
+		_cast_timer -= tick
+		if free and _can_start_cast(distance):
+			_start_cast(dir)
+			return true
+	if _has_dive and _ability_on("dive"):
+		_dive_timer -= tick
+		if free and _can_start_dive(distance):
+			_start_dive(dir)
+			return true
+	if _has_breath and _ability_on("breath"):
+		_breath_timer -= tick
+		if free and _can_start_breath(distance):
+			_start_breath(dir)
+			return true
+	if _has_locust and _ability_on("locust"):
+		_locust_timer -= tick
+		if free and _can_start_locust(distance):
+			_start_locust(dir)
+			return true
+	if _has_duel and _ability_on("duel"):
+		_duel_timer -= tick
+		if free and _can_start_duel(distance):
+			_start_duel(dir)
+			return true
+	return false
+
+# --- Animasyon eşleme (EnemyData.anim_aliases): ör. Lucifer'de breath/locust/shoot/summon animasyonu yerine cast ---
+func _anim_base(kind: String) -> String:
+	if data and data.anim_aliases.has(kind):
+		return String(data.anim_aliases[kind])
+	return kind
+
+func _anim(kind: String) -> String:
+	return _anim_base(kind) + "_" + DIR8_NAMES[_dir8_idx]
+
+# --- Fazlar (Lucifer) ---
+func _ability_on(kind: String) -> bool:
+	if data == null or data.phase_thresholds.is_empty():
+		return true
+	return _phase_list.has(kind)
+
+func _apply_phase(index: int) -> void:
+	_phase = index
+	_phase_list = PackedStringArray()
+	if not data.phase_abilities.is_empty():
+		var line := data.phase_abilities[mini(index, data.phase_abilities.size() - 1)]
+		for part in line.split(",", false):
+			_phase_list.append(part.strip_edges())
+	var interval_mult := data.phase_interval_mult[index] if index < data.phase_interval_mult.size() else 1.0
+	_tick_mult = 1.0 / maxf(interval_mult, 0.05)
+	var speed_mult := data.phase_speed_mult[index] if index < data.phase_speed_mult.size() else 1.0
+	move_speed = _base_move_speed * speed_mult
+	_base_color = data.phase_tints[index] if index < data.phase_tints.size() else data.tint
+	sprite.modulate = _base_color
+
+# Can bir faz eşiğinin altına indi mi (tek vuruşta birden çok eşik geçilirse son faza atlanır)
+func _check_phase() -> void:
+	if data == null or data.phase_thresholds.is_empty():
+		return
+	var next := _phase
+	while next < data.phase_thresholds.size() and float(health) <= max_health * data.phase_thresholds[next]:
+		next += 1
+	if next == _phase:
+		return
+	_apply_phase(next)
+	if _seated:
+		_start_rise()
+		return
+	Audio.play_sfx_focus(data.phase_sound)
+	sprite.modulate = RISE_FLASH
+	create_tween().tween_property(sprite, "modulate", _base_color, 0.6)
+
+# --- Taht: ilk fazda oturur, ikinci faza geçerken ayağa kalkıp iner ---
+func _sit_on_throne() -> void:
+	_seated = true
+	position = data.throne_position + data.throne_seat_offset
+	sprite.visible = false
+	_throne_sprite = Sprite2D.new()
+	_throne_sprite.texture = data.throne_texture
+	_throne_sprite.position = -data.throne_seat_offset / scale
+	_throne_sprite.scale = Vector2.ONE / scale  # body_scale'den bağımsız, görselin kendi boyunda
+	add_child(_throne_sprite)
+	move_child(_throne_sprite, sprite.get_index())
+
+func _start_rise() -> void:
+	_seated = false
+	_rising = true
+	_state = State.RISE
+	_state_timer = data.rise_time
+	sprite.position = Vector2.ZERO
+	sprite.speed_scale = 1.0
+	# Tahtta Biscuit kalır (WaveManager'da, Y sıralı: Lucifer önüne inince tahtın önünde çizilir)
+	if data.throne_empty_texture:
+		var throne := Sprite2D.new()
+		throne.texture = data.throne_empty_texture
+		throne.position = data.throne_position
+		get_parent().add_child(throne)
+	if is_instance_valid(_throne_sprite):
+		_throne_sprite.queue_free()
+	_throne_sprite = null
+	sprite.visible = true
+	_face_exact(Vector2.DOWN)
+	sprite.play(_anim("cast"))  # kollar yukarı, kanatlar açılır
+	sprite.frame = 0
+	sprite.modulate = RISE_FLASH
+	create_tween().tween_property(sprite, "modulate", _base_color, data.rise_time * 0.6)
+	var move := create_tween()
+	move.tween_property(self, "position", data.throne_position + data.throne_stand_offset, data.rise_time) \
+		.set_trans(Tween.TRANS_SINE).set_ease(Tween.EASE_IN_OUT)
+	Audio.play_sfx_focus(data.phase_sound)
+
+func _process_rise(delta: float) -> void:
+	velocity = Vector2.ZERO
+	_state_timer -= delta
+	if _state_timer <= 0.0:
+		_rising = false
+		_state = State.CHASE
+		sprite.play(_anim("run"))
 
 func _can_start_attack(distance: float) -> bool:
 	if not _has_attack or _attack_cooldown_left > 0.0 or _dying:
@@ -450,7 +581,7 @@ func _start_throw(dir: Vector2) -> void:
 	_state = State.THROW
 	_throw_released = false
 	_face_exact(dir)
-	sprite.play("throw_" + DIR8_NAMES[_dir8_idx])
+	sprite.play(_anim("throw"))
 	sprite.frame = 0
 
 # Yelpaze, bırakma anında oyuncunun o anki konumuna nişanlanır
@@ -489,7 +620,7 @@ func _start_summon(dir: Vector2) -> void:
 	_state = State.SUMMON
 	_summon_released = false
 	_face_exact(dir)
-	sprite.play("summon_" + DIR8_NAMES[_dir8_idx])
+	sprite.play(_anim("summon"))
 	sprite.frame = 0
 
 # Yaratıklar çağıranın etrafına eşit aralıklı çember üzerinde çıkar (ilki rastgele açıda)
@@ -530,7 +661,7 @@ func _start_cast(dir: Vector2) -> void:
 	_state = State.CAST
 	_cast_released = false
 	_face_exact(dir)
-	sprite.play("cast_" + DIR8_NAMES[_dir8_idx])
+	sprite.play(_anim("cast"))
 	sprite.frame = 0
 
 # İlk rün oyuncunun tam altına, diğerleri çevresine eşit açılarla (rastgele uzaklıkta) düşer:
@@ -552,6 +683,8 @@ func _release_cast() -> void:
 			pos += Vector2.RIGHT.rotated(angle) * randf_range(data.cast_radius * 1.4, data.cast_spread)
 		var rune := RuneBlast.new()
 		rune.setup(cast_damage, data.cast_radius, data.cast_delay, data.cast_blast_sound, data.cast_focus)
+		if data.fx_color.a > 0.0:
+			rune.set_color(data.fx_color)
 		rune.global_position = pos
 		fx_parent.add_child(rune)
 	if data.cast_focus:
@@ -647,7 +780,7 @@ func _start_emerge() -> void:
 	collision_layer = _collision_layer_saved
 	add_to_group("enemy")
 	_face_exact(target.global_position - _ground_point())
-	sprite.play("emerge_" + DIR8_NAMES[_dir8_idx])
+	sprite.play(_anim("emerge"))
 	sprite.frame = 0
 	_set_sink(1.0)
 	sprite.visible = true
@@ -700,7 +833,7 @@ func _start_breath(dir: Vector2) -> void:
 	_breath_phase = 0
 	_state_timer = data.breath_windup + data.breath_duration
 	_face_exact(dir)
-	sprite.play("breath_" + DIR8_NAMES[_dir8_idx])
+	sprite.play(_anim("breath"))
 	sprite.frame = 0
 	var cones := BreathCones.new()
 	cones.setup(breath_damage, data.breath_count, data.breath_range, data.breath_width_degrees, dir.angle(),
@@ -743,7 +876,7 @@ func _start_locust(dir: Vector2) -> void:
 	_locust_phase = 0
 	_state_timer = data.locust_warning
 	_face_exact(dir)
-	sprite.play("locust_" + DIR8_NAMES[_dir8_idx])
+	sprite.play(_anim("locust"))
 	sprite.frame = 0
 	var start := global_position + dir * (data.locust_thickness * 0.5 + 10.0)
 	var distance := (target.global_position - start).dot(dir) + data.locust_overshoot
@@ -754,6 +887,8 @@ func _start_locust(dir: Vector2) -> void:
 	var tide := LocustTide.new()
 	tide.setup(locust_damage, data.locust_length, data.locust_thickness, gap, data.locust_gap, data.locust_speed,
 		distance, data.locust_warning, dir.angle(), data.locust_sound, data.locust_focus)
+	if data.fx_color.a > 0.0:
+		tide.set_color(data.fx_color)
 	_floor_fx_parent().add_child(tide)
 	tide.global_position = start
 
@@ -786,7 +921,7 @@ func _start_duel(dir: Vector2) -> void:
 	_duel_phase = 0
 	_state_timer = data.duel_track_time + data.duel_lock_time
 	_face_exact(dir)
-	sprite.play("shoot_" + DIR8_NAMES[_dir8_idx])
+	sprite.play(_anim("shoot"))
 	sprite.frame = 0
 	_duel_guns.aim()  # nişan -> kilit -> seri kendi zamanlamasıyla
 	if data.duel_focus:
@@ -795,8 +930,9 @@ func _start_duel(dir: Vector2) -> void:
 		Audio.play_sfx(data.duel_sound)
 
 func _process_duel(delta: float) -> void:
-	velocity = _separation() * SEPARATION_MIN_SPEED * SEPARATION_STRENGTH
-	move_and_slide()
+	if not _seated:  # tahttaki Lucifer itilmez
+		velocity = _separation() * SEPARATION_MIN_SPEED * SEPARATION_STRENGTH
+		move_and_slide()
 	match _duel_phase:
 		0:
 			# Nişan boyunca oyuncuya döner (kilitlenince bakış da durur)
@@ -806,7 +942,7 @@ func _process_duel(delta: float) -> void:
 				_face_exact(dir)
 				if _dir8_idx != before:
 					var frame := sprite.frame
-					sprite.play("shoot_" + DIR8_NAMES[_dir8_idx])
+					sprite.play(_anim("shoot"))
 					sprite.frame = frame
 					if frame >= data.duel_hold_frame:
 						sprite.pause()
@@ -822,7 +958,7 @@ func _process_duel(delta: float) -> void:
 				if _dir8_idx != before:
 					var frame := sprite.frame
 					var progress := sprite.frame_progress
-					sprite.play("shoot_" + DIR8_NAMES[_dir8_idx])
+					sprite.play(_anim("shoot"))
 					sprite.set_frame_and_progress(frame, progress)
 		2:
 			_state_timer -= delta
@@ -950,7 +1086,10 @@ func _process_windup(delta: float) -> void:
 	_state_timer -= delta
 	var t := 1.0 - _state_timer / maxf(data.charge_windup, 0.01)
 	sprite.position = Vector2(randf_range(-1.0, 1.0), randf_range(-1.0, 1.0)) * CHARGE_SHAKE * t
-	sprite.modulate = _base_color.lerp(CHARGE_WINDUP_COLOR, t)
+	var windup_color := CHARGE_WINDUP_COLOR
+	if data.fx_color.a > 0.0:  # Lucifer: kızarma yerine buz mavisi parlama
+		windup_color = Color(data.fx_color.r * 1.8, data.fx_color.g * 1.8, data.fx_color.b * 1.8)
+	sprite.modulate = _base_color.lerp(windup_color, t)
 	if _state_timer <= 0.0:
 		_start_charge()
 
@@ -1106,7 +1245,7 @@ func _update_direction(dir: Vector2) -> void:
 	_play_keep_frame("run_" + _facing)
 
 func take_damage(amount: int) -> void:
-	if _dying:
+	if _dying or _rising:
 		return
 	health -= amount
 	_flash()
@@ -1117,6 +1256,7 @@ func take_damage(amount: int) -> void:
 		if Time.get_ticks_msec() >= _summon_sound_until:
 			Audio.play_sfx(data.get_hit_sound())
 		_check_spill()
+		_check_phase()
 
 # Canın her spill_health_step kadarı gidince sikke saçar (tek vuruşta birden çok eşik geçilirse hepsi birlikte)
 func _check_spill() -> void:
@@ -1152,3 +1292,6 @@ func _flash() -> void:
 	sprite.modulate = Color(3, 3, 3)  # kısa süreli parlama
 	var tween := create_tween()
 	tween.tween_property(sprite, "modulate", _base_color, 0.1)
+	if is_instance_valid(_throne_sprite):  # tahtta otururken görünen oturan görsel parlar
+		_throne_sprite.modulate = Color(3, 3, 3)
+		create_tween().tween_property(_throne_sprite, "modulate", Color.WHITE, 0.1)

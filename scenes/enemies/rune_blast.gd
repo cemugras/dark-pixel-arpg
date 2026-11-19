@@ -26,6 +26,13 @@ var focus_sound: bool = true   # patlama sesi play_sfx_focus ile mi (boss rünü
 
 var _t: float = 0.0
 var _blasted: bool = false
+var _rune_color: Color = RUNE_COLOR
+var _blast_color: Color = BLAST_COLOR
+
+# Kan kırmızısı yerine başka renk (Lucifer: buz mavisi, EnemyData.fx_color)
+func set_color(c: Color) -> void:
+	_rune_color = Color(c, 1.0)
+	_blast_color = Color(c, 1.0).lightened(0.45)
 
 func setup(dmg: int, r: float, warn: float, sound: String, focus: bool = true) -> void:
 	focus_sound = focus
@@ -65,23 +72,23 @@ func _blast() -> void:
 func _draw() -> void:
 	if _blasted:
 		var b := clampf((_t - delay) / BLAST_TIME, 0.0, 1.0)
-		var c := BLAST_COLOR
+		var c := _blast_color
 		c.a = 1.0 - b
 		draw_circle(Vector2.ZERO, radius * lerpf(1.0, BLAST_GROW, b), c)
 		return
 
 	var p := clampf(_t / delay, 0.0, 1.0)  # 0 = yeni çizildi, 1 = patlıyor
 	# Zemin dolgusu giderek koyulaşır
-	var fill := RUNE_COLOR
+	var fill := _rune_color
 	fill.a = lerpf(FILL_ALPHA_START, FILL_ALPHA_END, p)
 	draw_circle(Vector2.ZERO, radius, fill)
 	# İçten dolan daire: kenara değdiği an patlar
-	var inner := RUNE_COLOR
+	var inner := _rune_color
 	inner.a = 0.45
 	draw_circle(Vector2.ZERO, radius * p, inner)
 	# Dış halka: patlamaya yaklaştıkça hızlanarak yanıp söner
 	var blink_speed := lerpf(BLINK_SPEED_START, BLINK_SPEED_END, p)
-	var ring := RUNE_COLOR
+	var ring := _rune_color
 	ring.a = 0.55 + 0.45 * absf(sin(_t * blink_speed))
 	draw_arc(Vector2.ZERO, radius, 0.0, TAU, 32, ring, RING_WIDTH)
 	# Dönen rün işaretleri (halkanın hemen içinde küçük çizgiler)

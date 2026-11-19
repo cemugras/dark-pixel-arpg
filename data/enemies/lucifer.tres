@@ -1,0 +1,120 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" uid="uid://cqlw7x1k6q18i" path="res://scripts/enemy_data.gd" id="1_luc"]
+[ext_resource type="SpriteFrames" path="res://data/enemies/lucifer_frames.tres" id="2_luc"]
+[ext_resource type="Resource" path="res://data/weapons/glock.tres" id="3_glock"]
+[ext_resource type="Resource" path="res://data/enemies/azazel_spear.tres" id="4_spear"]
+[ext_resource type="Resource" path="res://data/enemies/hellhound.tres" id="5_hound"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/lucifer/throne_seated.png" id="6_seated"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/lucifer/throne_biscuit.png" id="7_biscuit"]
+
+[resource]
+script = ExtResource("1_luc")
+id = "lucifer"
+display_name = "Lucifer"
+sprite_frames = ExtResource("2_luc")
+body_scale = 1.0
+hitbox_scale = 1.8
+max_health = 3800
+move_speed = 34.0
+contact_damage = 5
+charge_interval = 4.0
+charge_min_range = 80.0
+charge_max_range = 300.0
+charge_windup = 0.7
+charge_speed = 380.0
+charge_overshoot = 60.0
+charge_max_distance = 340.0
+charge_damage = 7
+charge_tired = 1.2
+charge_sound = "lucifer_charge"
+summon_data = ExtResource("5_hound")
+summon_count = 3
+summon_max_alive = 6
+summon_interval = 9.0
+summon_release_frame = 6
+summon_radius = 60.0
+summon_sound = "lucifer_summon"
+cast_count = 4
+cast_interval = 3.5
+cast_max_range = 450.0
+cast_release_frame = 6
+cast_radius = 28.0
+cast_spread = 90.0
+cast_delay = 1.0
+cast_damage = 6
+cast_sound = "lucifer_cast"
+cast_blast_sound = "lucifer_rune_blast"
+breath_count = 4
+breath_interval = 5.0
+breath_max_range = 180.0
+breath_range = 120.0
+breath_width_degrees = 40.0
+breath_windup = 0.8
+breath_duration = 2.0
+breath_spin_degrees = 70.0
+breath_hold_frame = 5
+breath_damage = 6
+breath_recover = 0.8
+breath_colors = Array[Color]([Color(0.45, 0.78, 1, 1), Color(0.8, 0.92, 1, 1)])
+breath_sound = "lucifer_breath"
+locust_length = 560.0
+locust_thickness = 30.0
+locust_interval = 6.0
+locust_min_range = 110.0
+locust_max_range = 340.0
+locust_gap = 90.0
+locust_gap_min = 30.0
+locust_gap_max = 140.0
+locust_speed = 160.0
+locust_overshoot = 200.0
+locust_warning = 1.0
+locust_hold_frame = 5
+locust_damage = 6
+locust_recover = 0.8
+locust_sound = "lucifer_frost"
+duel_interval = 4.5
+duel_min_range = 0.0
+duel_max_range = 450.0
+duel_track_time = 0.8
+duel_lock_time = 0.0
+duel_shots = 16
+duel_shot_gap = 0.08
+duel_spread_degrees = 3.0
+duel_bullet_speed = 260.0
+duel_bullet_distance = 480.0
+duel_damage = 6
+duel_hold_frame = 5
+duel_recover = 0.8
+duel_orbit_radius = 40.0
+duel_sound = "lucifer_aim"
+duel_fallback_weapon = ExtResource("3_glock")
+duel_weapon = ExtResource("4_spear")
+duel_show_weapon = false
+duel_follow_fire = true
+phase_thresholds = PackedFloat32Array(0.7, 0.35)
+phase_abilities = PackedStringArray("cast,duel", "charge,breath,locust", "charge,breath,locust,cast,duel,summon")
+phase_interval_mult = PackedFloat32Array(1, 1, 0.75)
+phase_speed_mult = PackedFloat32Array(1, 1, 1.25)
+phase_tints = Array[Color]([Color(1, 1, 1, 1), Color(1, 1, 1, 1), Color(0.85, 0.95, 1.25, 1)])
+phase_sound = "lucifer_rise"
+special_gap = 1.0
+anim_aliases = {
+"breath": "cast",
+"locust": "cast",
+"shoot": "cast",
+"summon": "cast"
+}
+fx_color = Color(0.45, 0.78, 1, 1)
+throne_texture = ExtResource("6_seated")
+throne_empty_texture = ExtResource("7_biscuit")
+throne_position = Vector2(0, -200)
+throne_seat_offset = Vector2(0, -8)
+throne_stand_offset = Vector2(0, 54)
+rise_time = 1.5
+coin_value = 1000
+is_boss = true
+boss_wave = 100
+hit_sound = "lucifer_hit"
+death_sound = "lucifer_death"
+spawn_sound = "lucifer_spawn"

@@ -42,6 +42,24 @@ var _sfx: AudioStreamPlayer = null
 var _sfx_stream: AudioStream = null
 var _sfx_base_db: float = 0.0
 
+var _warn_fill: Color = WARN_FILL
+var _warn_edge: Color = WARN_EDGE
+var _gap_edge: Color = GAP_EDGE
+var _wall_shadow: Color = WALL_SHADOW
+var _body_color: Color = BODY_COLOR
+var _wing_color: Color = WING_COLOR
+var _wing_dark: Color = WING_DARK
+
+# Kehribar çekirgeler yerine başka renk (Lucifer: buz mavisi, EnemyData.fx_color; çekirgeler buz kırıntısı fırtınası olur)
+func set_color(c: Color) -> void:
+	_warn_fill = Color(c, WARN_FILL.a)
+	_warn_edge = Color(c.lightened(0.2), WARN_EDGE.a)
+	_gap_edge = Color(c.lightened(0.75), GAP_EDGE.a)
+	_wall_shadow = Color(c.darkened(0.9), WALL_SHADOW.a)
+	_body_color = c.darkened(0.75)
+	_wing_color = c.lightened(0.55)
+	_wing_dark = c.darkened(0.25)
+
 # angle: selin aktığı yön (radyan). gap: boşluğun duvar ortasına uzaklığı (işaretli).
 func setup(dmg: int, wall_length: float, wall_thickness: float, gap: float, gap_size: float, flow_speed: float,
 		distance: float, warning: float, angle: float, sound: String, focus: bool = true) -> void:
@@ -152,12 +170,12 @@ func _draw() -> void:
 	if _t < warn:
 		var p := _t / maxf(warn, 0.01)
 		var blink := 0.5 + 0.5 * absf(sin(_t * lerpf(6.0, 20.0, p)))
-		var fill := WARN_FILL
-		fill.a = WARN_FILL.a + 0.08 * p
+		var fill := _warn_fill
+		fill.a = _warn_fill.a + 0.08 * p
 		# Boşluğun iki yanındaki iki şerit (boşluk açık kalır)
 		draw_rect(Rect2(x0, -half, x1 - x0, gap_lo + half), fill)
 		draw_rect(Rect2(x0, gap_hi, x1 - x0, half - gap_hi), fill)
-		var edge := WARN_EDGE
+		var edge := _warn_edge
 		edge.a *= blink
 		# Duvarın başladığı çizgi (kalın) ve alanın uç kenarları
 		draw_line(Vector2(0.0, -half), Vector2(0.0, gap_lo), edge, 3.0)
@@ -166,7 +184,7 @@ func _draw() -> void:
 		draw_line(Vector2(x0, half), Vector2(x1, half), edge, 1.0)
 		# Boşluk şeridinin parlak kenarları
 		if _has_gap():
-			var g := GAP_EDGE
+			var g := _gap_edge
 			g.a *= 0.6 + 0.4 * blink
 			draw_line(Vector2(x0, gap_lo), Vector2(x1, gap_lo), g, 1.5)
 			draw_line(Vector2(x0, gap_hi), Vector2(x1, gap_hi), g, 1.5)
@@ -182,7 +200,7 @@ func _draw() -> void:
 			y += ARROW_GAP
 	else:
 		var fade := _fade()
-		var shadow := WALL_SHADOW
+		var shadow := _wall_shadow
 		shadow.a *= fade
 		var f := _front()
 		draw_rect(Rect2(f - thickness * 0.5, -half, thickness, gap_lo + half), shadow)
@@ -210,9 +228,9 @@ func _draw_swarm() -> void:
 		var pos := Vector2(f + l.x + sin(_t * 9.0 + ph) * 2.0, l.y + cos(_t * 7.0 + ph) * 2.0)
 		pos += l.drift * scatter
 		var flap := sin(_t * 40.0 + ph) > 0.0
-		var body := BODY_COLOR
+		var body := _body_color
 		body.a = fade
-		var wing := WING_COLOR if flap else WING_DARK
+		var wing := _wing_color if flap else _wing_dark
 		wing.a = fade
 		pos = pos.round()
 		# Gövde 3x2, kanatlar gövdenin üstünde/altında 1-2 px (çırpınca açılır)

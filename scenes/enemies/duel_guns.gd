@@ -260,6 +260,8 @@ func _shoot(g: Dictionary) -> void:
 	var angle := d.angle() + deg_to_rad(randf_range(-_data.duel_spread_degrees, _data.duel_spread_degrees))
 	var b := HellBullet.new()
 	b.setup(_damage, _data.duel_bullet_speed, _data.duel_bullet_distance, angle)
+	if _data.fx_color.a > 0.0:
+		b.set_color(_data.fx_color)  # Lucifer: buz oku
 	b.position = _muzzle_global(g)
 	# Yaratığın ebeveyninde (WaveManager) doğar, boss ölse de uçmaya devam eder (die() havadakileri siler)
 	get_parent().get_parent().add_child(b)
@@ -284,6 +286,11 @@ func _draw() -> void:
 		return
 	# Küçük yaratıkta (body_scale 0.5) düğüm de ölçekli: çizgi boyu ve kalınlığı ekranda aynı kalsın diye düzeltilir
 	var k := 1.0 / maxf(get_global_transform().get_scale().x, 0.01)
+	var line_color := LINE_COLOR
+	var core_color := Color(1.0, 0.75, 0.6, 0.9)
+	if _data.fx_color.a > 0.0:  # Lucifer: buz mavisi nişan
+		line_color = Color(_data.fx_color, 1.0)
+		core_color = Color(_data.fx_color.lightened(0.7), 0.9)
 	for g in _guns:
 		var from := to_local(_muzzle_global(g))
 		var d: Vector2 = g["dir"]
@@ -292,12 +299,12 @@ func _draw() -> void:
 			var t := 1.0 - _timer / maxf(_data.duel_track_time, 0.01)
 			if _data.duel_lock_time <= 0.0:
 				t = maxf(t, 0.6)  # kilit yoksa izlerken de belirgin olsun (ateş yaklaşıyor)
-			var c := LINE_COLOR
+			var c := line_color
 			c.a = LINE_TRACK_ALPHA * (0.6 + 0.4 * t) * (0.75 + 0.25 * sin(_bob_time * 40.0))
 			draw_line(from, to, c, 1.0 * k)
 		else:
-			var c := LINE_COLOR
+			var c := line_color
 			c.a = LINE_LOCK_ALPHA
 			draw_line(from, to, Color(c, 0.3), 4.0 * k)
 			draw_line(from, to, c, 2.0 * k)
-			draw_line(from, to, Color(1.0, 0.75, 0.6, 0.9), 1.0 * k)
+			draw_line(from, to, core_color, 1.0 * k)

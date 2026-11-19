@@ -57,6 +57,11 @@ func _ready() -> void:
 	if player:
 		move_child(merchant, player.get_index() + 1)
 
+	# Oyunun sonu (100. dalga bitince THE END; ileride final ara sahnesi)
+	var victory: CanvasLayer = load("res://scenes/ui/victory_screen.gd").new()
+	victory.name = "VictoryScreen"
+	add_child(victory)
+
 	# Test kısayolları (F1-F5): sadece editörden / debug derlemede, release'de yok
 	if OS.is_debug_build():
 		var debug_tools: CanvasLayer = load("res://scenes/levels/debug_tools.gd").new()

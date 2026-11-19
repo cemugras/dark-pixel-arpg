@@ -225,6 +225,9 @@ func _end_wave() -> void:
 	_boss = null
 	get_tree().call_group("coin", "attract_to_player")
 	EventBus.wave_ended.emit(wave)
+	if wave >= max_wave:
+		EventBus.game_won.emit()  # son dalga (Lucifer): tüccar gelmez, bitiş ekranı (victory_screen.gd) açılır
+		return
 	# Müzik yavaşça kısılır; mağaza müziği mağaza açılınca başlar (EventBus.shop_requested, _ready'de bağlı):
 	# tüccar önce iner ve yere değme sesi çalar, müzik ondan sonra girer
 	Audio.stop_music(WAVE_END_MUSIC_FADE)

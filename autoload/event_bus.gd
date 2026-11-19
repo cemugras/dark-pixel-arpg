@@ -13,3 +13,4 @@ signal next_wave_requested
 signal shop_closed  # mağazada Next Wave basıldı; tüccar varsa havalanır, gidince next_wave_requested yayınlar
 signal boss_spawned(boss: Node)
 signal boss_defeated(boss_id: String)  # boss ölünce (EnemyData.id); ileride Steam başarımları bunu dinleyecek
+signal game_won  # son dalga (Lucifer) bitince; tüccar gelmez, bitiş ekranı açılır (ileride final ara sahnesi)
