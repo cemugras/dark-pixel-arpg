@@ -15,6 +15,8 @@ extends Resource
 @export var floor_texture: Texture2D           # arena zemini: lower = düz zemin, upper = sönük leke (kül, is)
 @export var floor_tiles: Dictionary = {}
 @export var floor_patches: int = 10            # arenaya serpiştirilen leke sayısı
+@export var floor_veins: int = 0               # zemindeki kızgın damar sayısı (floor_veins.gd; 0 = yok), sadece görüntü
+@export var vein_color: Color = Color(0.77, 0.14, 0.16)
 
 @export_group("Edge")
 @export var edge_texture: Texture2D            # arena kenarı ve ötesi: lower = dış (ör. lav), upper = arena zemini
@@ -41,6 +43,9 @@ extends Resource
 # ash_fall bölgesinde düşen pulların renkleri (ör. Asmodeus'un Bahçeleri: kızıl, mor, zehir yeşili yapraklar);
 # doluysa pul sayısı renklere eşit bölünür ve ember_color yerine bunlar kullanılır, boşsa sadece ember_color
 @export var ember_colors: Array[Color] = []
+# ash_fall bölgesinde düşen pulların yanında ayrıca yükselen seyrek korlar (ember_color; pullar o zaman ember_colors'tan,
+# ör. Lucifer'in Tahtı: düşen kar + buzun altından yükselen kızıl kıvılcım); 0 = yok
+@export var rising_embers: int = 0
 # Dış alanda yer yer vızıldayan küçük sinek bulutları (ör. Beelzebub'un Bataklığı); 0 = yok
 @export var fly_swarms: int = 0
 @export var fly_color: Color = Color(0.06, 0.07, 0.05, 1.0)

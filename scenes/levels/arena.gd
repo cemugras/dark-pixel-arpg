@@ -39,6 +39,11 @@ func build(new_region: RegionData) -> void:
 	if region == null:
 		return
 	_build_ground()
+	if region.floor_veins > 0:
+		var veins := FloorVeins.new()
+		veins.name = "Veins"
+		add_child(veins)
+		veins.setup(region.floor_veins, region.vein_color, play_rect(), region.id)
 	_build_walls()
 	_build_decor()
 	_build_effects()
@@ -249,6 +254,8 @@ func _build_effects() -> void:
 			for c in colors:
 				_add_ash(band, maxi(4, roundi(region.ember_amount * share / colors.size())), c)
 			_add_mist(band, maxi(1, roundi(region.smoke_amount * share)))
+			if region.rising_embers > 0:  # düşen pulların yanında yükselen seyrek korlar (ember_color; Lucifer'in Tahtı)
+				_add_embers(band, maxi(2, roundi(region.rising_embers * share)))
 		else:
 			_add_embers(band, maxi(4, roundi(region.ember_amount * share)))
 			_add_smoke(band, maxi(1, roundi(region.smoke_amount * share)))

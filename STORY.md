@@ -29,6 +29,9 @@ Steam kısa açıklaması (taslak):
 ### Lucifer (final boss, 100. dalga)
 
 - Tahtında, kucağında Biscuit ile oturur. Kediyi gerçekten sever; kaçırma bir intikam değil, sahiplenmedir.
+- **Görünüm:** çatlamış güzel melek: soluk, neredeyse beyaz ten, çatlaklarından sızan soğuk ışık, kıvrık boynuzlar, kara kanatlar, siyah-beyaz uzun cübbe. Büyüleri buz mavisi (cehennemin en dibi ateş değil buz).
+- **Tahtı:** boynuz ve kemikten taht, kızıl kadife minder, kafatasları, kırık kara hale.
+- **Savaş (üç evre):** önce tahtta oturur, Biscuit kucağında; yerinden kalkmadan buz rünleri ve görünmez iki mızraktan oyuncuyu izleyen buz oku serisi atar. Canı %70'e inince ayağa kalkıp basamaklardan iner, Biscuit tahtta tek başına kalır; ani hamle, dönen buz nefesi ve buz kırıntısı fırtınası (çekirge selinin buz hâli). %35'in altında öfkelenir: soğuk bir parıltı, daha hızlı, bütün yetenekleri birden ve Hellhound çağırır. Önceki iblis lordlarının mekaniklerinin karışımı.
 
 ### Brimm, gezgin tüccar (mağaza)
 
@@ -82,7 +85,7 @@ Boss'lar zayıftan güçlüye sıralanır; her biri oyuna bir yeni mekanik getir
 | 70 | Asmodeus | Üç başı kedinin kime ait olduğu konusunda kavga eder. | Üç başın dönen nefesi (kızıl, mor, yeşil; tek hamle) | Kırık mama kabı |
 | 80 | Abaddon | Yıkım meleği; Walt'ı "geri dön" diye uyarır. | Çekirge sürüleri, geniş alan | Kedinin çan sesi |
 | 90 | Azazel | İnsanlara silah dövmeyi öğreten düşmüş melek, cehennemin dökümhanesinin ustası; Walt gibi nişan alıp ateş eder. Lucifer'in son kapısı. | İki kızgın mızrağından oyuncuyu izleyen ateş oku serisi | Kapı anahtarı |
-| 100 | Lucifer | Tahtında, kucağında Biscuit. | Önceki mekaniklerin karışımı | — |
+| 100 | Lucifer | Tahtında, kucağında Biscuit; canı azalınca ayağa kalkar, kedi tahtta kalır. | Üç evrede önceki mekaniklerin buz mavisi karışımı (rün, izleyen ok serisi, hamle, nefes, sel, çağırma) | — |
 
 Yedek boss: Baal.
 
@@ -104,7 +107,7 @@ Hem yazıyla hem animasyonla anlatılacak (bkz. "Ara sahneler").
 ## Ara sahneler (planlı)
 
 - **Giriş:** yukarıdaki açılış; oyun başında (ilk Play'de) oynar, geçilebilir.
-- **Bitiş:** yukarıdaki final; Lucifer yenilince oynar.
+- **Bitiş:** yukarıdaki final; Lucifer yenilince oynar. Şimdilik geçici bir "THE END" ekranı var (son dalga bitince tahtta tek başına oturan Biscuit görünür, ekran kararır). Konuşulan fikir (henüz karar verilmedi, üretim yapılmadı): son sahne kameranın odada durduğu, koltuğa arkadan bakan bir görüntü; koltukta Walt oturuyor (sadece başının arkası görünür), televizyonda kükürt kokusu haberi, Biscuit yerde yürüyerek koltuğa gelir, ekran kararır, THE END.
 - Anlatım hem yazı (kısa metin kutuları) hem animasyonla olur. Karakter görselleri (Walt, Biscuit, Lucifer) PixelLab ile hazır olacağı için ara sahne animasyonları bu görsellerden bir yapay zekâ aracıyla üretilecek.
 
 ## Bölgeler (harita)
@@ -122,7 +125,7 @@ Walt her boss'tan sonra cehennemin daha derinine iner; her boss bölümünün ke
 | 61-70 | Asmodeus'un Bahçeleri: üç renkli saray bahçesi |
 | 71-80 | Abaddon'un Uçurumu: yıkık köprüler, kırık zemin |
 | 81-90 | Azazel'in Silah Dökümhanesi: kırık kılıçlar, örsler, düşmüş melek kanatları |
-| 91-100 | Lucifer'in Tahtı: donmuş göl (en dipte ateş değil buz) |
+| 91-100 | Lucifer'in Tahtı: donmuş göl (en dipte ateş değil buz); buzun altında hâlâ yanan cehennem ateşi kızıl damarlar olarak görünür, buza saplanmış kırık melek kanatları, buzda donmuş ruhlar |
 
 ## Ton ve yazım
 
