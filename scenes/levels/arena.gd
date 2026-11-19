@@ -243,7 +243,11 @@ func _build_effects() -> void:
 	for band in bands:
 		var share := band.get_area() / total_area
 		if region.ash_fall:
-			_add_ash(band, maxi(4, roundi(region.ember_amount * share)))
+			var colors: Array[Color] = region.ember_colors.duplicate()
+			if colors.is_empty():
+				colors.append(region.ember_color)
+			for c in colors:
+				_add_ash(band, maxi(4, roundi(region.ember_amount * share / colors.size())), c)
 			_add_mist(band, maxi(1, roundi(region.smoke_amount * share)))
 		else:
 			_add_embers(band, maxi(4, roundi(region.ember_amount * share)))
@@ -326,7 +330,7 @@ func _add_smoke(rect: Rect2, amount: int) -> void:
 	_fx.add_child(p)
 
 # Kül bölgesi: yukarıdan sallanarak yavaşça düşen sönük kül pulları (parlamaz, belirip kaybolur)
-func _add_ash(rect: Rect2, amount: int) -> void:
+func _add_ash(rect: Rect2, amount: int, c: Color) -> void:
 	var p := CPUParticles2D.new()
 	p.amount = amount
 	p.lifetime = 6.0
@@ -346,7 +350,6 @@ func _add_ash(rect: Rect2, amount: int) -> void:
 	p.scale_amount_min = 1.0
 	p.scale_amount_max = 2.0
 	var ramp := Gradient.new()
-	var c := region.ember_color
 	ramp.set_color(0, Color(c.r, c.g, c.b, 0.0))
 	ramp.set_color(1, Color(c.r, c.g, c.b, 0.0))
 	ramp.add_point(0.2, Color(c.r, c.g, c.b, c.a))

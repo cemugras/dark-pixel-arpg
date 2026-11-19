@@ -38,6 +38,9 @@ extends Resource
 # true: kül bölgesi (ör. Belphegor'un Uyku Salonları): korlar yerine yukarıdan yavaşça düşen kül pulları (ember_color,
 # parlamaz), duman yerine yatay sürünen sis (smoke_color), kenar boyunca kıvılcım yok
 @export var ash_fall: bool = false
+# ash_fall bölgesinde düşen pulların renkleri (ör. Asmodeus'un Bahçeleri: kızıl, mor, zehir yeşili yapraklar);
+# doluysa pul sayısı renklere eşit bölünür ve ember_color yerine bunlar kullanılır, boşsa sadece ember_color
+@export var ember_colors: Array[Color] = []
 # Dış alanda yer yer vızıldayan küçük sinek bulutları (ör. Beelzebub'un Bataklığı); 0 = yok
 @export var fly_swarms: int = 0
 @export var fly_color: Color = Color(0.06, 0.07, 0.05, 1.0)
