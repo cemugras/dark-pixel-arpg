@@ -72,6 +72,9 @@ const SFX_VOLUME_DB: Dictionary = {
 	"abyss_locust_hit": -8.0,  # kalabalık yaratık, kısık
 	"abyss_locust_death": -6.0,
 	"abyss_locust_swarm": -10.0,  # Abaddon sel sesinin ince ve kısık kopyası (SFX_ALIASES)
+	"grigori_hit": -8.0,  # Azazel sesinin ince ve kısık kopyası (SFX_ALIASES)
+	"grigori_death": -6.0,
+	"grigori_aim": -10.0,
 }
 
 # Aynı anda en fazla kaç kopya çalabileceği sese özel ayar (listede yoksa MAX_PER_SOUND).
@@ -94,6 +97,9 @@ const SFX_MAX_INSTANCES: Dictionary = {
 	"abyss_locust_hit": 1,
 	"abyss_locust_death": 2,
 	"abyss_locust_swarm": 1,
+	"grigori_hit": 1,
+	"grigori_death": 2,
+	"grigori_aim": 2,
 }
 
 # Başka sesin dosyasını kullanan sesler (ayrı dosya yok): ad -> kaynak ses. Seviye (SFX_VOLUME_DB), üst üste çalma
@@ -105,6 +111,9 @@ const SFX_ALIASES: Dictionary = {
 	"lilim_cast": "lilith_cast",
 	"lilim_rune_blast": "lilith_rune_blast",
 	"abyss_locust_swarm": "abaddon_swarm",  # Abyss Locust, Abaddon sel sesini ince ve kısık kullanır
+	"grigori_hit": "azazel_hit",  # Grigori (Azazel'in çırağı), Azazel'in seslerini ince ve kısık kullanır
+	"grigori_death": "azazel_death",
+	"grigori_aim": "azazel_aim",
 	"smg_shoot": "glock_shoot",  # SMG Glock ile aynı mermiyi atar, sadece daha hızlı ve otomatik: aynı ses
 }
 
@@ -115,6 +124,9 @@ const SFX_PITCH: Dictionary = {
 	"lilim_cast": 1.25,
 	"lilim_rune_blast": 1.25,
 	"abyss_locust_swarm": 1.3,
+	"grigori_hit": 1.3,
+	"grigori_death": 1.3,
+	"grigori_aim": 1.25,
 }
 
 # --- Müzik ---

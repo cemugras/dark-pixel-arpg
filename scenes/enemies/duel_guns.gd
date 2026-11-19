@@ -26,7 +26,6 @@ const LINE_LOCK_ALPHA: float = 0.9
 const FLASH_TIME: float = 0.05
 const RECOIL_PX: float = 4.0
 const SHOT_PITCH: float = 0.75                      # oyuncunun silah sesinin kalın hâli
-const SHOT_DB: float = -3.0
 const BACK_THRESHOLD: float = -0.35                 # nişan yönünün y'si bunun altındaysa (kuzey) silah gövdenin arkasında
 const MOVE_RATE: float = 12.0                       # elden nişana / nişandan ele geçiş hızı (büyüdükçe daha çabuk)
 # Elde dik dururken yumrukların konumu (gövde merkezine göre px, Azazel'in duruş karelerinden ölçüldü) ve gövdenin
@@ -68,8 +67,10 @@ func _ready() -> void:
 	get_parent().add_child.call_deferred(_back)
 	get_parent().move_child.call_deferred(_back, 0)  # yaratığın sprite'ından önce çizilir
 	var weapons := _copied_weapons()
-	for i in 2:
+	for i in clampi(_data.duel_gun_count, 1, 2):
 		_guns.append(_build_gun(weapons[i], i))
+	if _guns.size() == 1:
+		_guns[0]["side"] = 0.0  # tek silah nişan yönünün tam önünde
 	if _target:
 		_aim_angle = (_target.global_position - global_position).angle()
 	_place_guns(0.0, true)  # delta 0: geçiş olmadan doğrudan yerine
@@ -104,6 +105,7 @@ func _build_gun(weapon: WeaponData, index: int) -> Dictionary:
 	s.offset = -grip
 	s.scale = Vector2.ONE * _data.duel_gun_scale
 	s.modulate = HOT_COLOR
+	s.visible = _data.duel_show_weapon  # kapalıysa silah yaratığın kendi sprite'ında (Grigori'nin elindeki mızrak)
 	holder.add_child(s)
 	var flash: Sprite2D = null
 	if weapon.muzzle_flash:
@@ -271,7 +273,7 @@ func _shoot(g: Dictionary) -> void:
 	s.position = Vector2(-RECOIL_PX, 0.0)
 	tw.tween_property(s, "position", Vector2.ZERO, _data.duel_shot_gap * 1.6)
 	var weapon: WeaponData = g["weapon"]
-	var p := Audio.play_sfx(weapon.shoot_sound, SHOT_DB)
+	var p := Audio.play_sfx(weapon.shoot_sound, _data.duel_shot_db)
 	if p:
 		p.pitch_scale *= SHOT_PITCH
 
@@ -280,20 +282,22 @@ func _draw() -> void:
 	var firing_follow := _phase == Phase.FIRE and _data.duel_follow_fire
 	if _phase != Phase.TRACK and _phase != Phase.LOCK and not firing_follow:
 		return
+	# Küçük yaratıkta (body_scale 0.5) düğüm de ölçekli: çizgi boyu ve kalınlığı ekranda aynı kalsın diye düzeltilir
+	var k := 1.0 / maxf(get_global_transform().get_scale().x, 0.01)
 	for g in _guns:
 		var from := to_local(_muzzle_global(g))
 		var d: Vector2 = g["dir"]
-		var to := from + d * _data.duel_bullet_distance
+		var to := from + d * _data.duel_bullet_distance * k
 		if _phase == Phase.TRACK:
 			var t := 1.0 - _timer / maxf(_data.duel_track_time, 0.01)
 			if _data.duel_lock_time <= 0.0:
 				t = maxf(t, 0.6)  # kilit yoksa izlerken de belirgin olsun (ateş yaklaşıyor)
 			var c := LINE_COLOR
 			c.a = LINE_TRACK_ALPHA * (0.6 + 0.4 * t) * (0.75 + 0.25 * sin(_bob_time * 40.0))
-			draw_line(from, to, c, 1.0)
+			draw_line(from, to, c, 1.0 * k)
 		else:
 			var c := LINE_COLOR
 			c.a = LINE_LOCK_ALPHA
-			draw_line(from, to, Color(c, 0.3), 4.0)
-			draw_line(from, to, c, 2.0)
-			draw_line(from, to, Color(1.0, 0.75, 0.6, 0.9), 1.0)
+			draw_line(from, to, Color(c, 0.3), 4.0 * k)
+			draw_line(from, to, c, 2.0 * k)
+			draw_line(from, to, Color(1.0, 0.75, 0.6, 0.9), 1.0 * k)

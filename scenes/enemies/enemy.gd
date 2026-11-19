@@ -252,7 +252,8 @@ func _ready() -> void:
 	_has_duel = data != null and data.duel_interval > 0.0 and _mode == SpriteMode.EIGHT_DIR \
 		and frames.has_animation("shoot_east")
 	if _has_duel:
-		_duel_timer = data.duel_interval * 0.5  # boss belirince ilk seri biraz erken gelsin
+		# boss belirince ilk seri biraz erken gelsin; normal yaratıkta (Grigori) rastgele, aynı anda doğanlar birlikte atmasın
+		_duel_timer = data.duel_interval * (0.5 if data.is_boss else randf_range(0.4, 1.0))
 		_duel_guns = DuelGuns.new()
 		_duel_guns.setup(data, duel_damage)
 		add_child(_duel_guns)
@@ -788,7 +789,10 @@ func _start_duel(dir: Vector2) -> void:
 	sprite.play("shoot_" + DIR8_NAMES[_dir8_idx])
 	sprite.frame = 0
 	_duel_guns.aim()  # nişan -> kilit -> seri kendi zamanlamasıyla
-	Audio.play_sfx_focus(data.duel_sound)
+	if data.duel_focus:
+		Audio.play_sfx_focus(data.duel_sound)
+	else:
+		Audio.play_sfx(data.duel_sound)
 
 func _process_duel(delta: float) -> void:
 	velocity = _separation() * SEPARATION_MIN_SPEED * SEPARATION_STRENGTH

@@ -1,0 +1,46 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" uid="uid://cqlw7x1k6q18i" path="res://scripts/enemy_data.gd" id="1_grig"]
+[ext_resource type="SpriteFrames" path="res://data/enemies/grigori_frames.tres" id="2_grig"]
+[ext_resource type="Resource" path="res://data/enemies/azazel_spear.tres" id="3_spear"]
+
+[resource]
+script = ExtResource("1_grig")
+id = "grigori"
+display_name = "Grigori"
+sprite_frames = ExtResource("2_grig")
+body_scale = 0.5
+max_health = 30
+move_speed = 45.0
+keep_distance = 150.0
+contact_damage = 2
+duel_interval = 5.0
+duel_min_range = 0.0
+duel_max_range = 230.0
+duel_track_time = 1.0
+duel_lock_time = 0.3
+duel_shots = 3
+duel_shot_gap = 0.12
+duel_spread_degrees = 3.0
+duel_bullet_speed = 240.0
+duel_bullet_distance = 300.0
+duel_damage = 4
+duel_hold_frame = 5
+duel_recover = 0.4
+duel_orbit_radius = 20.0
+duel_gun_scale = 1.0
+duel_strafe = 0.0
+duel_sound = "grigori_aim"
+duel_weapon = ExtResource("3_spear")
+duel_follow_fire = false
+duel_rest_upright = false
+duel_gun_count = 1
+duel_show_weapon = false
+duel_shot_db = -9.0
+duel_focus = false
+coin_value = 2
+spawn_weight = 0.4
+spawn_weight_per_wave = 0.04
+min_wave = 91
+hit_sound = "grigori_hit"
+death_sound = "grigori_death"

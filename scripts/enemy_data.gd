@@ -186,6 +186,10 @@ extends Resource
 @export var duel_weapon: WeaponData              # doluysa iki silah da bu (Azazel: mızrak); boşsa oyuncunun silahları kopyalanır
 @export var duel_follow_fire: bool = false       # true: seri boyunca da oyuncuyu izler (kilit sadece ateşten önce)
 @export var duel_rest_upright: bool = false      # true: boştayken silahlar ellerde dik durur (mızrak), nişanda öne süzülüp döner
+@export var duel_gun_count: int = 2              # 1 ya da 2 silah (Grigori 1)
+@export var duel_show_weapon: bool = true        # false: silah görünmez (yaratık sprite'ında zaten elinde), çizgi ve oklar yine çıkar
+@export var duel_shot_db: float = -3.0           # atış sesinin ek seviyesi (kalabalık yaratıkta kısık)
+@export var duel_focus: bool = true              # true: nişan sesi play_sfx_focus ile (boss); kalabalık yaratıkta false
 
 # --- Vurdukça sikke saçma (Mammon) ---
 # spill_health_step 0 ise yok. Canın her spill_health_step kadarı (ör. 0.1 = %10) gidince yere spill_value
