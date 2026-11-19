@@ -1,0 +1,45 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" uid="uid://cqlw7x1k6q18i" path="res://scripts/enemy_data.gd" id="1_azaz"]
+[ext_resource type="SpriteFrames" path="res://data/enemies/azazel_frames.tres" id="2_azaz"]
+[ext_resource type="Resource" path="res://data/weapons/glock.tres" id="3_glock"]
+[ext_resource type="Resource" path="res://data/enemies/azazel_spear.tres" id="4_spear"]
+
+[resource]
+script = ExtResource("1_azaz")
+id = "azazel"
+display_name = "Azazel"
+sprite_frames = ExtResource("2_azaz")
+body_scale = 1.0
+hitbox_scale = 1.8
+max_health = 2820
+move_speed = 36.0
+keep_distance = 170.0
+contact_damage = 5
+duel_interval = 4.5
+duel_min_range = 0.0
+duel_max_range = 300.0
+duel_track_time = 0.8
+duel_lock_time = 0.0
+duel_shots = 12
+duel_shot_gap = 0.07
+duel_spread_degrees = 2.0
+duel_bullet_speed = 280.0
+duel_bullet_distance = 420.0
+duel_damage = 6
+duel_hold_frame = 4
+duel_recover = 1.0
+duel_orbit_radius = 34.0
+duel_gun_scale = 1.0
+duel_strafe = 0.6
+duel_sound = "azazel_aim"
+duel_fallback_weapon = ExtResource("3_glock")
+duel_weapon = ExtResource("4_spear")
+duel_follow_fire = true
+duel_rest_upright = true
+coin_value = 500
+is_boss = true
+boss_wave = 90
+hit_sound = "azazel_hit"
+death_sound = "azazel_death"
+spawn_sound = "azazel_spawn"

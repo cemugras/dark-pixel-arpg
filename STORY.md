@@ -81,7 +81,7 @@ Boss'lar zayıftan güçlüye sıralanır; her biri oyuna bir yeni mekanik getir
 | 60 | Leviathan | Kediyi lav denizinin karşısına taşımış. | Yere dalıp çıkar, alan saldırısı | Islak tüy yumağı |
 | 70 | Asmodeus | Üç başı kedinin kime ait olduğu konusunda kavga eder. | Üç başın dönen nefesi (kızıl, mor, yeşil; tek hamle) | Kırık mama kabı |
 | 80 | Abaddon | Yıkım meleği; Walt'ı "geri dön" diye uyarır. | Çekirge sürüleri, geniş alan | Kedinin çan sesi |
-| 90 | Azazel | Walt'a benzer silahlar kullanan düşmüş melek; Lucifer'in son kapısı. | Oyuncu gibi silah kullanır | Kapı anahtarı |
+| 90 | Azazel | İnsanlara silah dövmeyi öğreten düşmüş melek, cehennemin dökümhanesinin ustası; Walt gibi nişan alıp ateş eder. Lucifer'in son kapısı. | İki kızgın mızrağından oyuncuyu izleyen ateş oku serisi | Kapı anahtarı |
 | 100 | Lucifer | Tahtında, kucağında Biscuit. | Önceki mekaniklerin karışımı | — |
 
 Yedek boss: Baal.

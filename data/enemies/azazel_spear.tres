@@ -1,0 +1,16 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapon_data.gd" id="1_wdata"]
+[ext_resource type="Texture2D" path="res://assets/sprites/monster/azazel/spear.png" id="2_spear"]
+
+[resource]
+script = ExtResource("1_wdata")
+id = "azazel_spear"
+display_name = "Azazel's Spear"
+description = "Boss weapon, not sold in the shop (DuelGuns)"
+icon = ExtResource("2_spear")
+sprite = ExtResource("2_spear")
+grip_point = Vector2(24, 6.5)
+muzzle_point = Vector2(62, 6.5)
+sprite_scale = 1.0
+shoot_sound = "ak47_shoot"

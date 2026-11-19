@@ -52,6 +52,10 @@ Kurallar:
 | abyss_locust_hit.wav | Creature_growls | maatre | https://freesound.org/s/735438/ | CC0 | Cut from raw/abaddon_hit_abyss_hit_death_raw.wav, 16 bit mono, normalized |
 | abyss_locust_death.wav | Creature_growls | maatre | https://freesound.org/s/735438/ | CC0 | Cut from raw/abaddon_hit_abyss_hit_death_raw.wav, 16 bit mono, normalized |
 | abaddon_swarm.wav | wasp sound.wav | szymalix | https://freesound.org/s/570721/ | CC0 | Cut from raw/abaddon_swarm_raw.wav, 16 bit mono, normalized (also played pitched up and quieter as abyss_locust_swarm) |
+| azazel_spawn.wav | SFX - Dark Laughter | TheEndOfACycle | https://freesound.org/s/692731/ | CC0 | Cut from raw/azazel_spawn_raw.wav, 16 bit mono, normalized |
+| azazel_hit.wav | Growl and Roar | Jofae | https://freesound.org/s/366837/ | CC0 | Cut from raw/azazel_hit_death_raw.mp3, 16 bit mono, normalized |
+| azazel_death.wav | Growl and Roar | Jofae | https://freesound.org/s/366837/ | CC0 | Cut from raw/azazel_hit_death_raw.mp3, 16 bit mono, normalized |
+| azazel_aim.wav | Clanks.wav | markgia | https://freesound.org/s/176226/ | CC0 | Cut from raw/azazel_aim_raw.wav, 16 bit mono, normalized |
 | ui_click.wav | Click.wav | budek | https://freesound.org/s/513481/ | CC0 | - |
 
 ## Music (music/)

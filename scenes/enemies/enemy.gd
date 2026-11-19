@@ -53,7 +53,7 @@ var _dying: bool = false
 # --- Saldırı durumu (bkz. EnemyData attack_*) ---
 const ATTACK_HIT_RANGE_MULT: float = 1.4  # attack_hit_range boşsa: başlatma menzilinin bu katı (kılpayı ıska olmasın)
 const ATTACK_LUNGE_FRAMES: int = 2        # vuruş karesinden önceki kaç karede ileri atılır
-enum State { CHASE, ATTACK, WINDUP, CHARGE, TIRED, THROW, SUMMON, CAST, DIVE, BURROW, SURFACING, EMERGE, BREATH, LOCUST }
+enum State { CHASE, ATTACK, WINDUP, CHARGE, TIRED, THROW, SUMMON, CAST, DIVE, BURROW, SURFACING, EMERGE, BREATH, LOCUST, DUEL }
 var _state: State = State.CHASE
 
 # --- Hamle durumu (bkz. EnemyData charge_*) ---
@@ -134,6 +134,19 @@ var locust_damage: int = 0
 var _locust_timer: float = 0.0
 var _locust_phase: int = 0            # 0 = uyarı, 1 = animasyonun kalanı, 2 = toparlanma
 
+# --- Düello atışı (bkz. EnemyData duel_*) ---
+# DUEL: dur, dön, animasyon (bekleme karesinde durur); silahlar (DuelGuns) nişan alır, kilitlenir, ateş eder ->
+# kilit bitince animasyon kalanı -> seri bitip animasyon da bitince toparlanma (silahlar soğuk) -> CHASE
+const STRAFE_FLIP_MIN: float = 1.5     # yana kayma yönü bu kadar sn ile ...
+const STRAFE_FLIP_MAX: float = 3.5     # ... bu kadar sn arasında rastgele değişir
+var _has_duel: bool = false
+var duel_damage: int = 0
+var _duel_timer: float = 0.0
+var _duel_phase: int = 0               # 0 = nişan, 1 = animasyonun kalanı, 2 = toparlanma
+var _duel_guns: DuelGuns = null
+var _strafe_sign: float = 1.0
+var _strafe_timer: float = 0.0
+
 # --- Sikke saçma (bkz. EnemyData spill_*) ---
 var _spill_next: int = 0  # can bu değerin altına inince sikke saçılır
 
@@ -155,6 +168,7 @@ func setup(enemy_data: EnemyData, wave: int) -> void:
 	emerge_damage = int(data.emerge_damage * dmg_mult)
 	breath_damage = int(data.breath_damage * dmg_mult)
 	locust_damage = int(data.locust_damage * dmg_mult)
+	duel_damage = int(data.duel_damage * dmg_mult)
 	move_speed = data.move_speed * minf(1.0 + 0.01 * w, 1.5)
 	coin_value = data.coin_value
 	scale = Vector2.ONE * data.body_scale
@@ -234,7 +248,18 @@ func _ready() -> void:
 		# boss belirince ilk sel biraz erken gelsin; normal yaratıkta rastgele, aynı anda doğanlar birlikte atmasın
 		_locust_timer = data.locust_interval * (0.5 if data.is_boss else randf_range(0.4, 1.0))
 
-	if _has_attack or _has_throw or _has_summon or _has_cast or _has_dive or _has_breath or _has_locust:
+	# Düello atışı: veri + 8 yönlü shoot animasyonu varsa açılır; silahlar baştan görünür
+	_has_duel = data != null and data.duel_interval > 0.0 and _mode == SpriteMode.EIGHT_DIR \
+		and frames.has_animation("shoot_east")
+	if _has_duel:
+		_duel_timer = data.duel_interval * 0.5  # boss belirince ilk seri biraz erken gelsin
+		_duel_guns = DuelGuns.new()
+		_duel_guns.setup(data, duel_damage)
+		add_child(_duel_guns)
+		_strafe_sign = 1.0 if randf() < 0.5 else -1.0
+		_strafe_timer = randf_range(STRAFE_FLIP_MIN, STRAFE_FLIP_MAX)
+
+	if _has_attack or _has_throw or _has_summon or _has_cast or _has_dive or _has_breath or _has_locust or _has_duel:
 		sprite.frame_changed.connect(_on_sprite_frame_changed)
 		sprite.animation_finished.connect(_on_sprite_animation_finished)
 
@@ -280,6 +305,9 @@ func _physics_process(delta: float) -> void:
 		State.LOCUST:
 			_process_locust(delta)
 			return
+		State.DUEL:
+			_process_duel(delta)
+			return
 
 	var separation := _separation() * maxf(move_speed, SEPARATION_MIN_SPEED) * SEPARATION_STRENGTH
 	if _state == State.THROW or _state == State.SUMMON or _state == State.CAST:
@@ -297,9 +325,19 @@ func _physics_process(delta: float) -> void:
 
 	var to_target := target.global_position - global_position
 	var dir := to_target.normalized()
+	if data and data.duel_strafe > 0.0:
+		_strafe_timer -= delta
+		if _strafe_timer <= 0.0:
+			_strafe_sign = -_strafe_sign
+			_strafe_timer = randf_range(STRAFE_FLIP_MIN, STRAFE_FLIP_MAX)
 	# Yön (bakış) oyuncuya göre kalır; itme sadece hareketi etkiler, böylece sprite titremez
-	velocity = _chase_dir(dir, to_target.length()) * move_speed + separation
+	var wanted := _chase_dir(dir, to_target.length()) * move_speed
+	velocity = wanted + separation
 	move_and_slide()
+	# Yana kayarken duvara dayandıysa diğer yana döner
+	if data and data.duel_strafe > 0.0 and wanted.length() > 1.0 and get_real_velocity().length() < wanted.length() * 0.3:
+		_strafe_sign = -_strafe_sign
+		_strafe_timer = randf_range(STRAFE_FLIP_MIN, STRAFE_FLIP_MAX)
 
 	if _has_charge:
 		_charge_timer -= delta
@@ -347,6 +385,12 @@ func _physics_process(delta: float) -> void:
 			_start_locust(dir)
 			return
 
+	if _has_duel:
+		_duel_timer -= delta
+		if _can_start_duel(to_target.length()):
+			_start_duel(dir)
+			return
+
 	match _mode:
 		SpriteMode.EIGHT_DIR:
 			_update_direction_8(dir)
@@ -360,14 +404,17 @@ func _physics_process(delta: float) -> void:
 
 # Kovalama yönü. keep_distance > 0 olan yaratık (Lilim) mesafesini korur: uzaksa yaklaşır, çok yakınsa geri çekilir,
 # arada (KEEP_DISTANCE_BAND) durur. Bakış her durumda oyuncuya döner.
+# duel_strafe > 0 olan yaratık (Azazel) ayrıca oyuncunun etrafında yana kayar (yönü ara ara değişir).
 func _chase_dir(dir: Vector2, distance: float) -> Vector2:
-	if data == null or data.keep_distance <= 0.0:
-		return dir
-	if distance > data.keep_distance + KEEP_DISTANCE_BAND:
-		return dir
-	if distance < data.keep_distance - KEEP_DISTANCE_BAND:
-		return -dir
-	return Vector2.ZERO
+	var move := dir
+	if data != null and data.keep_distance > 0.0:
+		if distance < data.keep_distance - KEEP_DISTANCE_BAND:
+			move = -dir
+		elif distance <= data.keep_distance + KEEP_DISTANCE_BAND:
+			move = Vector2.ZERO
+	if data != null and data.duel_strafe > 0.0:
+		move = (move + dir.orthogonal() * _strafe_sign * data.duel_strafe).limit_length(1.0)
+	return move
 
 func _can_start_attack(distance: float) -> bool:
 	if not _has_attack or _attack_cooldown_left > 0.0 or _dying:
@@ -725,12 +772,72 @@ func _process_locust(delta: float) -> void:
 				_locust_timer = data.locust_interval
 				sprite.play("run_" + DIR8_NAMES[_dir8_idx])
 
+# --- Düello atışı: dur, dön, kollar öne; silahlar nişan alıp seri atar; bitince toparlanma (silahlar soğuk) ---
+func _can_start_duel(distance: float) -> bool:
+	if _duel_timer > 0.0 or _dying or _duel_guns == null:
+		return false
+	if "is_dead" in target and target.is_dead:
+		return false
+	return distance >= data.duel_min_range and distance <= data.duel_max_range
+
+func _start_duel(dir: Vector2) -> void:
+	_state = State.DUEL
+	_duel_phase = 0
+	_state_timer = data.duel_track_time + data.duel_lock_time
+	_face_exact(dir)
+	sprite.play("shoot_" + DIR8_NAMES[_dir8_idx])
+	sprite.frame = 0
+	_duel_guns.aim()  # nişan -> kilit -> seri kendi zamanlamasıyla
+	Audio.play_sfx_focus(data.duel_sound)
+
+func _process_duel(delta: float) -> void:
+	velocity = _separation() * SEPARATION_MIN_SPEED * SEPARATION_STRENGTH
+	move_and_slide()
+	match _duel_phase:
+		0:
+			# Nişan boyunca oyuncuya döner (kilitlenince bakış da durur)
+			if _state_timer > data.duel_lock_time and is_instance_valid(target):
+				var dir := (target.global_position - global_position).normalized()
+				var before := _dir8_idx
+				_face_exact(dir)
+				if _dir8_idx != before:
+					var frame := sprite.frame
+					sprite.play("shoot_" + DIR8_NAMES[_dir8_idx])
+					sprite.frame = frame
+					if frame >= data.duel_hold_frame:
+						sprite.pause()
+			_state_timer -= delta
+			if _state_timer <= 0.0:
+				_duel_phase = 1
+				sprite.play()  # ateş: animasyonun kalanı (bitince _on_sprite_animation_finished)
+		1:
+			# Seri boyunca izleyen silahlarda gövde de oyuncuya dönmeye devam eder
+			if data.duel_follow_fire and is_instance_valid(target):
+				var before := _dir8_idx
+				_face_exact((target.global_position - global_position).normalized())
+				if _dir8_idx != before:
+					var frame := sprite.frame
+					var progress := sprite.frame_progress
+					sprite.play("shoot_" + DIR8_NAMES[_dir8_idx])
+					sprite.set_frame_and_progress(frame, progress)
+		2:
+			_state_timer -= delta
+			if _state_timer <= 0.0 and not _duel_guns.is_busy():
+				_state = State.CHASE
+				_duel_timer = data.duel_interval
+				sprite.play("run_" + DIR8_NAMES[_dir8_idx])
+
 func _floor_fx_parent() -> Node:
 	var fx_parent: Node = get_tree().current_scene.get_node_or_null(FLOOR_FX_PATH)
 	return fx_parent if fx_parent else get_parent()
 
 # Vuruş karesi: oyuncu hâlâ menzildeyse hasar (kaçtıysa ıska)
 func _on_sprite_frame_changed() -> void:
+	if _state == State.DUEL:
+		# Nişan bitene kadar bekleme karesinde durur
+		if _duel_phase == 0 and sprite.frame >= data.duel_hold_frame:
+			sprite.pause()
+		return
 	if _state == State.LOCUST:
 		# Uyarı bitene kadar bekleme karesinde durur
 		if _locust_phase == 0 and sprite.frame >= data.locust_hold_frame:
@@ -767,6 +874,10 @@ func _on_sprite_frame_changed() -> void:
 		target.try_hit(attack_damage)
 
 func _on_sprite_animation_finished() -> void:
+	if _state == State.DUEL:
+		_duel_phase = 2
+		_state_timer = data.duel_recover
+		return
 	if _state == State.LOCUST:
 		_locust_phase = 2
 		_state_timer = data.locust_recover

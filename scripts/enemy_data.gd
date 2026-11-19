@@ -158,6 +158,35 @@ extends Resource
 @export var locust_sound: String = ""            # Audio sfx adı: sel akmaya başlarken (boşsa ses yok)
 @export var locust_focus: bool = true            # true: ses play_sfx_focus ile (boss); kalabalık yaratıkta false
 
+# --- Düello atışı (Azazel) ---
+# duel_interval 0 olan ya da shoot_<yön> animasyonu olmayan yaratıklar etkilenmez. Etrafında havada iki silah döner
+# (oyuncunun o an taşıdığı silahların kopyası, görünüm ve ses silahtan; hasar ve mermi sayısı buradan, silahtan bağımsız).
+# duel_interval dolunca ve oyuncu duel_min..max_range arasındaysa durur, shoot animasyonu duel_hold_frame karesinde
+# bekler; her silahtan oyuncuya kızıl nişan çizgisi: duel_track_time sn oyuncuyu izler, duel_lock_time sn kilitlenir
+# (parlar), sonra iki silah sırayla o hatlar boyunca duel_shots'ar mermi atar. Bitince silahlar soğur, boss
+# duel_recover sn durur (vurma penceresi). Kovalarken keep_distance ile mesafe korur ve duel_strafe oranında yana kayar.
+@export var duel_interval: float = 0.0
+@export var duel_min_range: float = 0.0
+@export var duel_max_range: float = 300.0
+@export var duel_track_time: float = 0.6         # nişan çizgilerinin oyuncuyu izlediği süre (sn)
+@export var duel_lock_time: float = 0.35         # çizgiler kilitli, ateşten hemen önce (sn)
+@export var duel_shots: int = 6                  # silah başına mermi
+@export var duel_shot_gap: float = 0.07          # ardışık iki mermi arası (iki silah sırayla; sn)
+@export var duel_spread_degrees: float = 2.0     # mermi sapması (+/- derece)
+@export var duel_bullet_speed: float = 280.0
+@export var duel_bullet_distance: float = 420.0
+@export var duel_damage: int = 0                 # mermi hasarı (dalgayla temas hasarı gibi artar)
+@export var duel_hold_frame: int = 4             # animasyonun nişan boyunca beklediği kare (0'dan sayılır)
+@export var duel_recover: float = 1.0            # seriden sonra yerinde durma süresi (sn)
+@export var duel_orbit_radius: float = 34.0      # silahların gövde merkezine uzaklığı (px)
+@export var duel_gun_scale: float = 1.0          # silah sprite'ının ölçeği (oyuncudaki sprite_scale yerine)
+@export var duel_strafe: float = 0.0             # kovalarken yana kayma oranı (0 = yok, 1 = ileri hız kadar)
+@export var duel_sound: String = ""              # Audio sfx adı: nişan başlarken (boşsa ses yok)
+@export var duel_fallback_weapon: WeaponData     # oyuncunun silahı yoksa (olmamalı) kullanılan silah
+@export var duel_weapon: WeaponData              # doluysa iki silah da bu (Azazel: mızrak); boşsa oyuncunun silahları kopyalanır
+@export var duel_follow_fire: bool = false       # true: seri boyunca da oyuncuyu izler (kilit sadece ateşten önce)
+@export var duel_rest_upright: bool = false      # true: boştayken silahlar ellerde dik durur (mızrak), nişanda öne süzülüp döner
+
 # --- Vurdukça sikke saçma (Mammon) ---
 # spill_health_step 0 ise yok. Canın her spill_health_step kadarı (ör. 0.1 = %10) gidince yere spill_value
 # değerinde sikke saçılır (oyuncu yaklaşınca toplanır, kalanlar dalga sonunda otomatik toplanır).

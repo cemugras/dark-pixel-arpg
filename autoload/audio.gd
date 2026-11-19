@@ -60,6 +60,10 @@ const SFX_VOLUME_DB: Dictionary = {
 	"abaddon_hit": 0.0,
 	"abaddon_death": 0.0,
 	"abaddon_swarm": 0.0,
+	"azazel_spawn": 0.0,
+	"azazel_hit": 0.0,
+	"azazel_death": 0.0,
+	"azazel_aim": 0.0,
 	"belphegor_charge": 0.0,
 	"lilim_hit": -10.0,         # Lilith seslerinin ince ve kısık kopyası (SFX_ALIASES)
 	"lilim_death": -8.0,
@@ -82,6 +86,7 @@ const SFX_MAX_INSTANCES: Dictionary = {
 	"leviathan_hit": 1,
 	"asmodeus_hit": 1,
 	"abaddon_hit": 1,
+	"azazel_hit": 1,
 	"lilim_hit": 1,        # kalabalık yaratık: Lilith sesi üst üste binmesin
 	"lilim_death": 2,
 	"lilim_cast": 1,
