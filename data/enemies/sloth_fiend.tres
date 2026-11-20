@@ -1,0 +1,30 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" uid="uid://cqlw7x1k6q18i" path="res://scripts/enemy_data.gd" id="1_sloth"]
+[ext_resource type="SpriteFrames" path="res://data/enemies/sloth_fiend_frames.tres" id="2_sloth"]
+
+[resource]
+script = ExtResource("1_sloth")
+id = "sloth_fiend"
+display_name = "Sloth Fiend"
+sprite_frames = ExtResource("2_sloth")
+body_scale = 0.5
+max_health = 35
+move_speed = 30.0
+contact_damage = 2
+charge_interval = 4.5
+charge_min_range = 40.0
+charge_max_range = 170.0
+charge_windup = 0.6
+charge_speed = 260.0
+charge_overshoot = 50.0
+charge_max_distance = 220.0
+charge_damage = 6
+charge_tired = 1.0
+charge_sound = "sloth_fiend_charge"
+coin_value = 2
+spawn_weight = 0.4
+spawn_weight_per_wave = 0.04
+min_wave = 21
+hit_sound = "sloth_fiend_hit"
+death_sound = "sloth_fiend_death"

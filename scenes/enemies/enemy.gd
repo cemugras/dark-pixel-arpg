@@ -282,7 +282,8 @@ func _ready() -> void:
 	# Hamle: sadece 8 yönlü sprite'ta (yön kilidi 8 yön sistemine göre)
 	_has_charge = data != null and data.charge_interval > 0.0 and _mode == SpriteMode.EIGHT_DIR
 	if _has_charge:
-		_charge_timer = data.charge_interval
+		# Normal yaratıkta (Sloth Fiend) ilk hamle zamanı rastgele: aynı anda doğanlar birlikte atılmasın
+		_charge_timer = data.charge_interval * (1.0 if data.is_boss else randf_range(0.4, 1.0))
 
 	if data and data.spill_health_step > 0.0 and data.spill_value > 0:
 		_spill_next = max_health - roundi(max_health * data.spill_health_step)

@@ -77,6 +77,9 @@ const SFX_VOLUME_DB: Dictionary = {
 	"grigori_hit": -8.0,  # Azazel sesinin ince ve kısık kopyası (SFX_ALIASES)
 	"grigori_death": -6.0,
 	"grigori_aim": -10.0,
+	"sloth_fiend_hit": -8.0,   # Belphegor sesinin ince ve kısık kopyası (SFX_ALIASES)
+	"sloth_fiend_death": -6.0,
+	"sloth_fiend_charge": -8.0,
 }
 
 # Aynı anda en fazla kaç kopya çalabileceği sese özel ayar (listede yoksa MAX_PER_SOUND).
@@ -104,6 +107,9 @@ const SFX_MAX_INSTANCES: Dictionary = {
 	"grigori_hit": 1,
 	"grigori_death": 2,
 	"grigori_aim": 2,
+	"sloth_fiend_hit": 1,
+	"sloth_fiend_death": 2,
+	"sloth_fiend_charge": 2,
 	"lucifer_hit": 1,
 	"lucifer_rune_blast": 1,
 	"lucifer_frost": 1,
@@ -131,6 +137,9 @@ const SFX_ALIASES: Dictionary = {
 	"lucifer_charge": "belphegor_charge",
 	"lucifer_summon": "beelzebub_summon",
 	"smg_shoot": "glock_shoot",  # SMG Glock ile aynı mermiyi atar, sadece daha hızlı ve otomatik: aynı ses
+	"sloth_fiend_hit": "belphegor_hit",  # Sloth Fiend (Belphegor'un evcil hayvanı), Belphegor'un seslerini ince ve kısık kullanır
+	"sloth_fiend_death": "belphegor_death",
+	"sloth_fiend_charge": "belphegor_charge",
 }
 
 # Sese özel perde çarpanı (listede yoksa 1.0; PITCH_JITTER bunun üstüne uygulanır). >1 = daha ince/küçük.
@@ -150,6 +159,9 @@ const SFX_PITCH: Dictionary = {
 	"lucifer_frost": 0.7,
 	"lucifer_charge": 0.8,
 	"lucifer_summon": 0.8,
+	"sloth_fiend_hit": 1.3,
+	"sloth_fiend_death": 1.3,
+	"sloth_fiend_charge": 1.3,
 }
 
 # --- Müzik ---
