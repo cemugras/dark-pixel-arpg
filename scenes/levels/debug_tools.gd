@@ -7,7 +7,9 @@ extends CanvasLayer
 #   F3: sahnedeki boss'a canının %25'i kadar hasar (ölüm akışını test etmek için)
 #   F4: sıradaki boss dalgasına atla (sahnedeki yaratıklar altınsız silinir)
 #   F5: test donanımı: o dalgaya normal oyunla gelmiş ortalama bir oyuncunun yapısı (tools/balance_sim.ps1 tahmini):
-#       1 AK47 (iki elli; kilidi açılmadıysa 2 SMG ya da 2 Glock) + gümüş mermi (20. dalgadan), Damage/Fire Rate dalga x KIT_GUN_PER_WAVE seviye,
+#       açık en iyi silah (Glock, 10. dalgadan SMG, 20. dalgadan AK47) + ikincil silah; her basışta sırayla katana (K), el bombası (G),
+#       ikincilsiz (-: iki Glock/SMG ya da tek AK47). Gümüş mermi (20. dalgadan, sadece ateşli silah), her yuvanın geliştirmeleri
+#       dalga x KIT_GUN_PER_WAVE seviye (tek AK47'de x KIT_TWO_HANDED_MULT),
 #       Max Health/Regen/Armor dalga x KIT_PLAYER_PER_WAVE seviye (ör. 70. dalgada 23 ve 17)
 
 const BOSS_HIT_RATIO: float = 0.25
@@ -15,6 +17,10 @@ const KIT_GUN_PER_WAVE: float = 0.33
 const KIT_PLAYER_PER_WAVE: float = 0.25
 const KIT_SILVER_WAVE: int = 20
 const KIT_TWO_HANDED_MULT: float = 1.5  # tek AK47'de silah geliştirme seviyesi (balance_sim: 70. dalgada ~35)
+# F5 her basışta sırayla: katana, el bombası, ikincilsiz (yardım yazısında K / G / -)
+const KIT_SECONDARIES: Array[String] = ["res://data/weapons/katana.tres", "res://data/weapons/grenade.tres", ""]
+var _kit_index: int = 0
+var _kit_label: String = ""
 
 var _label: Label
 
@@ -66,7 +72,7 @@ func _update_label() -> void:
 	var p := _player()
 	var god: bool = p != null and "debug_god" in p and p.debug_god
 	# Tek satır ve kısa: ekranın ortasındaki boss çubuğunun (x 392-632) sağına sığsın (11 px'de karakter 7 px, ~350 px)
-	_label.text = "F1 god %s | F2 +1000 | F3 -25%% | F4 boss | F5 kit" % ("ON" if god else "off")
+	_label.text = "F1 god %s | F2 +1000 | F3 -25%% | F4 boss | F5 kit%s" % ["ON" if god else "off", " " + _kit_label if _kit_label != "" else ""]
 
 func _hit_boss() -> void:
 	if get_tree().paused:
@@ -95,36 +101,41 @@ func _give_kit() -> void:
 	var wave: int = maxi(wm.wave if wm else 1, 1)
 	var gun_levels := roundi(wave * KIT_GUN_PER_WAVE)
 	var player_levels := roundi(wave * KIT_PLAYER_PER_WAVE)
-	# AK47 kilidi açılmadıysa (unlock_wave) o dalgadaki oyuncu gibi SMG ya da Glock; kilit sayacı dalgaya çekilir ki değiştirme çalışsın
+	# Her basışta ikincil silah sırayla değişir: katana -> el bombası -> ikincilsiz (Adım 52)
+	var secondary_path: String = KIT_SECONDARIES[_kit_index]
+	_kit_index = (_kit_index + 1) % KIT_SECONDARIES.size()
+	# AK47 kilidi açılmadıysa (unlock_wave) o dalgadaki oyuncu gibi SMG ya da Glock; kilit sayacı dalgaya çekilir
 	GameState.cleared_wave = maxi(GameState.cleared_wave, wave - 1)
-	var ak := load("res://data/weapons/ak47.tres") as WeaponData
+	var gun := load("res://data/weapons/ak47.tres") as WeaponData
 	for path in ["res://data/weapons/smg.tres", "res://data/weapons/glock.tres"]:  # kilitliyse sıradaki en iyi silah
-		if GameState.is_weapon_unlocked(ak):
+		if GameState.is_weapon_unlocked(gun):
 			break
-		ak = load(path) as WeaponData
-	GameState.add_gold(1000000)
-	if ak.hands >= 2:
-		# İki elli AK47 (Adım 52a): tek AK47, geliştirmeler tek silahta toplandığı için seviyesi ~1.5 kat (balance_sim)
-		while GameState.guns.size() > 1:
-			GameState.sell_gun(GameState.guns.size() - 1)
-		if GameState.guns.is_empty():
-			GameState.give_weapon(ak)
-		elif GameState.guns[0].id != ak.id:
-			GameState.swap_gun(0, ak)
-		gun_levels = roundi(wave * KIT_GUN_PER_WAVE * KIT_TWO_HANDED_MULT)
+		gun = load(path) as WeaponData
+	# Yapı: silah + ikincil; ikincilsizde iki tek elli silah ya da tek iki elli AK47
+	var loadout: Array[WeaponData] = [gun]
+	if secondary_path != "":
+		loadout.append(load(secondary_path) as WeaponData)
+	elif gun.hands < 2:
+		loadout.append(gun)
 	else:
-		for slot in GameState.guns.size():
-			if GameState.guns[slot].id != ak.id and GameState.can_swap_gun(slot, ak):
-				GameState.swap_gun(slot, ak)
-		while GameState.guns.size() < 2 and GameState.can_take_weapon(ak):
-			GameState.give_weapon(ak)
+		gun_levels = roundi(wave * KIT_GUN_PER_WAVE * KIT_TWO_HANDED_MULT)  # tek AK47: geliştirmeler tek silahta (balance_sim)
+	# Eski yapı silinir (test kısayolu: iade yok), yenisi bedava verilir
+	GameState.guns.clear()
+	GameState.gun_spent.clear()
+	GameState.gun_silver.clear()
+	GameState.gun_upgrades.clear()
+	for w in loadout:
+		GameState.give_weapon(w)
+	GameState.add_gold(1000000)
 	for slot in GameState.guns.size():
-		for path in ["res://data/upgrades/gun_damage.tres", "res://data/upgrades/fire_rate.tres"]:
-			var upgrade := load(path) as UpgradeData
+		# Yuvadaki silahın kendi geliştirmeleri (ateşli: Damage/Fire Rate, bomba ve katana: kendi Damage/hız)
+		for upgrade in UpgradePool.load_all():
+			if upgrade.scope != GameState.guns[slot].upgrade_scope:
+				continue
 			while GameState.get_gun_upgrade_level(slot, upgrade) < gun_levels:
 				if not GameState.buy_gun_upgrade(slot, upgrade):
 					break
-		if wave >= KIT_SILVER_WAVE and not GameState.has_silver(slot):
+		if wave >= KIT_SILVER_WAVE and GameState.is_gun_slot(slot) and not GameState.has_silver(slot):
 			GameState.buy_silver(slot)
 	for path in ["res://data/upgrades/max_health.tres", "res://data/upgrades/regen.tres", "res://data/upgrades/armor.tres"]:
 		var upgrade := load(path) as UpgradeData
@@ -132,3 +143,5 @@ func _give_kit() -> void:
 			if not GameState.buy_upgrade(upgrade):
 				break
 	GameState.spend_gold(maxi(GameState.gold - 300, 0))
+	_kit_label = ["K", "G", "-"][(_kit_index + KIT_SECONDARIES.size() - 1) % KIT_SECONDARIES.size()]
+	_update_label()

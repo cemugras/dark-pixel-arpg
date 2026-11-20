@@ -23,7 +23,15 @@ param(
     [double]$SmgDps = 22.5, [int]$SmgPrice = 45,   # smg.tres: 5 x 4.5
     [double]$AkDps = 30.6,             # AK47 taban hasar/sn (9 x 3.4; Adım 52a: iki elli, tek başına; geliştirmeler tek silahta toplandığı için 14 değil 9 yetti)
     [int]$AkPrice = 100,               # ak47.tres cost
-    [int]$AkHands = 2,                 # 2 = AK47 iki elli: alınınca diğer yuvadaki ateşli silah satılır (ikincil silah henüz tabloda yok); 1 = eski 2 AK47
+    [int]$AkHands = 2,                 # 2 = AK47 iki elli: alınınca diğer yuvadaki ateşli silah satılır (ikincil silah kalır); 1 = eski 2 AK47
+    [ValidateSet('none', 'grenade', 'katana')][string]$Secondary = 'none',   # ikinci yuvaya ikinci silah yerine bu ikincil silah alınır (Adım 52)
+    [int]$SecondaryPrice = 40,         # grenade.tres / katana.tres cost
+    [double]$GrenadeDps = 10,          # grenade.tres: 20 hasar x 0.5 atış/sn (tek yaratığa)
+    [double]$GrenadeTargets = 3.0,     # bir patlamanın kalabalıkta ortalama vurduğu yaratık (yarıçap 40)
+    [double]$KatanaDps = 18,           # katana.tres: 15 hasar x 1.2 kesik/sn (tek yaratığa)
+    [double]$KatanaTargets = 2.0,      # bir kesiğin kalabalıkta ortalama vurduğu yaratık (yay 140 derece, menzil 45)
+    [double]$KatanaUptime = 0.6,       # menzilde (45 px) yaratık olma payı: kalabalıkta
+    [double]$KatanaBossUptime = 0.3,   # boss'un dibinde durulabilen pay (yakın saldırılar yüzünden)
     [double]$OffenseShare = 0.7,       # altının saldırıya giden payı (kalanı can/zırh/yenilenme)
     [double]$Efficiency = 0.7,         # isabet/boşa giden hasar payı (kaçan mermi, fazla vuruş)
     [int[]]$Waves = @(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100)
@@ -53,6 +61,12 @@ $gold = 0.0; $bank = 0.0; $offGold = 0.0; $defGold = 0.0
 $type = @('g'); $spent = @(0, 0); $sil = @(0, 0)
 $gunDps = @{ g = 15; s = $SmgDps; a = $AkDps }; $gunPrice = @{ g = 30; s = $SmgPrice; a = $AkPrice }
 $gunTier = @{ g = 0; s = 1; a = 2 }
+# İkincil silahlar (hashtable anahtarları büyük/küçük harf duyarsız: 'gr' / 'ka'). Kalabalıkta çok hedef, boss'a tek hedef.
+$secKey = @{ none = $null; grenade = 'gr'; katana = 'ka' }[$Secondary]
+$gunDps['gr'] = $GrenadeDps; $gunDps['ka'] = $KatanaDps
+$crowdFactor = @{ g = 1; s = 1; a = 1; gr = $GrenadeTargets; ka = $KatanaTargets * $KatanaUptime }
+$bossFactor = @{ g = 1; s = 1; a = 1; gr = 1; ka = $KatanaBossUptime }
+function IsSecondary($t) { $t -eq 'gr' -or $t -eq 'ka' }
 $dmgLv = @(0, 0); $frLv = @(0, 0)
 $hpLv = 0; $armorLv = 0; $regenLv = 0
 $rows = @()
@@ -77,13 +91,15 @@ for ($wave = 1; $wave -le 100; $wave++) {
     $avgCoin = $coinSum / $tw
 
     # Oyuncunun bu dalgadaki gücü (mağazada önceki dalgaların altınıyla alındı)
-    $dps = 0.0
+    $dps = 0.0; $single = 0.0
     for ($s = 0; $s -lt $type.Count; $s++) {
         $sv = if ($sil[$s]) { 2 } else { 1 }
-        $base = $gunDps[$type[$s]]
-        $dps += $base * (1 + 0.15 * $dmgLv[$s]) * $sv * (1 + 0.1 * $frLv[$s])
+        $one = $gunDps[$type[$s]] * (1 + 0.15 * $dmgLv[$s]) * $sv * (1 + 0.1 * $frLv[$s])
+        $dps += $one * $crowdFactor[$type[$s]]
+        $single += $one * $bossFactor[$type[$s]]
     }
     $effDps = $dps * $Efficiency
+    $effSingle = $single * $Efficiency   # boss'a giden (alan hasarı tek hedefe düşer)
     $spawnInterval = if ($isBoss) { $interval * $BossSpawnMult } else { $interval }
     $incoming = $avgHp / $spawnInterval   # saniyede gelen can
     $ratio = $effDps / $incoming
@@ -98,7 +114,7 @@ for ($wave = 1; $wave -le 100; $wave++) {
     $earn = 0.0
     if ($isBoss) {
         $bossHp = $bosses[$wave] * $BossHpMult * $(if ($useBossCurve) { 1 + $BossHealthPerWave * ($wave - 1) } else { HpMult $wave })
-        $surplus = $effDps - $incoming
+        $surplus = [math]::Min($effDps - $incoming, $effSingle)   # kalabalık temizlendikten sonra kalan, ama boss'a en çok tek hedef hasarı
         if ($surplus -gt 0) {
             $t = $bossHp / $surplus
             $bossTtk = if ($t -gt 999) { '>999' } else { [math]::Round($t) }
@@ -114,7 +130,7 @@ for ($wave = 1; $wave -le 100; $wave++) {
 
     if ($Waves -contains $wave) {
         $rows += [pscustomobject]@{
-            Dalga = $wave; ToplamAltin = [math]::Round($gold); Silah = (($type | ForEach-Object { @{ g = 'Gl'; s = 'SMG'; a = 'AK' }[$_] }) -join '+') + $(if ($sil[0] + $sil[1]) { ' gm' + ($sil[0] + $sil[1]) } else { '' })
+            Dalga = $wave; ToplamAltin = [math]::Round($gold); Silah = (($type | ForEach-Object { @{ g = 'Gl'; s = 'SMG'; a = 'AK'; gr = 'Gren'; ka = 'Kat' }[$_] }) -join '+') + $(if ($sil[0] + $sil[1]) { ' gm' + ($sil[0] + $sil[1]) } else { '' })
             DmgLv = ($dmgLv -join '/'); FrLv = ($frLv -join '/'); Hasar_sn = [math]::Round($effDps)
             GelenCan_sn = [math]::Round($incoming); Oran = [math]::Round($ratio, 2)
             BossSure_sn = $bossTtk; Can = $maxHp; Zirh = $armor; Pence = $claw; KacPence = $hitsToDie
@@ -130,24 +146,30 @@ for ($wave = 1; $wave -le 100; $wave++) {
     if ($wave -ge $AkUnlockWave) { $best = 'a' }
     $bank += $earn   # ikinci silahın parası birikir
     $twoHanded = ($AkHands -ge 2) -and ($type -contains 'a')
-    if ($type.Count -lt 2 -and -not $twoHanded) {
-        $price = $gunPrice[$best]
-        if ($best -eq 'a' -and $AkHands -ge 2) { $price = [double]::MaxValue }  # iki elli silah ikinci yuvaya alınmaz (aşağıda değiştirilir)
-        if ($bank -ge $price) { $type += $best; $spent[1] = $price; $bank -= $price }
+    if ($type.Count -lt 2) {
+        $pick = $best; $price = $gunPrice[$best]
+        if ($secKey) { $pick = $secKey; $price = $SecondaryPrice }   # ikinci yuvaya ikincil silah
+        elseif ($twoHanded -or ($best -eq 'a' -and $AkHands -ge 2)) { $price = [double]::MaxValue }  # iki elli silahın yanına ateşli silah alınmaz
+        if ($bank -ge $price) { $type += $pick; $spent[1] = $price; $bank -= $price }
     }
     if ($type.Count -ge 2 -or $twoHanded -or ($best -eq 'a' -and $AkHands -ge 2)) {
         $offGold += $bank * $OffenseShare; $defGold += $bank * (1 - $OffenseShare); $bank = 0
     }
-    # İki elli AK47: iki yuvadaki silahlar satılır (harcamalarının yarısı iade), tek AK47 alınır
+    # İki elli AK47: yuvalardaki ateşli silahlar satılır (harcamalarının yarısı iade), tek AK47 alınır; ikincil silah kalır
     if ($best -eq 'a' -and $AkHands -ge 2 -and -not $twoHanded) {
-        $refund = 0; for ($s = 0; $s -lt $type.Count; $s++) { $refund += [math]::Floor($spent[$s] * 0.5) }
+        $refund = 0; for ($s = 0; $s -lt $type.Count; $s++) { if (-not (IsSecondary $type[$s])) { $refund += [math]::Floor($spent[$s] * 0.5) } }
         $c = $AkPrice - $refund
         if ($offGold -ge $c) {
-            $offGold -= $c; $type = @('a'); $spent = @($AkPrice, 0); $dmgLv = @(0, 0); $frLv = @(0, 0); $sil = @(0, 0)
+            $offGold -= $c
+            if ($type.Count -ge 2 -and (IsSecondary $type[1])) {
+                $type = @('a', $type[1]); $spent = @($AkPrice, $spent[1]); $dmgLv = @(0, $dmgLv[1]); $frLv = @(0, $frLv[1]); $sil = @(0, 0)
+            } else {
+                $type = @('a'); $spent = @($AkPrice, 0); $dmgLv = @(0, 0); $frLv = @(0, 0); $sil = @(0, 0)
+            }
         }
     }
     for ($s = 0; $s -lt $type.Count; $s++) {
-        if ($type[$s] -eq 'a' -and $AkHands -ge 2) { continue }
+        if (($type[$s] -eq 'a' -and $AkHands -ge 2) -or (IsSecondary $type[$s])) { continue }
         if ($gunTier[$type[$s]] -ge $gunTier[$best]) { continue }
         $refund = if ($KeepUpgradesOnSwap) { [math]::Floor($gunPrice[$type[$s]] * 0.5) } else { [math]::Floor($spent[$s] * 0.5) }
         $c = $gunPrice[$best] - $refund
