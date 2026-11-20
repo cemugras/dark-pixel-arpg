@@ -24,6 +24,8 @@ Steam kısa açıklaması (taslak):
 ### Biscuit (kedi)
 
 - Turuncu tekir, bir kulağı hafif kesik; gözleri bazen belli belirsiz kızıl parlar. İlk bakışta tamamen sıradan bir kedi.
+- **Dişi** (2026-11-20 kararı; İngilizce metinlerde she/her: duvardaki yazı "SHE'S MINE").
+
 - **Sır:** Biscuit aslında Lucifer'in bir zamanlar en sevdiği evcil hayvanı, cehennemin "kapı bekçisi" kedisidir. Sıkılıp insan dünyasına kaçmış, sokakta Walt tarafından bulunmuş ve yıllardır dünyanın en sıradan, en mutlu hayatını sürmektedir. Lucifer onu geri ister, çünkü o yokken cehennemin kapıları "açık kalır".
 
 ### Lucifer (final boss, 100. dalga)
@@ -65,12 +67,12 @@ Karikatür (çizgi roman paneli) anlatımı, 5 kare (kullanıcının planı, 202
 1. **Ev savaş alanı:** Gece vardiyasından dönen Walt kapıyı açar; ev savaş alanına dönmüş (devrik eşyalar, yanık pençe izleri, kükürt dumanı).
 2. **Biscuit yok:** Walt evin içinde kedisi Biscuit'i arar; Biscuit hiçbir yerde yok (devrilmiş mama kabı).
 3. **Kırık zemin:** Walt evin zemininde dibi görünmeyen, karanlık bir kırık boşluk bulur.
-4. **Duvardaki yazı:** Kırığın yanındaki duvarda kükürtle yazılmış bir yazı: *"Biscuit bana ait. Onu ben aldım."* (İngilizcesi ve imza henüz kesinleşmedi; eski metin "HE'S MINE. — L." idi, imzadaki "L." finaldeki Lucifer'e ipucu.)
-5. **Atlayış:** Walt yatak odasından silahını (Glock) alır ve kırığın içine atlar. Anlatıcı: Biscuit'i alan her kimse buna pişman olacak.
+4. **Duvardaki yazı:** Kırığın yanındaki duvarda kükürtle yazılmış bir yazı. İngilizce: **"SHE'S MINE. — L."**, Türkçe: **"Biscuit bana ait. Onu ben aldım. — L."** (imzadaki "L." finaldeki Lucifer'e ipucu).
+5. **Son sigara ve atlayış:** Walt son bir sigara yakar, yatak odasından silahını (Glock) alır ve kırığın içine atlar. Anlatıcı (ör.): "Son bir sigara yaktı, silahını aldı ve karanlığa atladı. Biscuit'i alan her kimse, buna pişman olacaktı." (Sigara mekaniğine bağ.)
 
-Sonra oyun ana menüye geçer. Eski taslaktaki "sigara yakar" anı istenirse 5. kareye eklenebilir (sigara mekaniğiyle bağ).
+Sonra oyun ana menüye geçer.
 
-Anlatıcı kadın sesinin kim olduğu henüz kararlaştırılmadı (öneri: Lilith; 50. dalgada Walt'a Biscuit'in sırrını anlatan karakter, sesi baştan duyulursa o savaşta "o ses" anı olur).
+**Anlatıcı: Lilith** (kararlaştırıldı). Girişi anlatan ürpertici kadın sesi Lilith'in sesidir; 50. dalgada Walt'a Biscuit'in sırrını anlatan karakter, oyuncu o savaşta sesi tanır. Seslendirme yapay zekâyla (ElevenLabs, kullanıcının planı), iki dilde; arkada düşük seviyede korku ambiyansı. Lisans notu (2026-11-20 araması): ElevenLabs ücretsiz planı ticari kullanım hakkı vermez; oyunda kullanılacak sesler ücretli bir planla (en düşük ticari plan) ve abonelik açıkken üretilmeli, Voice Library'deki hazır seslerin ek koşulları ve güncel şartlar üretimden önce kontrol edilmeli (en güvenlisi kendi tasarlanan ses: Voice Design).
 
 Anlatım biçimi için bkz. "Ara sahneler".
 
