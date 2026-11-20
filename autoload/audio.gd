@@ -20,6 +20,7 @@ const SFX_VOLUME_DB: Dictionary = {
 	"smg_shoot": -7.0,          # Glock sesi; Glock (-4) ile aynı ama 3 kat sık ateş ettiği için biraz kısık
 	"revolver_shoot": -5.0,
 	"grenade_explode": -6.0,    # el bombası (Adım 52b); 2 sn'de bir ve daha sık patlar, silahlardan biraz kısık
+	"katana_slash": -6.0,       # katana kesiği (Adım 52c), 3 varyasyon; saniyede 1-2 kez çalar, hafif
 	"coin_pickup": -7.0,
 	"hell_harpy_hit": -6.0,
 	"hell_harpy_death": -6.0,
@@ -82,6 +83,7 @@ const SFX_VOLUME_DB: Dictionary = {
 # 1 = ses bitmeden aynı ses tekrar çalmaz.
 const SFX_MAX_INSTANCES: Dictionary = {
 	"grenade_explode": 2,  # sık atılan bomba patlamaları üst üste binip müziği boğmasın
+	"katana_slash": 2,
 	"moloch_hit": 1,  # boss hit sesleri üst üste binmesin (her yeni boss için eklenir)
 	"belphegor_hit": 1,
 	"mammon_hit": 1,
