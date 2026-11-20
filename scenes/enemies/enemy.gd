@@ -224,7 +224,8 @@ func _ready() -> void:
 	_has_throw = data != null and data.throw_count > 0 and _mode == SpriteMode.EIGHT_DIR \
 		and frames.has_animation(_anim_base("throw") + "_east")
 	if _has_throw:
-		_throw_timer = data.throw_interval * 0.5  # boss belirince ilk atış biraz erken gelsin
+		# Boss belirince ilk atış biraz erken gelsin; normal yaratıkta (Coin Imp) rastgele, aynı anda doğanlar birlikte atmasın
+		_throw_timer = data.throw_interval * (0.5 if data.is_boss else randf_range(0.4, 1.0))
 
 	# Çağırma: veri + 8 yönlü summon animasyonu varsa açılır
 	_has_summon = data != null and data.summon_data != null and data.summon_count > 0 \
