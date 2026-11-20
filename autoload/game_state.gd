@@ -65,7 +65,7 @@ func get_gun_upgrade_cost(slot: int, upgrade: UpgradeData) -> int:
 	return _scaled_cost(upgrade, get_gun_upgrade_level(slot, upgrade))
 
 func can_buy_gun_upgrade(slot: int, upgrade: UpgradeData) -> bool:
-	return slot >= 0 and slot < guns.size() and gold >= get_gun_upgrade_cost(slot, upgrade)
+	return is_gun_slot(slot) and gold >= get_gun_upgrade_cost(slot, upgrade)
 
 func buy_gun_upgrade(slot: int, upgrade: UpgradeData) -> bool:
 	if not can_buy_gun_upgrade(slot, upgrade):
@@ -112,9 +112,38 @@ func _add_stat(stat: String, amount: float) -> void:
 func gun_slots_full() -> bool:
 	return guns.size() >= MAX_GUNS
 
-# Silah boş yuva varsa alınır
-func can_take_weapon(_weapon: WeaponData) -> bool:
-	return not gun_slots_full()
+# --- El sistemi (Adım 52a) ---
+# Kurallar: ikincil silah (katana, bıçak, bomba) en fazla bir tane; iki elli silah (AK47) varsa yanında ateşli silah olmaz
+# (sadece ikincil). Alma ve değiştirme aynı kontrolden geçer; AK47 satılınca kısıt kendiliğinden kalkar.
+
+# slot dışındaki yuvalardaki silahlar (slot -1 = hepsi): değiştirmede o yuva boşalmış sayılır
+func _other_weapons(slot: int) -> Array[WeaponData]:
+	var result: Array[WeaponData] = []
+	for i in guns.size():
+		if i != slot:
+			result.append(guns[i])
+	return result
+
+# Silah bu yuvaya (slot -1 = boş yuvaya alım) girebilir mi? Girebilirse "", giremezse mağazada gösterilecek sebep.
+# Yuva doluluğu ve fiyat ayrıca kontrol edilir.
+func weapon_block_reason(weapon: WeaponData, slot: int = -1) -> String:
+	for other in _other_weapons(slot):
+		if weapon.category == "secondary" and other.category == "secondary":
+			return "one secondary only"
+		if weapon.category == "gun" and other.category == "gun":
+			if weapon.hands >= 2:
+				return "needs both hands"
+			if other.hands >= 2:
+				return "other hand holds %s" % other.display_name
+	return ""
+
+# Silah boş yuva varsa ve el kuralları izin veriyorsa alınır
+func can_take_weapon(weapon: WeaponData) -> bool:
+	return not gun_slots_full() and weapon_block_reason(weapon) == ""
+
+# Damage / Fire Rate / gümüş mermi sadece ateşli silahlara
+func is_gun_slot(slot: int) -> bool:
+	return slot >= 0 and slot < guns.size() and guns[slot].category == "gun"
 
 # Ücretsiz verir (başlangıç Glock'u, F5); mağaza buy_weapon kullanır. paid = iade hesabı için ödenen para
 func give_weapon(weapon: WeaponData, paid: int = 0) -> void:
@@ -180,7 +209,7 @@ func get_swap_cost(slot: int, weapon: WeaponData) -> int:
 func can_swap_gun(slot: int, weapon: WeaponData) -> bool:
 	if slot < 0 or slot >= guns.size():
 		return false
-	if guns[slot].id == weapon.id or not is_weapon_unlocked(weapon):
+	if guns[slot].id == weapon.id or not is_weapon_unlocked(weapon) or weapon_block_reason(weapon, slot) != "":
 		return false
 	return gold >= get_swap_cost(slot, weapon)
 
@@ -205,7 +234,7 @@ func has_silver(slot: int) -> bool:
 	return slot >= 0 and slot < gun_silver.size() and gun_silver[slot]
 
 func can_buy_silver(slot: int) -> bool:
-	return slot >= 0 and slot < guns.size() and not has_silver(slot) and gold >= SILVER_COST
+	return is_gun_slot(slot) and not has_silver(slot) and gold >= SILVER_COST
 
 func buy_silver(slot: int) -> bool:
 	if not can_buy_silver(slot) or not spend_gold(SILVER_COST):

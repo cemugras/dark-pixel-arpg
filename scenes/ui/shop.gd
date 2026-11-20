@@ -255,8 +255,9 @@ func _refresh_slots() -> void:
 			_fill_gun_column(column, slot, can_sell, last_text)
 		elif slot == GameState.guns.size():
 			for weapon in _weapons:
-				var text := "Buy %s - %s%s\n%s" % [weapon.display_name, _price(weapon.cost), _lock_note(weapon), weapon.description]
-				_set_weapon_icon(_make_button(column, text, GameState.gold < weapon.cost or not GameState.is_weapon_unlocked(weapon), _on_weapon_pressed.bind(weapon)), weapon)
+				var text := "Buy %s - %s%s\n%s" % [weapon.display_name, _price(weapon.cost), _weapon_note(weapon), weapon.description]
+				var blocked := GameState.gold < weapon.cost or not GameState.can_take_weapon(weapon) or not GameState.is_weapon_unlocked(weapon)
+				_set_weapon_icon(_make_button(column, text, blocked, _on_weapon_pressed.bind(weapon)), weapon)
 		else:
 			_add_column_note(column, "Empty")
 
@@ -268,8 +269,11 @@ func _fill_gun_column(column: VBoxContainer, slot: int, can_sell: bool, last_tex
 	var text := "%s\nDamage: base %d, now %d\nSell (%s)%s" % [gun_name, gun.damage, current, _price(GameState.get_gun_sell_price(slot), true), last_text]
 	_set_weapon_icon(_make_button(column, text, not can_sell, _on_sell_gun_pressed.bind(slot)), gun)
 
-	# Bu silahın geliştirmeleri (yarı fiyat, sadece bu silaha)
+	# Bu silahın geliştirmeleri (yarı fiyat, sadece bu silaha) ve gümüş mermi: sadece ateşli silahlarda
+	var is_gun := GameState.is_gun_slot(slot)
 	for upgrade in _scoped_upgrades("gun"):
+		if not is_gun:
+			break
 		var cost := GameState.get_gun_upgrade_cost(slot, upgrade)
 		var level := GameState.get_gun_upgrade_level(slot, upgrade)
 		var up_text := "%s (Lv %d) - %s\n%s" % [upgrade.display_name, level, _price(cost), upgrade.description]
@@ -278,7 +282,8 @@ func _fill_gun_column(column: VBoxContainer, slot: int, can_sell: bool, last_tex
 	# Gümüş mermi: tek seferlik
 	var silver_text := "Silver Bullets\nOwned" if silver \
 		else "Silver Bullets - %s\nx2 damage, bright bullets" % _price(GameState.SILVER_COST)
-	_make_button(column, silver_text, not GameState.can_buy_silver(slot), _on_silver_pressed.bind(slot))
+	if is_gun:
+		_make_button(column, silver_text, not GameState.can_buy_silver(slot), _on_silver_pressed.bind(slot))
 
 	# Başka silahla değiştirme (eski silahın harcamasının yarısı fiyattan düşer, geliştirmeler silahla gider)
 	for weapon in _weapons:
@@ -287,7 +292,7 @@ func _fill_gun_column(column: VBoxContainer, slot: int, can_sell: bool, last_tex
 		var net := GameState.get_swap_cost(slot, weapon)
 		var price := _price(net) if net >= 0 else _price(-net, true)
 		# Geliştirmeler ve gümüş eski silahla gider: yeni silah taban hasarıyla gelir
-		var swap_text := "Replace with %s - %s%s\nDamage: %d -> %d\n%s" % [weapon.display_name, price, _lock_note(weapon), current, weapon.damage, weapon.description]
+		var swap_text := "Replace with %s - %s%s\nDamage: %d -> %d\n%s" % [weapon.display_name, price, _weapon_note(weapon, slot), current, weapon.damage, weapon.description]
 		# Yeni silahın görseli: hangi silahla değiştirileceği bir bakışta anlaşılsın
 		_set_weapon_icon(_make_button(column, swap_text, not GameState.can_swap_gun(slot, weapon), _on_swap_pressed.bind(slot, weapon)), weapon)
 
@@ -296,8 +301,13 @@ func _gun_damage(slot: int) -> int:
 	var mult := GameState.get_gun_multiplier(slot, "damage_multiplier") * (GameState.SILVER_DAMAGE_MULT if GameState.has_silver(slot) else 1.0)
 	return maxi(1, roundi(GameState.guns[slot].damage * mult))
 
-# Kilitli silah (WeaponData.unlock_wave dalgası henüz bitmedi): butona "(after wave X)" eklenir, buton pasif
-func _lock_note(weapon: WeaponData) -> String:
+# Kilitli silah (WeaponData.unlock_wave dalgası henüz bitmedi): butona "(after wave X)" eklenir, buton pasif.
+# El kuralı engelliyorsa (Adım 52a) sebebi yazılır: "(needs both hands)", "(other hand holds AK47)", "(one secondary only)".
+# slot -1 = boş yuvaya alım, değilse o yuvadaki silahla değiştirme.
+func _weapon_note(weapon: WeaponData, slot: int = -1) -> String:
+	var reason := GameState.weapon_block_reason(weapon, slot)
+	if reason != "":
+		return " (%s)" % reason
 	return "" if GameState.is_weapon_unlocked(weapon) else " (after wave %d)" % weapon.unlock_wave
 
 func _scoped_upgrades(scope: String) -> Array[UpgradeData]:

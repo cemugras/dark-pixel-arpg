@@ -1,5 +1,5 @@
 ﻿# Zorluk dengesi hesap tablosu (oyuna girmez). Oyundaki formüllerle dalga dalga kaba bir tahmin yapar:
-# toplanan altın, o altınla alınan tipik yapı (2 AK47 + gümüş mermi + silah geliştirmeleri, kalan savunmaya),
+# toplanan altın, o altınla alınan tipik yapı (20. dalgaya kadar 2 Glock/SMG, sonra tek iki elli AK47 + gümüş mermi + silah geliştirmeleri, kalan savunmaya),
 # oyuncunun saniyedeki hasarı, sahneye saniyede gelen yaratık canı, boss'u öldürme süresi, ölmeden kaç pençe yenir.
 # Kullanım: tools/balance_sim.ps1 [-HealthPerWave 0.12] [-DamagePerWave 0.1] [-IntervalMin 0.25] ... (aşağıdaki param'lar)
 # Değerler oyundakiyle aynı varsayılanlarla başlar; denemek için parametre verilir, oyun dosyaları değişmez.
@@ -21,7 +21,9 @@ param(
     [switch]$KeepUpgradesOnSwap,       # değiştirmede Damage/Fire Rate/gümüş yuvada kalır, sadece eski silahın fiyatının yarısı düşer (açık değilse silahla gider)
     [int]$SmgUnlockWave = 10,          # smg.tres unlock_wave (101 = SMG yokmuş gibi)
     [double]$SmgDps = 22.5, [int]$SmgPrice = 45,   # smg.tres: 5 x 4.5
-    [double]$AkDps = 23.8,             # AK47 taban hasar/sn (7 x 3.4)
+    [double]$AkDps = 30.6,             # AK47 taban hasar/sn (9 x 3.4; Adım 52a: iki elli, tek başına; geliştirmeler tek silahta toplandığı için 14 değil 9 yetti)
+    [int]$AkPrice = 100,               # ak47.tres cost
+    [int]$AkHands = 2,                 # 2 = AK47 iki elli: alınınca diğer yuvadaki ateşli silah satılır (ikincil silah henüz tabloda yok); 1 = eski 2 AK47
     [double]$OffenseShare = 0.7,       # altının saldırıya giden payı (kalanı can/zırh/yenilenme)
     [double]$Efficiency = 0.7,         # isabet/boşa giden hasar payı (kaçan mermi, fazla vuruş)
     [int[]]$Waves = @(1, 5, 10, 15, 20, 30, 40, 50, 60, 70, 80, 90, 100)
@@ -49,7 +51,7 @@ function Cost($base, $step, $ratio, $level) { [math]::Ceiling(($base + $step * $
 $gold = 0.0; $bank = 0.0; $offGold = 0.0; $defGold = 0.0
 # Yuvalar: 'g' = Glock (10 x 1.5), 'a' = AK47 (6 x 3). Başlangıç: tek Glock (bedava)
 $type = @('g'); $spent = @(0, 0); $sil = @(0, 0)
-$gunDps = @{ g = 15; s = $SmgDps; a = $AkDps }; $gunPrice = @{ g = 30; s = $SmgPrice; a = 60 }
+$gunDps = @{ g = 15; s = $SmgDps; a = $AkDps }; $gunPrice = @{ g = 30; s = $SmgPrice; a = $AkPrice }
 $gunTier = @{ g = 0; s = 1; a = 2 }
 $dmgLv = @(0, 0); $frLv = @(0, 0)
 $hpLv = 0; $armorLv = 0; $regenLv = 0
@@ -127,14 +129,25 @@ for ($wave = 1; $wave -le 100; $wave++) {
     if ($wave -ge $SmgUnlockWave) { $best = 's' }
     if ($wave -ge $AkUnlockWave) { $best = 'a' }
     $bank += $earn   # ikinci silahın parası birikir
-    if ($type.Count -lt 2) {
+    $twoHanded = ($AkHands -ge 2) -and ($type -contains 'a')
+    if ($type.Count -lt 2 -and -not $twoHanded) {
         $price = $gunPrice[$best]
+        if ($best -eq 'a' -and $AkHands -ge 2) { $price = [double]::MaxValue }  # iki elli silah ikinci yuvaya alınmaz (aşağıda değiştirilir)
         if ($bank -ge $price) { $type += $best; $spent[1] = $price; $bank -= $price }
     }
-    if ($type.Count -ge 2) {
+    if ($type.Count -ge 2 -or $twoHanded -or ($best -eq 'a' -and $AkHands -ge 2)) {
         $offGold += $bank * $OffenseShare; $defGold += $bank * (1 - $OffenseShare); $bank = 0
     }
+    # İki elli AK47: iki yuvadaki silahlar satılır (harcamalarının yarısı iade), tek AK47 alınır
+    if ($best -eq 'a' -and $AkHands -ge 2 -and -not $twoHanded) {
+        $refund = 0; for ($s = 0; $s -lt $type.Count; $s++) { $refund += [math]::Floor($spent[$s] * 0.5) }
+        $c = $AkPrice - $refund
+        if ($offGold -ge $c) {
+            $offGold -= $c; $type = @('a'); $spent = @($AkPrice, 0); $dmgLv = @(0, 0); $frLv = @(0, 0); $sil = @(0, 0)
+        }
+    }
     for ($s = 0; $s -lt $type.Count; $s++) {
+        if ($type[$s] -eq 'a' -and $AkHands -ge 2) { continue }
         if ($gunTier[$type[$s]] -ge $gunTier[$best]) { continue }
         $refund = if ($KeepUpgradesOnSwap) { [math]::Floor($gunPrice[$type[$s]] * 0.5) } else { [math]::Floor($spent[$s] * 0.5) }
         $c = $gunPrice[$best] - $refund

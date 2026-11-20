@@ -7,13 +7,14 @@ extends CanvasLayer
 #   F3: sahnedeki boss'a canının %25'i kadar hasar (ölüm akışını test etmek için)
 #   F4: sıradaki boss dalgasına atla (sahnedeki yaratıklar altınsız silinir)
 #   F5: test donanımı: o dalgaya normal oyunla gelmiş ortalama bir oyuncunun yapısı (tools/balance_sim.ps1 tahmini):
-#       2 AK47 (kilidi açılmadıysa 2 SMG ya da 2 Glock) + gümüş mermi (20. dalgadan), Damage/Fire Rate dalga x KIT_GUN_PER_WAVE seviye,
+#       1 AK47 (iki elli; kilidi açılmadıysa 2 SMG ya da 2 Glock) + gümüş mermi (20. dalgadan), Damage/Fire Rate dalga x KIT_GUN_PER_WAVE seviye,
 #       Max Health/Regen/Armor dalga x KIT_PLAYER_PER_WAVE seviye (ör. 70. dalgada 23 ve 17)
 
 const BOSS_HIT_RATIO: float = 0.25
 const KIT_GUN_PER_WAVE: float = 0.33
 const KIT_PLAYER_PER_WAVE: float = 0.25
 const KIT_SILVER_WAVE: int = 20
+const KIT_TWO_HANDED_MULT: float = 1.5  # tek AK47'de silah geliştirme seviyesi (balance_sim: 70. dalgada ~35)
 
 var _label: Label
 
@@ -102,11 +103,21 @@ func _give_kit() -> void:
 			break
 		ak = load(path) as WeaponData
 	GameState.add_gold(1000000)
-	while GameState.guns.size() < 2:
-		GameState.give_weapon(ak)
-	for slot in GameState.guns.size():
-		if GameState.guns[slot].id != ak.id:
-			GameState.swap_gun(slot, ak)
+	if ak.hands >= 2:
+		# İki elli AK47 (Adım 52a): tek AK47, geliştirmeler tek silahta toplandığı için seviyesi ~1.5 kat (balance_sim)
+		while GameState.guns.size() > 1:
+			GameState.sell_gun(GameState.guns.size() - 1)
+		if GameState.guns.is_empty():
+			GameState.give_weapon(ak)
+		elif GameState.guns[0].id != ak.id:
+			GameState.swap_gun(0, ak)
+		gun_levels = roundi(wave * KIT_GUN_PER_WAVE * KIT_TWO_HANDED_MULT)
+	else:
+		for slot in GameState.guns.size():
+			if GameState.guns[slot].id != ak.id and GameState.can_swap_gun(slot, ak):
+				GameState.swap_gun(slot, ak)
+		while GameState.guns.size() < 2 and GameState.can_take_weapon(ak):
+			GameState.give_weapon(ak)
 	for slot in GameState.guns.size():
 		for path in ["res://data/upgrades/gun_damage.tres", "res://data/upgrades/fire_rate.tres"]:
 			var upgrade := load(path) as UpgradeData

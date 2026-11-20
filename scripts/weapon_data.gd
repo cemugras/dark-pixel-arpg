@@ -9,6 +9,10 @@ extends Resource
 @export var unlock_wave: int = 0              # mağazada bu dalga bitince alınabilir (0 = baştan); öncesinde buton pasif, "(after wave X)" yazar
 @export var icon: Texture2D                   # mağaza / seçim ekranı görüntüsü (sağa bakan); sprite boşsa oyunda da bu kullanılır
 @export var shoot_sound: String = ""            # Audio sfx adı (assets/audio/sfx/ içindeki dosya adı, uzantısız). Boşsa ses yok
+# Adım 52a: el sistemi. "gun" = ateşli silah (Damage/Fire Rate/gümüş mermi alır), "secondary" = ikincil silah
+# (katana, fırlatmalık bıçak, el bombası; aynı anda en fazla bir tane). hands 2 = iki elli (AK47): diğer yuvaya ateşli silah girmez.
+@export_enum("gun", "secondary") var category: String = "gun"
+@export_range(1, 2) var hands: int = 1
 
 @export_group("Ranged")
 @export var sprite: Texture2D                 # oyun içi (Walt'ın elindeki) görüntü, elsiz, sağa bakan; boşsa icon
