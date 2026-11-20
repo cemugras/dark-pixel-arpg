@@ -24,6 +24,7 @@ extends Resource
 @export var attack_hit_frame: int = 5            # hasarın verildiği animasyon karesi (0'dan sayılır)
 @export var attack_lunge: float = 0.0            # vuruştan önceki 2 karede ileri atılma mesafesi (px)
 @export var attack_cooldown: float = 1.2         # saldırı bitince tekrar saldırmadan önce bekleme (sn)
+@export var attack_knockback: float = 0.0       # vuruş isabet edince oyuncuyu geri itme hızı (px/sn, hızla söner; 0 = itme yok; Ram Brute toslaması)
 
 # --- Hamle (charge) ---
 # charge_interval 0 ise hamle yok. Akış: kovalarken süre dolunca ve oyuncu charge_min_range..charge_max_range

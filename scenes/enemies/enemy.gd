@@ -1020,7 +1020,9 @@ func _on_sprite_frame_changed() -> void:
 		return
 	var hit_range := data.attack_hit_range if data.attack_hit_range > 0.0 else data.attack_range * ATTACK_HIT_RANGE_MULT
 	if global_position.distance_to(target.global_position) <= hit_range and target.has_method("try_hit"):
-		target.try_hit(attack_damage)
+		# Ram Brute: toslama oyuncuyu geri iter (vuruş isabet ettiyse)
+		if target.try_hit(attack_damage) and data.attack_knockback > 0.0 and target.has_method("knockback"):
+			target.knockback(global_position.direction_to(target.global_position), data.attack_knockback)
 
 func _on_sprite_animation_finished() -> void:
 	if _state == State.DUEL:

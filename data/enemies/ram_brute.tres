@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" uid="uid://cqlw7x1k6q18i" path="res://scripts/enemy_data.gd" id="1_ram"]
+[ext_resource type="SpriteFrames" path="res://data/enemies/ram_brute_frames.tres" id="2_ram"]
+
+[resource]
+script = ExtResource("1_ram")
+id = "ram_brute"
+display_name = "Ram Brute"
+sprite_frames = ExtResource("2_ram")
+body_scale = 0.5
+hitbox_scale = 1.2
+max_health = 68
+move_speed = 42.0
+contact_damage = 2
+attack_range = 30.0
+attack_damage = 8
+attack_hit_frame = 5
+attack_lunge = 8.0
+attack_cooldown = 1.6
+attack_knockback = 320.0
+coin_value = 3
+spawn_weight = 0.2
+spawn_weight_per_wave = 0.01
+min_wave = 11
+hit_sound = "ram_brute_hit"
+death_sound = "ram_brute_death"

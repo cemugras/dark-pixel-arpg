@@ -80,6 +80,8 @@ const SFX_VOLUME_DB: Dictionary = {
 	"sloth_fiend_hit": -8.0,   # Belphegor sesinin ince ve kısık kopyası (SFX_ALIASES)
 	"sloth_fiend_death": -6.0,
 	"sloth_fiend_charge": -8.0,
+	"ram_brute_hit": -8.0,     # Moloch sesinin ince ve kısık kopyası (SFX_ALIASES)
+	"ram_brute_death": -6.0,
 }
 
 # Aynı anda en fazla kaç kopya çalabileceği sese özel ayar (listede yoksa MAX_PER_SOUND).
@@ -110,6 +112,8 @@ const SFX_MAX_INSTANCES: Dictionary = {
 	"sloth_fiend_hit": 1,
 	"sloth_fiend_death": 2,
 	"sloth_fiend_charge": 2,
+	"ram_brute_hit": 1,
+	"ram_brute_death": 2,
 	"lucifer_hit": 1,
 	"lucifer_rune_blast": 1,
 	"lucifer_frost": 1,
@@ -140,6 +144,8 @@ const SFX_ALIASES: Dictionary = {
 	"sloth_fiend_hit": "belphegor_hit",  # Sloth Fiend (Belphegor'un evcil hayvanı), Belphegor'un seslerini ince ve kısık kullanır
 	"sloth_fiend_death": "belphegor_death",
 	"sloth_fiend_charge": "belphegor_charge",
+	"ram_brute_hit": "moloch_hit",  # Ram Brute (Moloch bölgesinin tankı), Moloch'un seslerini biraz ince ve kısık kullanır
+	"ram_brute_death": "moloch_death",
 }
 
 # Sese özel perde çarpanı (listede yoksa 1.0; PITCH_JITTER bunun üstüne uygulanır). >1 = daha ince/küçük.
@@ -162,6 +168,8 @@ const SFX_PITCH: Dictionary = {
 	"sloth_fiend_hit": 1.3,
 	"sloth_fiend_death": 1.3,
 	"sloth_fiend_charge": 1.3,
+	"ram_brute_hit": 1.2,
+	"ram_brute_death": 1.2,
 }
 
 # --- Müzik ---

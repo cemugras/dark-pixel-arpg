@@ -49,6 +49,7 @@ $enemies = @(
     @{ name = 'fly';   hp = 5;  coin = 1; min = 41; w = 0.6; wpw = 0.05; n = 3 },   # n = swarm_size (bir doğmada kaç tane)
     @{ name = 'lilim'; hp = 25; coin = 2; min = 51; w = 0.4; wpw = 0.04 },
     @{ name = 'locust'; hp = 30; coin = 2; min = 81; w = 0.4; wpw = 0.04 },  # Abyss Locust
+    @{ name = 'ram'; hp = 68; coin = 3; min = 11; w = 0.2; wpw = 0.01 },  # Ram Brute
     @{ name = 'sloth'; hp = 35; coin = 2; min = 21; w = 0.4; wpw = 0.04 },  # Sloth Fiend
     @{ name = 'grigori'; hp = 30; coin = 2; min = 91; w = 0.4; wpw = 0.04 }   # Grigori
 )

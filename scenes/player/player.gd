@@ -34,6 +34,14 @@ var invulnerable_timer: float = 0.0
 var is_dead: bool = false
 var debug_god: bool = false  # test: F1 (DebugTools) ile açılır, hiç hasar almaz
 var _regen_accumulator: float = 0.0
+const KNOCKBACK_DECAY: float = 8.0   # geri itilmenin sönme hızı (hız / 8 ≈ itilme mesafesi)
+var _knockback: Vector2 = Vector2.ZERO
+
+# Yaratık vuruşuyla geri itilme (Ram Brute toslaması); speed px/sn başlangıç hızı
+func knockback(dir: Vector2, speed: float) -> void:
+	if is_dead or debug_god:
+		return
+	_knockback = dir.normalized() * speed
 
 func _ready() -> void:
 	add_to_group("player")
@@ -53,8 +61,12 @@ func _physics_process(delta: float) -> void:
 		return
 
 	var dir := Input.get_vector("move_left", "move_right", "move_up", "move_down")
-	velocity = dir * move_speed
+	velocity = dir * move_speed + _knockback
 	move_and_slide()
+	# Geri itilme (Ram Brute toslaması): hızla söner
+	_knockback *= exp(-KNOCKBACK_DECAY * delta)
+	if _knockback.length_squared() < 1.0:
+		_knockback = Vector2.ZERO
 
 	if dir != Vector2.ZERO:
 		_move_facing_idx = wrapi(roundi(dir.angle() / (PI / 4.0)), 0, 8)
