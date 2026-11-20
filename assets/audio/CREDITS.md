@@ -14,6 +14,7 @@ Kurallar:
 | ak47_shoot.wav | AK47 Shot | LeMudCrab | https://freesound.org/s/163457/ | CC0 | Trimmed |
 | revolver_shoot.wav | Weapon_Revolver_Shots_Stereo.wav | Nox_Sound | https://freesound.org/s/541818/ | CC0 | Cut from raw/revolver_shoot_raw.wav, mono |
 | grenade_explode.wav | Explosion.wav | karisigurd4 | https://freesound.org/s/555132/ | CC0 | Cut from raw/grenade_explode_raw.wav, 16 bit mono, normalized |
+| katana_slash_01.wav / _02 / _03 | swoosh.wav | PorkMuncher | https://freesound.org/s/263595/ | CC0 | Three variations cut from raw/katana_slash_raw.wav, 16 bit mono, normalized |
 | coin_pickup.wav | Coin_C_07 | cabled_mess | https://freesound.org/s/350875/ | CC0 | - |
 | hell_harpy_hit_01.wav, hell_harpy_hit_02.wav, hell_harpy_hit_03.wav, hell_harpy_death.wav | VG Voice - Golem.wav | marlonnnnnn | https://freesound.org/s/319140/ | CC0 | Cut into 4 clips (3 hit + 1 death) from raw/hell_harpy_raw.wav |
 | damned_soul_hit_01.wav, damned_soul_hit_02.wav, damned_soul_hit_03.wav, damned_soul_death.wav | spit take.wav | TheLittleCrow | https://freesound.org/s/456974/ | CC0 | Cut into 4 clips (3 hit + 1 death) from raw/damned_soul_raw.wav, leading silence trimmed, peak normalized to -4 dBFS |
