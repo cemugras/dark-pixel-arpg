@@ -85,6 +85,10 @@ const SFX_VOLUME_DB: Dictionary = {
 	"coin_imp_hit": -8.0,      # Mammon sesinin ince ve kısık kopyası (SFX_ALIASES)
 	"coin_imp_death": -6.0,
 	"coin_imp_throw": -12.0,
+	"magma_worm_hit": -8.0,    # Leviathan sesinin ince ve kısık kopyası (SFX_ALIASES)
+	"magma_worm_death": -6.0,
+	"magma_worm_dive": -10.0,
+	"magma_worm_emerge": -8.0,
 }
 
 # Aynı anda en fazla kaç kopya çalabileceği sese özel ayar (listede yoksa MAX_PER_SOUND).
@@ -120,6 +124,10 @@ const SFX_MAX_INSTANCES: Dictionary = {
 	"coin_imp_hit": 1,
 	"coin_imp_death": 2,
 	"coin_imp_throw": 2,
+	"magma_worm_hit": 1,
+	"magma_worm_death": 2,
+	"magma_worm_dive": 2,
+	"magma_worm_emerge": 2,
 	"lucifer_hit": 1,
 	"lucifer_rune_blast": 1,
 	"lucifer_frost": 1,
@@ -155,6 +163,10 @@ const SFX_ALIASES: Dictionary = {
 	"coin_imp_hit": "mammon_hit",  # Coin Imp (Mammon'un çırağı), Mammon'un seslerini ince ve kısık kullanır
 	"coin_imp_death": "mammon_death",
 	"coin_imp_throw": "mammon_spill",  # fırlatırken sikke şıngırtısı
+	"magma_worm_hit": "leviathan_hit",  # Magma Worm (Leviathan bölgesinin yaratığı), Leviathan'ın seslerini ince ve kısık kullanır
+	"magma_worm_death": "leviathan_death",
+	"magma_worm_dive": "leviathan_dive",
+	"magma_worm_emerge": "leviathan_emerge",
 }
 
 # Sese özel perde çarpanı (listede yoksa 1.0; PITCH_JITTER bunun üstüne uygulanır). >1 = daha ince/küçük.
@@ -182,6 +194,10 @@ const SFX_PITCH: Dictionary = {
 	"coin_imp_hit": 1.3,
 	"coin_imp_death": 1.3,
 	"coin_imp_throw": 1.3,
+	"magma_worm_hit": 1.3,
+	"magma_worm_death": 1.3,
+	"magma_worm_dive": 1.3,
+	"magma_worm_emerge": 1.3,
 }
 
 # --- Müzik ---

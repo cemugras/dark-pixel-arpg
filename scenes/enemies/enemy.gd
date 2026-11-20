@@ -244,7 +244,8 @@ func _ready() -> void:
 	_has_dive = data != null and data.dive_interval > 0.0 and _mode == SpriteMode.EIGHT_DIR \
 		and frames.has_animation(_anim_base("emerge") + "_east")
 	if _has_dive:
-		_dive_timer = data.dive_interval * 0.5  # boss belirince ilk dalış biraz erken gelsin
+		# Boss belirince ilk dalış biraz erken gelsin; normal yaratıkta (Magma Worm) rastgele, aynı anda doğanlar birlikte dalmasın
+		_dive_timer = data.dive_interval * (0.5 if data.is_boss else randf_range(0.4, 1.0))
 		var shader := Shader.new()
 		shader.code = SINK_SHADER
 		var mat := ShaderMaterial.new()
@@ -816,7 +817,10 @@ func _release_emerge() -> void:
 		_burrow_fx.blast()
 	_burrow_fx = null
 	_set_sink(0.0)
-	Audio.play_sfx_focus(data.emerge_sound)  # yaratık vuruş sesleri susar, çıkış duyulsun
+	if data.emerge_focus:
+		Audio.play_sfx_focus(data.emerge_sound)  # yaratık vuruş sesleri susar, çıkış duyulsun
+	else:
+		Audio.play_sfx(data.emerge_sound)  # kalabalık yaratık (Magma Worm): diğer sesleri susturmaz
 	if not is_instance_valid(target) or _dying or not target.has_method("try_hit"):
 		return
 	if "is_dead" in target and target.is_dead:
@@ -1288,6 +1292,10 @@ func die() -> void:
 	if _dying:
 		return
 	_dying = true
+	# Batarken ya da fırlarken ölürse yerdeki lav dalgacığı kalmasın (patlamayı bekleyen efekt kendiliğinden silinmez)
+	if is_instance_valid(_burrow_fx):
+		_burrow_fx.queue_free()
+		_burrow_fx = null
 	if data:
 		if data.is_boss:
 			Audio.stop_music(BOSS_DEATH_MUSIC_FADE)  # boss müziği ölüm sesinden önce kesilir

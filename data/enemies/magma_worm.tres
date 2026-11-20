@@ -1,0 +1,32 @@
+[gd_resource type="Resource" script_class="EnemyData" format=3]
+
+[ext_resource type="Script" uid="uid://cqlw7x1k6q18i" path="res://scripts/enemy_data.gd" id="1_worm"]
+[ext_resource type="SpriteFrames" path="res://data/enemies/magma_worm_frames.tres" id="2_worm"]
+
+[resource]
+script = ExtResource("1_worm")
+id = "magma_worm"
+display_name = "Magma Worm"
+sprite_frames = ExtResource("2_worm")
+body_scale = 0.5
+max_health = 30
+move_speed = 40.0
+contact_damage = 2
+dive_interval = 5.5
+dive_max_range = 220.0
+burrow_time = 1.2
+burrow_speed = 70.0
+emerge_warning = 0.7
+emerge_release_frame = 3
+emerge_radius = 30.0
+emerge_damage = 5
+emerge_recover = 0.6
+dive_sound = "magma_worm_dive"
+emerge_sound = "magma_worm_emerge"
+emerge_focus = false
+coin_value = 2
+spawn_weight = 0.4
+spawn_weight_per_wave = 0.04
+min_wave = 61
+hit_sound = "magma_worm_hit"
+death_sound = "magma_worm_death"

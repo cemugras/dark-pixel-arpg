@@ -112,6 +112,7 @@ extends Resource
 @export var emerge_recover: float = 1.0          # çıktıktan sonra yerinde durma süresi (sn)
 @export var dive_sound: String = ""              # Audio sfx adı: lava dalarken (boşsa ses yok)
 @export var emerge_sound: String = ""            # Audio sfx adı: fırlarken (boşsa ses yok)
+@export var emerge_focus: bool = true            # true: çıkış sesi play_sfx_focus ile (boss); kalabalık yaratıkta (Magma Worm) false
 
 # --- Nefes: etrafında dönen koniler (ör. Asmodeus'un üç başı) ---
 # breath_count 0 ise ya da sprite'ta breath_<yön> animasyonu yoksa nefes yok. Akış: kovalarken breath_interval dolunca
