@@ -134,6 +134,7 @@ extends Resource
 @export var breath_recover: float = 0.8          # nefesten sonra yerinde durma süresi (sn)
 @export var breath_colors: Array[Color] = []     # koni renkleri sırayla (boşsa kızıl, mor, yeşil)
 @export var breath_sound: String = ""            # Audio sfx adı: nefes başlarken (uyarı bitince; boşsa ses yok)
+@export var breath_focus: bool = true            # true: nefes sesi play_sfx_focus ile (boss); kalabalık yaratıkta (Venom Bloom) false
 
 # --- Çekirge seli: oyuncunun yolunu kesen geniş çekirge duvarı (ör. Abaddon) ---
 # locust_length 0 ise ya da sprite'ta locust_<yön> animasyonu yoksa sel yok. Akış: kovalarken locust_interval dolunca

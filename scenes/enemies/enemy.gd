@@ -119,6 +119,7 @@ var _emerge_released: bool = false
 var _recovering: bool = false
 var _sink: float = 0.0                 # 0 = yerde tam boy, 1 = tamamen gömülü
 var _burrow_fx: LavaBurrow = null
+var _breath_fx: Node2D = null       # o anki nefes konileri (ölünce silinir)
 var _collision_layer_saved: int = 0
 
 # --- Nefes durumu (bkz. EnemyData breath_*) ---
@@ -256,7 +257,8 @@ func _ready() -> void:
 	_has_breath = data != null and data.breath_count > 0 and _mode == SpriteMode.EIGHT_DIR \
 		and frames.has_animation(_anim_base("breath") + "_east")
 	if _has_breath:
-		_breath_timer = data.breath_interval * 0.5  # boss belirince ilk nefes biraz erken gelsin
+		# Boss belirince ilk nefes biraz erken gelsin; normal yaratıkta (Venom Bloom) rastgele, aynı anda doğanlar birlikte üflemesin
+		_breath_timer = data.breath_interval * (0.5 if data.is_boss else randf_range(0.4, 1.0))
 
 	# Çekirge seli: veri + 8 yönlü locust animasyonu varsa açılır
 	_has_locust = data != null and data.locust_length > 0.0 and _mode == SpriteMode.EIGHT_DIR \
@@ -850,6 +852,7 @@ func _start_breath(dir: Vector2) -> void:
 	sprite.play(_anim("breath"))
 	sprite.frame = 0
 	var cones := BreathCones.new()
+	_breath_fx = cones
 	cones.setup(breath_damage, data.breath_count, data.breath_range, data.breath_width_degrees, dir.angle(),
 		data.breath_spin_degrees, data.breath_windup, data.breath_duration, data.breath_colors)
 	_floor_fx_parent().add_child(cones)
@@ -864,7 +867,10 @@ func _process_breath(delta: float) -> void:
 			_state_timer -= delta
 			# Uyarı biterken (nefes başlarken) ses
 			if before > data.breath_duration and _state_timer <= data.breath_duration:
-				Audio.play_sfx_focus(data.breath_sound)  # yaratık vuruş sesleri susar, nefes duyulsun
+				if data.breath_focus:
+					Audio.play_sfx_focus(data.breath_sound)  # yaratık vuruş sesleri susar, nefes duyulsun
+				else:
+					Audio.play_sfx(data.breath_sound)  # kalabalık yaratık (Venom Bloom): diğer sesleri susturmaz
 			if _state_timer <= 0.0:
 				_breath_phase = 1
 				sprite.play()  # ağızlar kapanır, animasyonun kalanı (bitince _on_sprite_animation_finished)
@@ -1296,6 +1302,10 @@ func die() -> void:
 	if is_instance_valid(_burrow_fx):
 		_burrow_fx.queue_free()
 		_burrow_fx = null
+	# Nefes verirken ölürse koni de söner (yaratığın ağzından çıkıyordu)
+	if is_instance_valid(_breath_fx):
+		_breath_fx.queue_free()
+		_breath_fx = null
 	if data:
 		if data.is_boss:
 			Audio.stop_music(BOSS_DEATH_MUSIC_FADE)  # boss müziği ölüm sesinden önce kesilir

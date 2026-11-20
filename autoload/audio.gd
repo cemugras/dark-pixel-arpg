@@ -89,6 +89,9 @@ const SFX_VOLUME_DB: Dictionary = {
 	"magma_worm_death": -6.0,
 	"magma_worm_dive": -10.0,
 	"magma_worm_emerge": -8.0,
+	"venom_bloom_hit": -8.0,   # Asmodeus sesinin ince ve kısık kopyası (SFX_ALIASES)
+	"venom_bloom_death": -6.0,
+	"venom_bloom_breath": -10.0,
 }
 
 # Aynı anda en fazla kaç kopya çalabileceği sese özel ayar (listede yoksa MAX_PER_SOUND).
@@ -128,6 +131,9 @@ const SFX_MAX_INSTANCES: Dictionary = {
 	"magma_worm_death": 2,
 	"magma_worm_dive": 2,
 	"magma_worm_emerge": 2,
+	"venom_bloom_hit": 1,
+	"venom_bloom_death": 2,
+	"venom_bloom_breath": 2,
 	"lucifer_hit": 1,
 	"lucifer_rune_blast": 1,
 	"lucifer_frost": 1,
@@ -167,6 +173,9 @@ const SFX_ALIASES: Dictionary = {
 	"magma_worm_death": "leviathan_death",
 	"magma_worm_dive": "leviathan_dive",
 	"magma_worm_emerge": "leviathan_emerge",
+	"venom_bloom_hit": "asmodeus_hit",  # Venom Bloom (Asmodeus'un bahçesinden), Asmodeus'un seslerini ince ve kısık kullanır
+	"venom_bloom_death": "asmodeus_death",
+	"venom_bloom_breath": "asmodeus_breath",
 }
 
 # Sese özel perde çarpanı (listede yoksa 1.0; PITCH_JITTER bunun üstüne uygulanır). >1 = daha ince/küçük.
@@ -198,6 +207,9 @@ const SFX_PITCH: Dictionary = {
 	"magma_worm_death": 1.3,
 	"magma_worm_dive": 1.3,
 	"magma_worm_emerge": 1.3,
+	"venom_bloom_hit": 1.35,
+	"venom_bloom_death": 1.35,
+	"venom_bloom_breath": 1.3,
 }
 
 # --- Müzik ---

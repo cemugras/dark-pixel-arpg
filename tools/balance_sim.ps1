@@ -52,6 +52,7 @@ $enemies = @(
     @{ name = 'ram'; hp = 68; coin = 3; min = 11; w = 0.2; wpw = 0.01 },  # Ram Brute
     @{ name = 'coinimp'; hp = 25; coin = 2; min = 31; w = 0.4; wpw = 0.04 },  # Coin Imp
     @{ name = 'worm'; hp = 30; coin = 2; min = 61; w = 0.4; wpw = 0.04 },  # Magma Worm
+    @{ name = 'bloom'; hp = 30; coin = 2; min = 71; w = 0.4; wpw = 0.04 },  # Venom Bloom
     @{ name = 'sloth'; hp = 35; coin = 2; min = 21; w = 0.4; wpw = 0.04 },  # Sloth Fiend
     @{ name = 'grigori'; hp = 30; coin = 2; min = 91; w = 0.4; wpw = 0.04 }   # Grigori
 )
