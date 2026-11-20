@@ -1,0 +1,27 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapon_data.gd" id="1_wdata"]
+[ext_resource type="Texture2D" path="res://assets/sprites/gun/katana_icon.png" id="2_icon"]
+[ext_resource type="Texture2D" path="res://assets/sprites/gun/katana_sprite.png" id="3_sprite"]
+[ext_resource type="Script" path="res://scenes/weapons/katana_hand.gd" id="4_hand"]
+
+[resource]
+script = ExtResource("1_wdata")
+id = "katana"
+display_name = "Katana"
+description = "15 dmg slash, hits all close by, secondary"
+cost = 40
+sort_order = 6
+icon = ExtResource("2_icon")
+category = "secondary"
+upgrade_scope = "katana"
+hand_script = ExtResource("4_hand")
+swing_degrees = 140.0
+knockback = 140.0
+sprite = ExtResource("3_sprite")
+grip_point = Vector2(7, 4)
+muzzle_point = Vector2(43, 1.5)
+sprite_scale = 0.5
+damage = 15
+fire_rate = 1.2
+attack_range = 45.0

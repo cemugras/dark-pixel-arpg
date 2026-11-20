@@ -96,6 +96,8 @@ var _wave: int = 1
 const FLOOR_FX_PATH: String = "FloorFx"   # Main altındaki zemin efektleri düğümü (main.gd kurar)
 const SPECIAL_GAP: float = 1.2            # çağırma ile büyü arka arkaya gelmesin: biri bitince diğeri en az bu kadar bekler
 const KEEP_DISTANCE_BAND: float = 25.0     # keep_distance'ın bu kadar altı/üstü arasında yaratık yerinde durur (ileri geri titremesin)
+const KNOCKBACK_DECAY: float = 14.0         # geri itilmenin sönme hızı (katana vuruşu)
+var _knockback: Vector2 = Vector2.ZERO
 var _has_cast: bool = false
 var cast_damage: int = 0
 var _cast_timer: float = 0.0
@@ -302,6 +304,12 @@ func _physics_process(delta: float) -> void:
 		_prev_state = _state
 	if _gap_left > 0.0:
 		_gap_left -= delta
+	# Geri itilme (katana): hızla sönen itiş, duvarlardan geçmez
+	if _knockback.length_squared() > 1.0:
+		move_and_collide(_knockback * delta)
+		_knockback *= exp(-KNOCKBACK_DECAY * delta)
+	else:
+		_knockback = Vector2.ZERO
 
 	match _state:
 		State.RISE:
@@ -1287,6 +1295,12 @@ func die() -> void:
 		Audio.play_sfx(data.get_death_sound())
 	EventBus.enemy_died.emit(global_position, coin_value)
 	queue_free()
+
+# Vuruşla geri itilme (katana; Adım 52c). speed px/sn başlangıç hızı; boss'lar ve yer altındaki/tahttaki yaratık itilmez.
+func knockback(dir: Vector2, speed: float) -> void:
+	if _dying or _seated or (data and data.is_boss) or collision_layer == 0:
+		return
+	_knockback = dir.normalized() * speed
 
 func _flash() -> void:
 	sprite.modulate = Color(3, 3, 3)  # kısa süreli parlama

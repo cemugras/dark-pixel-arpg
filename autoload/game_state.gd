@@ -115,7 +115,7 @@ func gun_slots_full() -> bool:
 	return guns.size() >= MAX_GUNS
 
 # --- El sistemi (Adım 52a) ---
-# Kurallar: ikincil silah (katana, bıçak, bomba) en fazla bir tane; iki elli silah (AK47) varsa yanında ateşli silah olmaz
+# Kurallar: ikincil silah (el bombası, katana) en fazla bir tane; iki elli silah (AK47) varsa yanında ateşli silah olmaz
 # (sadece ikincil). Alma ve değiştirme aynı kontrolden geçer; AK47 satılınca kısıt kendiliğinden kalkar.
 
 # slot dışındaki yuvalardaki silahlar (slot -1 = hepsi): değiştirmede o yuva boşalmış sayılır

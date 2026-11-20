@@ -10,11 +10,11 @@ extends Resource
 @export var icon: Texture2D                   # mağaza / seçim ekranı görüntüsü (sağa bakan); sprite boşsa oyunda da bu kullanılır
 @export var shoot_sound: String = ""            # Audio sfx adı (assets/audio/sfx/ içindeki dosya adı, uzantısız). Boşsa ses yok
 # Adım 52a: el sistemi. "gun" = ateşli silah (Damage/Fire Rate/gümüş mermi alır), "secondary" = ikincil silah
-# (katana, fırlatmalık bıçak, el bombası; aynı anda en fazla bir tane). hands 2 = iki elli (AK47): diğer yuvaya ateşli silah girmez.
+# (el bombası, katana; aynı anda en fazla bir tane). hands 2 = iki elli (AK47): diğer yuvaya ateşli silah girmez.
 @export_enum("gun", "secondary") var category: String = "gun"
 @export_range(1, 2) var hands: int = 1
 # Silah başına geliştirmelerin hangileri bu silahın sütununda çıkar (UpgradeData.scope ile eşleşir): "gun" = Damage/Fire Rate,
-# "grenade" = Grenade Damage/Grenade Range. Seviye ve harcama yuvaya aittir (GameState.gun_upgrades).
+# "grenade" = bombanın Damage/Fire Rate. Seviye ve harcama yuvaya aittir (GameState.gun_upgrades).
 @export var upgrade_scope: String = "gun"
 # Doluysa GunSlots bu silah için gun.tscn yerine bu scripti kurar (ikincil silahlar: GrenadeHand ...)
 @export var hand_script: Script
@@ -22,6 +22,10 @@ extends Resource
 @export_group("Grenade")
 @export var blast_radius: float = 40.0        # patlamanın hasar yarıçapı (px)
 @export var fuse_time: float = 0.4            # yere düştükten sonra patlamaya kadar (fitil yanıp söner)
+
+@export_group("Katana")
+@export var swing_degrees: float = 140.0      # kesiğin yayı (nişan yönünün iki yanına yarısı); bu yaydaki ve menzildeki herkes vurulur
+@export var knockback: float = 140.0          # vurulan yaratığın geri itilme hızı (px/sn, hızla söner; boss'lar itilmez)
 
 @export_group("Ranged")
 @export var sprite: Texture2D                 # oyun içi (Walt'ın elindeki) görüntü, elsiz, sağa bakan; boşsa icon
