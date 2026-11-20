@@ -269,11 +269,10 @@ func _fill_gun_column(column: VBoxContainer, slot: int, can_sell: bool, last_tex
 	var text := "%s\nDamage: base %d, now %d\nSell (%s)%s" % [gun_name, gun.damage, current, _price(GameState.get_gun_sell_price(slot), true), last_text]
 	_set_weapon_icon(_make_button(column, text, not can_sell, _on_sell_gun_pressed.bind(slot)), gun)
 
-	# Bu silahın geliştirmeleri (yarı fiyat, sadece bu silaha) ve gümüş mermi: sadece ateşli silahlarda
+	# Bu silahın geliştirmeleri (yarı fiyat, sadece bu silaha; ateşli silahta Damage/Fire Rate, bombada kendi geliştirmeleri).
+	# Gümüş mermi sadece ateşli silahlarda.
 	var is_gun := GameState.is_gun_slot(slot)
-	for upgrade in _scoped_upgrades("gun"):
-		if not is_gun:
-			break
+	for upgrade in _scoped_upgrades(gun.upgrade_scope):
 		var cost := GameState.get_gun_upgrade_cost(slot, upgrade)
 		var level := GameState.get_gun_upgrade_level(slot, upgrade)
 		var up_text := "%s (Lv %d) - %s\n%s" % [upgrade.display_name, level, _price(cost), upgrade.description]

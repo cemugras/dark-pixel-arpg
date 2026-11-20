@@ -11,6 +11,7 @@ extends Resource
 @export var sort_order: int = 0      # mağazadaki sıra
 @export var requires: String = ""    # "gun": menzilli silah yoksa mağazada kilitli görünür
 # Mağazada nerede görünür: "" = genel geliştirmeler ızgarası (oyuncuya),
-# "gun" = her silah yuvasının altında ayrı ayrı (seviye ve harcama o yuvaya ait, GameState.gun_upgrades)
+# "gun" = her silah yuvasının altında ayrı ayrı (seviye ve harcama o yuvaya ait, GameState.gun_upgrades);
+# başka değer (ör. "grenade") = sadece WeaponData.upgrade_scope'u aynı olan silahın yuvasında
 @export var scope: String = ""
 @export var price_ratio: float = 1.0 # fiyat çarpanı (silah başına geliştirmeler yarı fiyat: 0.5)

@@ -95,17 +95,33 @@ func _place_guns_in_hands() -> void:
 	var flip: bool = player.DIR_FLIP[idx]
 	var front := idx in FRONT_FACINGS
 	var rest_dir := Vector2.from_angle(idx * PI / 4.0)
-	var guns := get_children()
-	for i in guns.size():
+	# Elde görünenler sırayla yumruklara: önce ateşli silahlar, sonra kalkmış ikincil el (bomba hep "öbür el" olsun,
+	# atarken silah elden ele zıplamasın). Cepteki ikincil son yumruğu alır (görünmez).
+	var order: Array = []
+	for child in get_children():
+		if not child.has_method("is_held"):
+			order.append(child)
+	for child in get_children():
+		if child.has_method("is_held"):
+			order.append(child)
+	for i in order.size():
 		var a: Vector2 = anchors[mini(i, anchors.size() - 1)]
 		if flip:
 			a.x = -a.x
-		guns[i].set_hand(a * HAND_SPRITE_SCALE, front, rest_dir)
+		order[i].set_hand(a * HAND_SPRITE_SCALE, front, rest_dir)
+
+# Elde görünen eşya sayısı (Walt'ın duruşu buna göre): ateşli silahlar hep, ikincil silah sadece eli kalkmışken
+func held_count() -> int:
+	var count := 0
+	for child in get_children():
+		if not child.has_method("is_held") or child.is_held():
+			count += 1
+	return count
 
 # Şu anki animasyon karesindeki yumruklar (yoksa sabit noktalar). Dönen değer: Array[Vector2], sprite pikseli.
 func _current_anchors(player: Node, idx: int) -> Array:
 	var dir_key: String = player.DIR_NAMES[idx]
-	var one := get_child_count() == 1
+	var one := held_count() <= 1
 	var fallback: Array = (HAND_ANCHORS_ONE if one else HAND_ANCHORS)[dir_key]
 	var sprite: AnimatedSprite2D = player.sprite
 	var anim := String(sprite.animation)          # ör. "run_south_east"
@@ -129,16 +145,16 @@ func request_shot() -> bool:
 	return true
 
 func _shot_gap() -> float:
-	var guns := get_children()
-	if guns.size() < 2:
-		return 0.0
+	# Sadece ateşli silahlar sıraya girer (ikincil silahlar, ör. el bombası, kendi zamanlamasıyla atar)
 	var fastest := INF
-	for gun in guns:
+	var shooters := 0
+	for gun in get_children():
 		if gun.has_method("fire_interval"):
 			fastest = minf(fastest, gun.fire_interval())
-	if fastest == INF:
+			shooters += 1
+	if shooters < 2:
 		return 0.0
-	return fastest / guns.size() * shot_gap_ratio
+	return fastest / shooters * shot_gap_ratio
 
 func rebuild() -> void:
 	# Ölüm anında GameState sıfırlanınca silahlar kaybolmasın
@@ -152,7 +168,9 @@ func rebuild() -> void:
 
 	var count := mini(GameState.guns.size(), slot_offsets.size())
 	for i in count:
-		var gun := gun_scene.instantiate()
+		# İkincil silahın kendi scripti var (WeaponData.hand_script, ör. GrenadeHand); yoksa ateşli silah sahnesi
+		var weapon_data := GameState.guns[i]
+		var gun = weapon_data.hand_script.new() if weapon_data.hand_script else gun_scene.instantiate()
 		gun.setup(GameState.guns[i])
 		gun.silver = GameState.has_silver(i)
 		gun.slot = i  # silah başına geliştirmeler (Damage, Fire Rate) bu yuvadan okunur

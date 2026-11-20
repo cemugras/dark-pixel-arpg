@@ -59,15 +59,23 @@ func _physics_process(delta: float) -> void:
 	if dir != Vector2.ZERO:
 		_move_facing_idx = wrapi(roundi(dir.angle() / (PI / 4.0)), 0, 8)
 
-	var gun_count := GameState.guns.size()
-	var armed := gun_count > 0
+	var armed := GameState.guns.size() > 0
+	# Duruş elde görünen eşya sayısına göre (el bombası sadece atarken sayılır, yoksa o el cepte)
+	var held: int = gun_slots.held_count()
 	var frames := FRAMES_WALT
-	if gun_count == 1:
+	if held == 1:
 		frames = FRAMES_AIM_ONE
-	elif gun_count >= 2:
+	elif held >= 2:
 		frames = FRAMES_AIM
 	if sprite.sprite_frames != frames:
+		# Bomba atarken duruş bir anlığına değişir: koşu/nefes animasyonu aynı karede devam etsin
+		var anim := sprite.animation
+		var frame := sprite.frame
+		var progress := sprite.frame_progress
 		sprite.sprite_frames = frames
+		if frames.has_animation(anim):
+			sprite.play(anim)
+			sprite.set_frame_and_progress(mini(frame, frames.get_frame_count(anim) - 1), progress)
 	# Silahlıyken gövde menzildeki en yakın düşmana döner; hedef yoksa hareket yönüne
 	facing_idx = gun_slots.aim_facing(facing_idx, _move_facing_idx) if armed else _move_facing_idx
 

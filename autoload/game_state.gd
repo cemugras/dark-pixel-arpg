@@ -65,7 +65,8 @@ func get_gun_upgrade_cost(slot: int, upgrade: UpgradeData) -> int:
 	return _scaled_cost(upgrade, get_gun_upgrade_level(slot, upgrade))
 
 func can_buy_gun_upgrade(slot: int, upgrade: UpgradeData) -> bool:
-	return is_gun_slot(slot) and gold >= get_gun_upgrade_cost(slot, upgrade)
+	return slot >= 0 and slot < guns.size() and upgrade.scope == guns[slot].upgrade_scope \
+		and gold >= get_gun_upgrade_cost(slot, upgrade)
 
 func buy_gun_upgrade(slot: int, upgrade: UpgradeData) -> bool:
 	if not can_buy_gun_upgrade(slot, upgrade):
@@ -83,8 +84,9 @@ func get_gun_multiplier(slot: int, stat: String) -> float:
 	var mult := 1.0
 	if slot < 0 or slot >= gun_upgrades.size():
 		return mult
+	var scope := guns[slot].upgrade_scope
 	for upgrade in UpgradePool.load_all():
-		if upgrade.scope == "gun" and upgrade.stat == stat:
+		if upgrade.scope == scope and upgrade.stat == stat:
 			mult += upgrade.amount * gun_upgrades[slot].get(upgrade.id, 0)
 	return mult
 

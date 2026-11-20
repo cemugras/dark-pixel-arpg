@@ -82,7 +82,7 @@ func _copied_weapons() -> Array[WeaponData]:
 		list.append(_data.duel_weapon)
 		return list
 	for w in GameState.guns:
-		if w:
+		if w and w.category == "gun":  # ikincil silahlar (el bombası) kopyalanmaz
 			list.append(w)
 	if list.is_empty() and _data.duel_fallback_weapon:
 		list.append(_data.duel_fallback_weapon)

@@ -1,0 +1,26 @@
+[gd_resource type="Resource" script_class="WeaponData" format=3]
+
+[ext_resource type="Script" path="res://scripts/weapon_data.gd" id="1_wdata"]
+[ext_resource type="Texture2D" path="res://assets/sprites/gun/grenade_icon.png" id="2_icon"]
+[ext_resource type="Texture2D" path="res://assets/sprites/gun/grenade_sprite.png" id="3_sprite"]
+[ext_resource type="Script" path="res://scenes/weapons/grenade_hand.gd" id="4_hand"]
+
+[resource]
+script = ExtResource("1_wdata")
+id = "grenade"
+display_name = "Grenade"
+description = "20 area dmg every 2 s, secondary"
+cost = 40
+sort_order = 5
+icon = ExtResource("2_icon")
+category = "secondary"
+upgrade_scope = "grenade"
+hand_script = ExtResource("4_hand")
+blast_radius = 40.0
+fuse_time = 0.4
+sprite = ExtResource("3_sprite")
+sprite_scale = 0.5
+damage = 20
+fire_rate = 0.5
+attack_range = 160.0
+shoot_sound = ""
