@@ -60,13 +60,19 @@ Steam kısa açıklaması (taslak):
 
 ## Açılış (intro)
 
-> Gece vardiyasından dönen Walt kapıyı açtığında evin içi kükürt kokuyor. Biscuit'in mama kabı devrilmiş, yerde yanık pençe izleri var. Duvarda kömürle yazılmış tek bir cümle:
->
-> **"HE'S MINE. — L."**
->
-> Walt ceketini giyiyor, bir sigara yakıyor ve bodrumdaki çatlaktan aşağı iniyor.
+Karikatür (çizgi roman paneli) anlatımı, 5 kare (kullanıcının planı, 2026-11-20). Her karede ürpertici bir kadın sesi anlatır, arkada korku müziği çalar.
 
-Hem yazıyla hem animasyonla anlatılacak (bkz. "Ara sahneler").
+1. **Ev savaş alanı:** Gece vardiyasından dönen Walt kapıyı açar; ev savaş alanına dönmüş (devrik eşyalar, yanık pençe izleri, kükürt dumanı).
+2. **Biscuit yok:** Walt evin içinde kedisi Biscuit'i arar; Biscuit hiçbir yerde yok (devrilmiş mama kabı).
+3. **Kırık zemin:** Walt evin zemininde dibi görünmeyen, karanlık bir kırık boşluk bulur.
+4. **Duvardaki yazı:** Kırığın yanındaki duvarda kükürtle yazılmış bir yazı: *"Biscuit bana ait. Onu ben aldım."* (İngilizcesi ve imza henüz kesinleşmedi; eski metin "HE'S MINE. — L." idi, imzadaki "L." finaldeki Lucifer'e ipucu.)
+5. **Atlayış:** Walt yatak odasından silahını (Glock) alır ve kırığın içine atlar. Anlatıcı: Biscuit'i alan her kimse buna pişman olacak.
+
+Sonra oyun ana menüye geçer. Eski taslaktaki "sigara yakar" anı istenirse 5. kareye eklenebilir (sigara mekaniğiyle bağ).
+
+Anlatıcı kadın sesinin kim olduğu henüz kararlaştırılmadı (öneri: Lilith; 50. dalgada Walt'a Biscuit'in sırrını anlatan karakter, sesi baştan duyulursa o savaşta "o ses" anı olur).
+
+Anlatım biçimi için bkz. "Ara sahneler".
 
 ## Boss'lar ve hikâye akışı
 
@@ -106,9 +112,9 @@ Hem yazıyla hem animasyonla anlatılacak (bkz. "Ara sahneler").
 
 ## Ara sahneler (planlı)
 
-- **Giriş:** yukarıdaki açılış; oyun başında (ilk Play'de) oynar, geçilebilir.
+- **Giriş:** yukarıdaki 5 karelik karikatür açılış. Oyun İLK açıldığında önce dil seçimi (English / Türkçe), sonra seçilen dilde karikatürler oynar, ardından ana menü. Oynarken ekranın altında "Press SPACE to skip" / "Animasyonu geçmek için SPACE'e basın" yazar. Giriş Steam sayfasında ve reklamlarda da kullanılacak.
 - **Bitiş:** yukarıdaki final; Lucifer yenilince oynar. Şimdilik geçici bir "THE END" ekranı var (son dalga bitince tahtta tek başına oturan Biscuit görünür, ekran kararır). Konuşulan fikir (henüz karar verilmedi, üretim yapılmadı): son sahne kameranın odada durduğu, koltuğa arkadan bakan bir görüntü; koltukta Walt oturuyor (sadece başının arkası görünür), televizyonda kükürt kokusu haberi, Biscuit yerde yürüyerek koltuğa gelir, ekran kararır, THE END.
-- Anlatım hem yazı (kısa metin kutuları) hem animasyonla olur. Karakter görselleri (Walt, Biscuit, Lucifer) PixelLab ile hazır olacağı için ara sahne animasyonları bu görsellerden bir yapay zekâ aracıyla üretilecek.
+- **Biçim (kullanıcının kararı, 2026-11-20):** giriş ve bitiş aynı biçimde: karikatürize çizim kareleri + ürpertici kadın anlatıcı sesi + korku müziği (bitişte final müziği), seçilen dilde (seslendirme ve/veya alt yazı iki dilde). Kareler PixelLab ile (Walt, Biscuit, Lucifer karakter görsellerinden, aynı stil); hareket hissi kodla (yavaş yakınlaşma/kaydırma, kararıp açılma, hafif sarsıntı). Bitiş (final) de yukarıdaki komik twist'i aynı karikatür biçiminde anlatır.
 
 ## Bölgeler (harita)
 
