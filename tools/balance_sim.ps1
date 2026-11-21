@@ -4,7 +4,7 @@
 # Kullanım: tools/balance_sim.ps1 [-HealthPerWave 0.12] [-DamagePerWave 0.1] [-IntervalMin 0.25] ... (aşağıdaki param'lar)
 # Değerler oyundakiyle aynı varsayılanlarla başlar; denemek için parametre verilir, oyun dosyaları değişmez.
 param(
-    [double]$HealthPerWave = 0.10,     # enemy.gd HEALTH_PER_WAVE (HealthLateFrom dalgasına kadar)
+    [double]$HealthPerWave = 0.12,     # enemy.gd HEALTH_PER_WAVE (HealthLateFrom dalgasına kadar)
     [double]$HealthLate = 0.18,        # enemy.gd HEALTH_PER_WAVE_LATE: HealthLateFrom dalgasından sonra can artışı (-1 = HealthPerWave ile aynı, tek eğri)
     [int]$HealthLateFrom = 20,         # enemy.gd HEALTH_LATE_FROM
     [double]$BossHealthPerWave = -1,   # boss için ayrı eğri (-1 = HealthPerWave ile aynı, şu anki durum)
@@ -44,7 +44,7 @@ function HpMult($w) { $e = [math]::Min($w, $HealthLateFrom) - 1; $l = [math]::Ma
 # Normal yaratıklar: can, sikke, ağırlık (min_wave, taban, dalga başına), pençe hasarı
 $enemies = @(
     @{ name = 'soul';  hp = 20; coin = 1; min = 1;  w = 1.5; wpw = 0.0 },
-    @{ name = 'harpy'; hp = 10; coin = 1; min = 3;  w = 1.0; wpw = 0.05 },
+    @{ name = 'harpy'; hp = 16; coin = 1; min = 3;  w = 1.0; wpw = 0.05 },
     @{ name = 'hound'; hp = 30; coin = 2; min = 5;  w = 0.5; wpw = 0.08 },
     @{ name = 'fly';   hp = 5;  coin = 1; min = 41; w = 0.6; wpw = 0.05; n = 3 },   # n = swarm_size (bir doğmada kaç tane)
     @{ name = 'lilim'; hp = 25; coin = 2; min = 51; w = 0.4; wpw = 0.04 },
@@ -56,7 +56,7 @@ $enemies = @(
     @{ name = 'sloth'; hp = 35; coin = 2; min = 21; w = 0.4; wpw = 0.04 },  # Sloth Fiend
     @{ name = 'grigori'; hp = 30; coin = 2; min = 91; w = 0.4; wpw = 0.04 }   # Grigori
 )
-$bosses = @{ 10 = 540; 20 = 1950; 30 = 1800; 40 = 1860; 50 = 2100; 60 = 2280; 70 = 2460; 80 = 2640; 90 = 2820; 100 = 3800 }  # 100 Lucifer (üç faz; tahttaki ilk fazda yürümez)
+$bosses = @{ 10 = 540; 20 = 1950; 30 = 1800; 40 = 1860; 50 = 4200; 60 = 4560; 70 = 2460; 80 = 2640; 90 = 2820; 100 = 15200 }  # 100 Lucifer (üç faz; tahttaki ilk fazda yürümez)
 $bossCoin = @{ 10 = 100; 20 = 150; 30 = 200; 40 = 250; 50 = 300; 60 = 350; 70 = 400; 80 = 450; 90 = 500; 100 = 1000 }
 
 function Cost($base, $step, $ratio, $level) { [math]::Ceiling(($base + $step * $level) * $ratio) }

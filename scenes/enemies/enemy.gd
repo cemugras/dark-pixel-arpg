@@ -11,9 +11,9 @@ const DIRECTION_BIAS: float = 1.2  # 4 yön: eksen değiştirme eşiği (titreme
 const SECTOR_MARGIN: float = 0.12  # 8 yön: dilim değiştirme payı (radyan, titreme önleme)
 const BOSS_DEATH_MUSIC_FADE: float = 0.1  # boss ölünce müzik bu sürede kesilir (ani kesilme tıkırtısı olmasın)
 const DAMAGE_PER_WAVE: float = 0.07  # her dalgada tüm hasarlar tabanın %7si kadar artar (eskiden %10; bkz. tools/balance_sim.ps1)
-# İki parçalı can eğrisi (Adım 43, beşinci ayar): HEALTH_LATE_FROM dalgasına kadar her dalgada tabanın %10'u,
+# İki parçalı can eğrisi (Adım 43, beşinci ayar; 2026-11-21 baştan testten sonra %10 -> %12): HEALTH_LATE_FROM dalgasına kadar her dalgada tabanın %12'si,
 # sonrası %18'i kadar artar. Erken dalgalar (11-18) yumuşadı, geç oyun eski zorluğunda kaldı (bkz. tools/balance_sim.ps1)
-const HEALTH_PER_WAVE: float = 0.10
+const HEALTH_PER_WAVE: float = 0.12
 const HEALTH_PER_WAVE_LATE: float = 0.18
 const HEALTH_LATE_FROM: int = 20
 
